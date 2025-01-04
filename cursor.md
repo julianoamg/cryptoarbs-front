@@ -64,3 +64,6 @@ Meu projeto esta estruturado da seguinte forma:
     tsconfig.json
     vite.config.ts
     yarn.lock
+
+
+O codigo sempre deve ser escrito em inglês.

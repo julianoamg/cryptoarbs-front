@@ -1,30 +1,74 @@
 <script lang="ts">
-    import { enhance } from '$app/forms';
     import { goto } from '$app/navigation';
+    import { handleApiResponse } from '$lib/utils/api';
+    import { PUBLIC_API_URL } from '$env/static/public';
+    import FormField from '../../components/forms/FormField.svelte';
+    import LanguageSelector from '../../components/LanguageSelector.svelte';
+    import { toast } from '$lib/stores/toast';
+    import { auth } from '$lib/stores/auth';
+    import { language } from '$lib/stores/i18n';
+    import { translations } from '$lib/i18n/translations';
 
-    let nome = '';
+    let first_name = '';
     let email = '';
     let password = '';
     let confirmPassword = '';
     let loading = false;
-    let error = '';
+    let fieldErrors: { [key: string]: string[] } = {};
+
+    $: t = translations[$language];
 
     async function handleSubmit() {
         loading = true;
-        error = '';
+        fieldErrors = {};
 
         if (password !== confirmPassword) {
-            error = 'As senhas não coincidem.';
+            fieldErrors = { password: [t.messages.error.senhasNaoCoincidem] };
             loading = false;
             return;
         }
 
         try {
-            // TODO: Implementar lógica de cadastro
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulação de delay
+            // Registrar usuário
+            const registerResponse = await fetch(`${PUBLIC_API_URL}/auth/register/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ first_name, email, password }),
+            });
+
+            const registerData = await registerResponse.json();
+            
+            if (!registerResponse.ok) {
+                fieldErrors = handleApiResponse(registerResponse, registerData);
+                return;
+            }
+
+            toast.success(t.messages.success.contaCriada);
+
+            // Fazer login automaticamente
+            const loginResponse = await fetch(`${PUBLIC_API_URL}/auth/login/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const loginData = await loginResponse.json();
+
+            if (!loginResponse.ok) {
+                toast.error(t.messages.error.loginAutomatico);
+                goto('/login');
+                return;
+            }
+
+            auth.setAuth(loginData);
+            toast.success(t.messages.success.loginSucesso);
             goto('/');
         } catch (err) {
-            error = 'Erro ao criar conta. Por favor, tente novamente.';
+            fieldErrors = { non_field_errors: [(err as Error).message] };
         } finally {
             loading = false;
         }
@@ -33,80 +77,54 @@
 
 <div class="min-h-screen flex items-center justify-center bg-neutral-950 p-4">
     <div class="w-full max-w-md">
-        <!-- Logo ou Título -->
+        <!-- Logo e Título -->
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-neutral-200">CryptoArbs</h1>
-            <p class="mt-2 text-neutral-400">Crie sua conta</p>
+            <p class="mt-2 text-neutral-400">{t.auth.cadastro.titulo}</p>
         </div>
 
         <!-- Card do Formulário -->
         <div class="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl p-6">
             <form on:submit|preventDefault={handleSubmit} class="space-y-6">
-                <!-- Campo de Nome -->
-                <div>
-                    <label for="nome" class="block text-sm font-medium text-neutral-400 mb-1">
-                        Nome
-                    </label>
-                    <input
-                        type="text"
-                        id="nome"
-                        bind:value={nome}
-                        required
-                        class="w-full bg-neutral-800/50 border border-neutral-700 rounded-lg px-3 py-2 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
-                        placeholder="Seu nome"
-                    />
-                </div>
+                <FormField
+                    name="first_name"
+                    type="text"
+                    label={t.auth.cadastro.nome}
+                    bind:value={first_name}
+                    placeholder={t.auth.cadastro.nome}
+                    errors={fieldErrors}
+                />
 
-                <!-- Campo de Email -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-neutral-400 mb-1">
-                        Email
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        bind:value={email}
-                        required
-                        class="w-full bg-neutral-800/50 border border-neutral-700 rounded-lg px-3 py-2 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
-                        placeholder="seu@email.com"
-                    />
-                </div>
+                <FormField
+                    name="email"
+                    type="email"
+                    label={t.auth.cadastro.email}
+                    bind:value={email}
+                    placeholder="seu@email.com"
+                    errors={fieldErrors}
+                />
 
-                <!-- Campo de Senha -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-neutral-400 mb-1">
-                        Senha
-                    </label>
-                    <input
-                        type="password"
-                        id="password"
-                        bind:value={password}
-                        required
-                        minlength="6"
-                        class="w-full bg-neutral-800/50 border border-neutral-700 rounded-lg px-3 py-2 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
-                        placeholder="••••••••"
-                    />
-                </div>
+                <FormField
+                    name="password"
+                    type="password"
+                    label={t.auth.cadastro.senha}
+                    bind:value={password}
+                    placeholder="••••••••"
+                    errors={fieldErrors}
+                />
 
-                <!-- Campo de Confirmação de Senha -->
-                <div>
-                    <label for="confirmPassword" class="block text-sm font-medium text-neutral-400 mb-1">
-                        Confirme a senha
-                    </label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        bind:value={confirmPassword}
-                        required
-                        minlength="6"
-                        class="w-full bg-neutral-800/50 border border-neutral-700 rounded-lg px-3 py-2 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
-                        placeholder="••••••••"
-                    />
-                </div>
+                <FormField
+                    name="confirmPassword"
+                    type="password"
+                    label={t.auth.cadastro.confirmarSenha}
+                    bind:value={confirmPassword}
+                    placeholder="••••••••"
+                    errors={fieldErrors}
+                />
 
-                <!-- Mensagem de Erro -->
-                {#if error}
-                    <div class="text-red-500 text-sm">{error}</div>
+                <!-- Mensagem de Erro Geral -->
+                {#if fieldErrors.non_field_errors}
+                    <div class="text-red-500 text-sm">{fieldErrors.non_field_errors[0]}</div>
                 {/if}
 
                 <!-- Botão de Cadastro -->
@@ -118,21 +136,26 @@
                     {#if loading}
                         <div class="flex items-center justify-center space-x-2">
                             <div class="w-4 h-4 border-2 border-neutral-900 border-t-transparent rounded-full animate-spin"></div>
-                            <span>Criando conta...</span>
+                            <span>{t.auth.cadastro.criando}</span>
                         </div>
                     {:else}
-                        Criar conta
+                        {t.auth.cadastro.criar}
                     {/if}
                 </button>
 
-                <!-- Link para Login -->
-                <div class="text-center text-sm">
-                    <span class="text-neutral-400">Já tem uma conta?</span>
-                    <a href="/login" class="text-emerald-500 hover:text-emerald-400 transition-colors ml-1">
-                        Faça login
+                <!-- Links Adicionais -->
+                <div class="flex items-center justify-center text-sm">
+                    <span class="text-neutral-400">{t.auth.cadastro.jaTemConta}</span>
+                    <a href="/login" class="ml-1 text-emerald-500 hover:text-emerald-400 transition-colors">
+                        {t.auth.cadastro.entrar}
                     </a>
                 </div>
             </form>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="mt-4 flex justify-center">
+            <LanguageSelector />
         </div>
     </div>
 </div> 

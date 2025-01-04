@@ -2,6 +2,8 @@
     import { ArrowRight, TrendingUp, Percent, X } from 'lucide-svelte';
     import { fade } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';
+    import { language } from '$lib/stores/i18n';
+    import { translations } from '$lib/i18n/translations';
 
     interface Exchange {
         nome: string;
@@ -16,6 +18,8 @@
         spread: string;
         volume24h: string;
     }
+
+    $: t = translations[$language];
 
     let opportunities: Opportunity[] = [
         {
@@ -180,10 +184,10 @@
     <div class="flex items-center justify-between">
         <div>
             <h1 class="text-3xl font-bold text-neutral-200 tracking-tight">
-                Arbitragem de Futuros
+                {t.pages.home.title}
             </h1>
             <p class="mt-2 text-neutral-400">
-                Esta página é atualizada automaticamente.
+                {t.pages.home.subtitle}
             </p>
         </div>
         <div class="flex items-center space-x-2 text-sm">
@@ -202,8 +206,8 @@
                 <button
                     on:click={() => abrirModal(index)}
                     class="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-800/40 backdrop-blur-sm text-neutral-300 hover:bg-red-500/30 hover:text-red-400 transition-all duration-200"
-                    title="Remover oportunidade"
-                    aria-label="Remover oportunidade"
+                    title={t.pages.home.removeOpportunity}
+                    aria-label={t.pages.home.removeOpportunity}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 6l12 12M6 18L18 6" />
@@ -218,17 +222,17 @@
                         </div>
                         <div class="flex items-baseline space-x-1">
                             <span class="text-2xl font-bold text-emerald-500">{opp.lucro}%</span>
-                            <span class="text-sm text-emerald-500/70">profit</span>
+                            <span class="text-sm text-emerald-500/70">{t.pages.home.profit}</span>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
-                            <p class="text-sm font-medium text-neutral-400 mb-1">Volume 24h</p>
+                            <p class="text-sm font-medium text-neutral-400 mb-1">{t.pages.home.volume24h}</p>
                             <p class="text-neutral-200">${opp.volume24h}</p>
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-neutral-400 mb-1">Spread</p>
+                            <p class="text-sm font-medium text-neutral-400 mb-1">{t.pages.home.spread}</p>
                             <p class="text-neutral-200">{opp.spread}%</p>
                         </div>
                     </div>
@@ -239,7 +243,7 @@
                                 <p class="text-sm font-medium text-neutral-400 mb-2">{opp.exchangeA.nome}</p>
                                 <div class="space-y-1">
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-neutral-300">Preço</span>
+                                        <span class="text-sm text-neutral-300">{t.pages.home.price}</span>
                                         <span class="text-sm text-neutral-300">${opp.exchangeA.preco}</span>
                                     </div>
                                 </div>
@@ -248,7 +252,7 @@
                                 <p class="text-sm font-medium text-neutral-400 mb-2">{opp.exchangeB.nome}</p>
                                 <div class="space-y-1">
                                     <div class="flex justify-between">
-                                        <span class="text-sm text-neutral-300">Preço</span>
+                                        <span class="text-sm text-neutral-300">{t.pages.home.price}</span>
                                         <span class="text-sm text-neutral-300">${opp.exchangeB.preco}</span>
                                     </div>
                                 </div>
@@ -258,7 +262,7 @@
                         <div class="mt-4 pt-4 border-t border-neutral-800">
                             <div class="flex items-center space-x-4">
                                 <div class="flex-1 relative">
-                                    <label for="valor-{opp.ativo}" class="text-sm font-medium text-neutral-400">Valor de entrada ($)</label>
+                                    <label for="valor-{opp.ativo}" class="text-sm font-medium text-neutral-400">{t.pages.home.entryValue}</label>
                                     <div class="relative">
                                         <input
                                             type="number"
@@ -278,7 +282,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-1">
-                                    <p class="text-sm font-medium text-neutral-400">Lucro estimado</p>
+                                    <p class="text-sm font-medium text-neutral-400">{t.pages.home.estimatedProfit}</p>
                                     <p class="mt-1 text-lg font-bold text-emerald-500">
                                         ${valoresEntrada[opp.ativo] ? calcularLucro(valoresEntrada[opp.ativo], opp.lucro) : '0.00'}
                                     </p>

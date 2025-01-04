@@ -1,8 +1,16 @@
 <script>
 // @ts-nocheck
-
     import {writable} from 'svelte/store';
     import {page} from '$app/stores';
+    import { goto } from '$app/navigation';
+    import { auth } from '$lib/stores/auth';
+    import { logout } from '$lib/services/auth';
+    import { getMe } from '$lib/services/user';
+    import { onMount } from 'svelte';
+    import { toast } from '$lib/stores/toast';
+    import { language } from '$lib/stores/i18n';
+    import { translations } from '$lib/i18n/translations';
+    import LanguageSelector from '../components/LanguageSelector.svelte';
     import {
         ArrowLeftRight,
         Settings,
@@ -18,72 +26,81 @@
 
     const sidebarOpen = writable(false);
     const sidebarCollapsed = writable(false);
-    let touchStart = 0;
-    let touchEnd = 0;
+    let userEmail = '';
 
-    const handleTouchStart = (e) => {
-        touchStart = e.changedTouches[0].screenX;
-    };
+    $: t = translations[$language];
 
-    const handleTouchEnd = (e) => {
-        touchEnd = e.changedTouches[0].screenX;
-        if (touchStart - touchEnd > 50) { // Swipe left
-            sidebarOpen.set(false);
+    onMount(async () => {
+        if ($auth.token) {
+            try {
+                const userData = await getMe($auth.token);
+                userEmail = userData.email;
+            } catch {
+                toast.error(t.menu.erro.carregarDados);
+            }
         }
-    };
+    });
 
-    const toggleSidebar = () => {
-        sidebarOpen.update(open => !open);
-    };
+    const toggleSidebar = () => sidebarOpen.update(open => !open);
+    const toggleCollapse = () => sidebarCollapsed.update(collapsed => !collapsed);
 
-    const toggleCollapse = () => {
-        sidebarCollapsed.update(collapsed => !collapsed);
-    };
+    async function handleLogout(event) {
+        event.preventDefault();
+        try {
+            if ($auth.token) await logout($auth.token);
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+        auth.clearAuth();
+        sidebarOpen.set(false);
+        goto('/login');
+    }
 
-    const menuSections = [
+    async function handleNavigation(href) {
+        if (window.innerWidth < 1024) sidebarOpen.set(false);
+        await goto(href);
+    }
+
+    $: menuSections = [
         {
-            title: 'ARBITRAGENS',
+            title: t.menu.arbitragens,
             items: [
-                {name: 'Criptomoedas', icon: ArrowLeftRight, href: '/'},
-                {name: 'Configurações', icon: Settings, href: '/configuracoes'}
+                {name: t.menu.criptomoedas, icon: ArrowLeftRight, href: '/'},
+                {name: t.menu.configuracoes, icon: Settings, href: '/configuracoes'}
             ]
         },
         {
-            title: 'SUPORTE',
+            title: t.menu.suporte,
             items: [
-                {name: 'Primeiros Passos', icon: BookOpen, href: '/primeiros-passos'},
-                {name: 'Mentoria', icon: Target, href: '/mentoria'},
-                {name: 'WhatsApp', icon: MessageCircle, href: '/whatsapp'}
+                {name: t.menu.primeirosPassos, icon: BookOpen, href: '/primeiros-passos'},
+                {name: t.menu.mentoria, icon: Target, href: '/mentoria'},
+                {name: t.menu.whatsapp, icon: MessageCircle, href: '/whatsapp'}
             ]
         },
         {
-            title: 'CONTA',
+            title: t.menu.conta,
             items: [
-                {name: 'Assinatura', icon: CreditCard, href: '/assinatura'},
-                {name: 'Meus Dados', icon: UserCircle, href: '/perfil'},
-                {name: 'Sair', icon: LogOut, href: '/logout'}
+                {name: t.menu.assinatura, icon: CreditCard, href: '/assinatura'},
+                {name: t.menu.meusDados, icon: UserCircle, href: '/perfil'},
+                {name: t.menu.sair, icon: LogOut, href: '#', onClick: handleLogout}
             ]
         }
     ];
 </script>
 
 <div class="flex h-screen bg-neutral-950 overflow-hidden">
-    <!-- Overlay for mobile -->
+    <!-- Mobile Overlay -->
     <div
-        class="fixed inset-0 bg-black/50 lg:hidden transition-opacity {$sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}"
-        on:click={() => toggleSidebar()}
+        class="fixed inset-0 bg-black/50 lg:hidden transition-opacity z-40 {$sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}"
+        on:click={toggleSidebar}
         role="button"
         tabindex="0"
-        on:keydown={(e) => {
-            if (e.key === 'Escape') toggleSidebar();
-        }}
+        on:keydown={(e) => e.key === 'Escape' && toggleSidebar()}
     ></div>
     
     <!-- Sidebar -->
     <aside
-        class="fixed lg:static flex flex-col h-screen transition-transform lg:translate-x-0 {$sidebarOpen ? 'translate-x-0' : '-translate-x-full'} {$sidebarCollapsed ? 'w-[4.5rem]' : 'w-64'} bg-gradient-to-b from-neutral-900 to-neutral-950 border-r border-neutral-800"
-        on:touchstart={handleTouchStart}
-        on:touchend={handleTouchEnd}
+        class="fixed lg:static flex flex-col h-screen transition-transform lg:translate-x-0 {$sidebarOpen ? 'translate-x-0' : '-translate-x-full'} {$sidebarCollapsed ? 'w-[4.5rem]' : 'w-64'} bg-gradient-to-b from-neutral-900 to-neutral-950 border-r border-neutral-800 z-50"
     >
         <!-- Header -->
         <div class="relative flex items-center h-14 px-3 border-b border-neutral-800 bg-gradient-to-r from-emerald-500/5 to-transparent">
@@ -93,7 +110,7 @@
                 </div>
                 <div class="flex flex-col">
                     <span class="text-sm font-semibold text-neutral-200 tracking-tight">CryptoArbs</span>
-                    <span class="text-xs font-medium text-neutral-500">contato@example.com</span>
+                    <span class="text-xs font-medium text-neutral-500">{userEmail || t.menu.carregando}</span>
                 </div>
             </div>
             <button 
@@ -109,7 +126,12 @@
             </button>
         </div>
 
-        <!-- Menu Items -->
+        <!-- Language Selector -->
+        <div class="px-3 py-3 border-b border-neutral-800" class:hidden={$sidebarCollapsed}>
+            <LanguageSelector variant="sidebar" />
+        </div>
+
+        <!-- Menu -->
         <nav class="flex-1 overflow-y-auto py-2">
             {#each menuSections as section}
                 <div class="px-3 mb-2">
@@ -117,9 +139,10 @@
                         {section.title}
                     </span>
                     <div class="mt-1 space-y-0.5">
-                        {#each section.items as {name, icon, href}}
+                        {#each section.items as {name, icon, href, onClick}}
                             <a
-                                href={href}
+                                {href}
+                                on:click|preventDefault={onClick || (() => handleNavigation(href))}
                                 class="flex items-center px-2 py-1 text-sm text-neutral-300 rounded-lg hover:bg-gradient-to-r hover:from-emerald-500/10 hover:to-transparent group {$page.url.pathname === href ? 'bg-gradient-to-r from-emerald-500/10 to-transparent text-neutral-200' : ''}"
                             >
                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 group-hover:from-emerald-500/20 group-hover:to-emerald-500/10">
@@ -136,7 +159,7 @@
 
     <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
         <!-- Mobile Header -->
-        <header class="lg:hidden flex items-center h-16 px-4 bg-gradient-to-b from-neutral-900 to-neutral-950 border-b border-neutral-800">
+        <header class="lg:hidden flex items-center justify-between h-16 px-4 bg-gradient-to-b from-neutral-900 to-neutral-950 border-b border-neutral-800">
             <button 
                 class="p-2 hover:bg-gradient-to-r hover:from-emerald-500/10 hover:to-transparent rounded-lg text-neutral-400" 
                 on:click={toggleSidebar}
@@ -152,9 +175,14 @@
                     </svg>
                 {/if}
             </button>
+
+            <!-- Mobile Language Selector -->
+            <div class="lg:hidden">
+                <LanguageSelector />
+            </div>
         </header>
 
-        <!-- Main Content -->
+        <!-- Content -->
         <main class="flex-1 overflow-auto bg-neutral-950 p-6">
             <div class="max-w-5xl mx-auto">
                 <slot />
