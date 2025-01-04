@@ -3,6 +3,7 @@
     import Input from '../../components/forms/Input.svelte';
     import PageHeader from '../../components/forms/PageHeader.svelte';
     import Button from '../../components/forms/Button.svelte';
+    import { UserCircle } from 'lucide-svelte';
     
     let user = {
         name: '',
@@ -36,7 +37,8 @@
         <PageHeader 
             title="Meus Dados"
             description="Atualize suas informações pessoais e dados de acesso."
-        />
+            icon={UserCircle}
+        ></PageHeader>
 
         <form on:submit|preventDefault={handleSubmit} class="space-y-6">
             <Card title="Informações Pessoais">

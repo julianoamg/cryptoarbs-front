@@ -67,3 +67,5 @@ Meu projeto esta estruturado da seguinte forma:
 
 
 O codigo sempre deve ser escrito em inglês.
+O projeto esta traduzido em PT-BR, EN e ES, respeite as strings para sempre serem traduzidas nessas linguagens, suportando as configuracoes atuais do projeto.
+Utilizar apenas JS, nada de TS.

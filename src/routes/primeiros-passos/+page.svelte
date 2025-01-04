@@ -1,24 +1,25 @@
-<script lang="ts">
+<script>
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
-    import { ChevronDown } from 'lucide-svelte';
-    import type { Language } from '$lib/i18n/types';
+    import { ChevronDown, BookOpen } from 'lucide-svelte';
+    import PageHeader from '../../components/forms/PageHeader.svelte';
 
-    $: t = translations[$language as Language];
+    $: t = translations[$language];
 
-    let openFaqs: Record<number, boolean> = {};
+    let openFaqs = {};
 
-    function toggleFaq(index: number) {
+    function toggleFaq(index) {
         openFaqs[index] = !openFaqs[index];
         openFaqs = openFaqs; // Trigger reactivity
     }
 </script>
 
 <div class="max-w-4xl mx-auto p-4 space-y-8">
-    <div class="space-y-2">
-        <h1 class="text-3xl font-bold text-neutral-200">{t.pages.gettingStarted.title}</h1>
-        <p class="text-neutral-400">{t.pages.gettingStarted.subtitle}</p>
-    </div>
+    <PageHeader 
+        title={t.pages.gettingStarted.title}
+        description={t.pages.gettingStarted.subtitle}
+        icon={BookOpen}
+    ></PageHeader>
 
     <div class="space-y-4">
         {#each t.pages.gettingStarted.faqs as faq, index}

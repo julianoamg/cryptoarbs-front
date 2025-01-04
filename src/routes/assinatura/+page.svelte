@@ -1,5 +1,8 @@
 <script>
-    import { Check } from 'lucide-svelte';
+    import { Check, CreditCard } from 'lucide-svelte';
+    import PageHeader from '../../components/forms/PageHeader.svelte';
+    import { language } from '$lib/stores/i18n';
+    import { translations } from '$lib/i18n/translations';
 
     const plans = [
         {
@@ -41,20 +44,17 @@
             ]
         }
     ];
+
+    $: t = translations[$language];
 </script>
 
 <div class="flex flex-col items-center py-4">
     <div class="w-full max-w-7xl space-y-8">
-        <!-- Header -->
-        <div class="max-w-3xl mx-auto text-center space-y-4">
-            <h1 class="text-4xl font-extrabold text-neutral-200 tracking-tight">
-                Planos de Assinatura
-            </h1>
-            <p class="text-xl text-neutral-400 leading-relaxed">
-                Escolha o plano ideal para suas necessidades de arbitragem de criptomoedas. 
-                Comece hoje mesmo a maximizar seus lucros com nossas ferramentas profissionais.
-            </p>
-        </div>
+        <PageHeader
+            title="Planos de Assinatura"
+            description="Escolha o plano ideal para suas necessidades de arbitragem de criptomoedas. Comece hoje mesmo a maximizar seus lucros com nossas ferramentas profissionais."
+            icon={CreditCard}
+        ></PageHeader>
 
         <!-- Pricing Cards -->
         <div class="grid gap-6 lg:grid-cols-3">

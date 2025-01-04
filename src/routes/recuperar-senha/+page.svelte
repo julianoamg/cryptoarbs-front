@@ -1,22 +1,30 @@
-<script lang="ts">
+<script>
+    import { goto } from '$app/navigation';
     import { handleApiResponse } from '$lib/utils/api';
     import { PUBLIC_API_URL } from '$env/static/public';
     import FormField from '../../components/forms/FormField.svelte';
     import LanguageSelector from '../../components/LanguageSelector.svelte';
+    import PageHeader from '../../components/forms/PageHeader.svelte';
     import { toast } from '$lib/stores/toast';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
 
     let email = '';
     let loading = false;
-    let fieldErrors: { [key: string]: string[] } = {};
     let success = false;
+    let fieldErrors = {
+        non_field_errors: [],
+        email: []
+    };
 
     $: t = translations[$language];
 
     async function handleSubmit() {
         loading = true;
-        fieldErrors = {};
+        fieldErrors = {
+            non_field_errors: [],
+            email: []
+        };
         success = false;
 
         try {
@@ -38,7 +46,7 @@
             success = true;
             toast.success(t.messages.success.emailRecuperacaoEnviado);
         } catch (err) {
-            fieldErrors = { non_field_errors: [(err as Error).message] };
+            fieldErrors.non_field_errors = [err.message];
         } finally {
             loading = false;
         }
@@ -47,10 +55,11 @@
 
 <div class="min-h-screen flex items-center justify-center bg-neutral-950 p-4">
     <div class="w-full max-w-md">
-        <!-- Logo e Título -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-neutral-200">CryptoArbs</h1>
-            <p class="mt-2 text-neutral-400">{t.auth.recuperarSenha.titulo}</p>
+        <div class="mb-8">
+            <PageHeader 
+                title="CryptoArbs"
+                description={t.auth.recuperarSenha.titulo}
+            ></PageHeader>
         </div>
 
         <!-- Card do Formulário -->

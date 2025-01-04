@@ -3,6 +3,10 @@
     import PageHeader from '../../components/forms/PageHeader.svelte';
     import Card from '../../components/forms/Card.svelte';
     import Button from '../../components/forms/Button.svelte';
+    import { language } from '$lib/stores/i18n';
+    import { translations } from '$lib/i18n/translations';
+
+    $: t = translations[$language];
 
     const exchanges = [
         {
@@ -69,9 +73,10 @@
 <div class="flex flex-col items-center">
     <div class="w-full max-w-5xl space-y-8">
         <PageHeader 
-            title="Configurações"
-            description="Personalize suas preferências de arbitragem selecionando as exchanges desejadas."
-        />
+            title={t && t.pages && t.pages.settings && t.pages.settings.title || 'Settings'}
+            description={t && t.pages && t.pages.settings && t.pages.settings.subtitle || 'Manage your preferences and connections'}
+            icon={Settings}
+        ></PageHeader>
 
         <Card title="Exchanges">
             <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">

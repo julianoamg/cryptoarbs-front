@@ -1,9 +1,10 @@
-<script lang="ts">
+<script>
     import { goto } from '$app/navigation';
     import { handleApiResponse } from '$lib/utils/api';
     import { PUBLIC_API_URL } from '$env/static/public';
     import FormField from '../../components/forms/FormField.svelte';
     import LanguageSelector from '../../components/LanguageSelector.svelte';
+    import PageHeader from '../../components/forms/PageHeader.svelte';
     import { toast } from '$lib/stores/toast';
     import { auth } from '$lib/stores/auth';
     import { language } from '$lib/stores/i18n';
@@ -14,22 +15,28 @@
     let password = '';
     let confirmPassword = '';
     let loading = false;
-    let fieldErrors: { [key: string]: string[] } = {};
+    let fieldErrors = {
+        non_field_errors: [],
+        password: []
+    };
 
     $: t = translations[$language];
 
     async function handleSubmit() {
         loading = true;
-        fieldErrors = {};
+        fieldErrors = {
+            non_field_errors: [],
+            password: []
+        };
 
         if (password !== confirmPassword) {
-            fieldErrors = { password: [t.messages.error.senhasNaoCoincidem] };
+            fieldErrors.password = [t.messages.error.senhasNaoCoincidem];
             loading = false;
             return;
         }
 
         try {
-            // Registrar usuário
+            // Register user
             const registerResponse = await fetch(`${PUBLIC_API_URL}/auth/register/`, {
                 method: 'POST',
                 headers: {
@@ -47,7 +54,7 @@
 
             toast.success(t.messages.success.contaCriada);
 
-            // Fazer login automaticamente
+            // Automatic login
             const loginResponse = await fetch(`${PUBLIC_API_URL}/auth/login/`, {
                 method: 'POST',
                 headers: {
@@ -68,7 +75,7 @@
             toast.success(t.messages.success.loginSucesso);
             goto('/');
         } catch (err) {
-            fieldErrors = { non_field_errors: [(err as Error).message] };
+            fieldErrors.non_field_errors = [err.message];
         } finally {
             loading = false;
         }
@@ -77,10 +84,11 @@
 
 <div class="min-h-screen flex items-center justify-center bg-neutral-950 p-4">
     <div class="w-full max-w-md">
-        <!-- Logo e Título -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-neutral-200">CryptoArbs</h1>
-            <p class="mt-2 text-neutral-400">{t.auth.cadastro.titulo}</p>
+        <div class="mb-8">
+            <PageHeader 
+                title="CryptoArbs"
+                description={t.auth.cadastro.titulo}
+            ></PageHeader>
         </div>
 
         <!-- Card do Formulário -->

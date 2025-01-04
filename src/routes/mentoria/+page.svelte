@@ -1,5 +1,8 @@
 <script>
+    import PageHeader from '../../components/forms/PageHeader.svelte';
     import { Target, Users, Calendar, MessageCircle, Zap, Award } from 'lucide-svelte';
+    import { language } from '$lib/stores/i18n';
+    import { translations } from '$lib/i18n/translations';
 
     const benefits = [
         {
@@ -33,20 +36,17 @@
             description: 'Receba um certificado ao completar o programa de mentoria'
         }
     ];
+
+    $: t = translations[$language];
 </script>
 
 <div class="flex flex-col items-center py-4">
     <div class="w-full max-w-7xl space-y-12">
-        <!-- Header -->
-        <div class="max-w-3xl mx-auto text-center space-y-4">
-            <h1 class="text-4xl font-extrabold text-neutral-200 tracking-tight">
-                Programa de Mentoria
-            </h1>
-            <p class="text-xl text-neutral-400 leading-relaxed">
-                Acelere sua jornada no mercado de arbitragem com nosso programa exclusivo de mentoria. 
-                Aprenda com profissionais experientes e desenvolva as habilidades necessárias para o sucesso.
-            </p>
-        </div>
+        <PageHeader 
+            title={t.pages.mentoring.title}
+            description={t.pages.mentoring.subtitle}
+            icon={Target}
+        ></PageHeader>
 
         <!-- Hero Section -->
         <div class="relative rounded-2xl overflow-hidden">

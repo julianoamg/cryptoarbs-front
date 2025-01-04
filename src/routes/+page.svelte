@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { ArrowRight, TrendingUp, Percent, X } from 'lucide-svelte';
+    import { ArrowRight, TrendingUp, Percent, X, ArrowLeftRight } from 'lucide-svelte';
     import { fade } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
+    import PageHeader from '../components/forms/PageHeader.svelte';
 
     interface Exchange {
         nome: string;
@@ -180,24 +181,11 @@
 {/if}
 
 <div class="w-full max-w-7xl mx-auto space-y-8 p-4">
-    <!-- Header -->
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-3xl font-bold text-neutral-200 tracking-tight">
-                {t.pages.home.title}
-            </h1>
-            <p class="mt-2 text-neutral-400">
-                {t.pages.home.subtitle}
-            </p>
-        </div>
-        <div class="flex items-center space-x-2 text-sm">
-            <div class="flex items-center space-x-1 text-emerald-500">
-                <span class="inline-block w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                <span class="inline-block w-2 h-2 bg-emerald-500 rounded-full animate-pulse" style="animation-delay: 0.2s"></span>
-                <span class="inline-block w-2 h-2 bg-emerald-500 rounded-full animate-pulse" style="animation-delay: 0.4s"></span>
-            </div>
-        </div>
-    </div>
+    <PageHeader 
+        title={t.pages.home.title}
+        description={t.pages.home.subtitle}
+        icon={ArrowLeftRight}
+    ></PageHeader>
 
     <!-- Opportunities List -->
     <div class="grid gap-6 grid-cols-1 lg:grid-cols-2">
