@@ -2,6 +2,7 @@
 // @ts-nocheck
 
     import {writable} from 'svelte/store';
+    import {page} from '$app/stores';
     import {
         ArrowLeftRight,
         Settings,
@@ -76,7 +77,7 @@
         on:keydown={(e) => {
             if (e.key === 'Escape') toggleSidebar();
         }}
-    />
+    ></div>
     
     <!-- Sidebar -->
     <aside
@@ -119,7 +120,7 @@
                         {#each section.items as {name, icon, href}}
                             <a
                                 href={href}
-                                class="flex items-center px-2 py-1 text-sm text-neutral-300 rounded-lg hover:bg-gradient-to-r hover:from-emerald-500/10 hover:to-transparent group"
+                                class="flex items-center px-2 py-1 text-sm text-neutral-300 rounded-lg hover:bg-gradient-to-r hover:from-emerald-500/10 hover:to-transparent group {$page.url.pathname === href ? 'bg-gradient-to-r from-emerald-500/10 to-transparent text-neutral-200' : ''}"
                             >
                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 group-hover:from-emerald-500/20 group-hover:to-emerald-500/10">
                                     <svelte:component this={icon} class="w-5 h-5 text-emerald-500/80 group-hover:text-emerald-400"/>
