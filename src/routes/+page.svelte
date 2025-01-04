@@ -137,10 +137,16 @@
     <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
          transition:fade={{ duration: 200 }}
          on:click={fecharModal}
+         on:keydown={(e) => e.key === 'Escape' && fecharModal()}
+         role="button"
+         tabindex="0"
     >
         <div class="bg-neutral-900 border border-neutral-800 rounded-xl p-6 max-w-md w-full shadow-xl"
              transition:fade={{ duration: 150, delay: 50 }}
              on:click|stopPropagation
+             on:keydown|stopPropagation
+             role="button"
+             tabindex="0"
         >
             <div class="flex flex-col items-center text-center space-y-4">
                 <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center">
@@ -197,6 +203,7 @@
                     on:click={() => abrirModal(index)}
                     class="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-800/40 backdrop-blur-sm text-neutral-300 hover:bg-red-500/30 hover:text-red-400 transition-all duration-200"
                     title="Remover oportunidade"
+                    aria-label="Remover oportunidade"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 6l12 12M6 18L18 6" />
