@@ -56,9 +56,13 @@
         goto('/login');
     }
 
-    async function handleNavigation(href) {
+    async function handleNavigation(href, external = false) {
         if (window.innerWidth < 1024) sidebarOpen.set(false);
-        await goto(href);
+        if (external) {
+            window.open(href, '_blank');
+        } else {
+            await goto(href);
+        }
     }
 
     $: menuSections = [
@@ -74,7 +78,7 @@
             items: [
                 {name: t.menu.primeirosPassos, icon: BookOpen, href: '/primeiros-passos'},
                 {name: t.menu.mentoria, icon: Target, href: '/mentoria'},
-                {name: t.menu.whatsapp, icon: MessageCircle, href: '/whatsapp'}
+                {name: t.menu.whatsapp, icon: MessageCircle, href: 'https://wa.me/5531991189817', external: true}
             ]
         },
         {
@@ -139,10 +143,10 @@
                         {section.title}
                     </span>
                     <div class="mt-1 space-y-0.5">
-                        {#each section.items as {name, icon, href, onClick}}
+                        {#each section.items as {name, icon, href, onClick, external}}
                             <a
                                 {href}
-                                on:click|preventDefault={onClick || (() => handleNavigation(href))}
+                                on:click|preventDefault={onClick || (() => handleNavigation(href, external))}
                                 class="flex items-center px-2 py-1 text-sm text-neutral-300 rounded-lg hover:bg-gradient-to-r hover:from-emerald-500/10 hover:to-transparent group {$page.url.pathname === href ? 'bg-gradient-to-r from-emerald-500/10 to-transparent text-neutral-200' : ''}"
                             >
                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 group-hover:from-emerald-500/20 group-hover:to-emerald-500/10">
