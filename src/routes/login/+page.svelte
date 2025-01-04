@@ -1,31 +1,22 @@
-<script lang="ts">
+<script>
     import { goto } from '$app/navigation';
-    import { auth } from '$lib/stores/auth';
-    import { handleApiResponse } from '$lib/utils/api';
+    import { browser } from '$app/environment';
     import { PUBLIC_API_URL } from '$env/static/public';
     import FormField from '../../components/forms/FormField.svelte';
     import LanguageSelector from '../../components/LanguageSelector.svelte';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
-    import { onMount } from 'svelte';
-    import { browser } from '$app/environment';
 
     let email = '';
     let password = '';
     let loading = false;
-    let fieldErrors: { [key: string]: string[] } = {};
+    let error = '';
 
     $: t = translations[$language];
 
-    onMount(() => {
-        if (browser && $auth.isAuthenticated) {
-            goto('/');
-        }
-    });
-
     async function handleSubmit() {
         loading = true;
-        fieldErrors = {};
+        error = '';
 
         try {
             const response = await fetch(`${PUBLIC_API_URL}/auth/login/`, {
@@ -33,20 +24,29 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password })
             });
 
             const data = await response.json();
             
             if (!response.ok) {
-                fieldErrors = handleApiResponse(response, data);
+                error = data.detail || 'Login failed';
                 return;
             }
 
-            auth.setAuth(data);
-            goto('/');
+            // Store token in localStorage
+            if (browser) {
+                localStorage.setItem('token', data.token);
+                if (data.refresh_token) {
+                    localStorage.setItem('refreshToken', data.refresh_token);
+                }
+            }
+
+            // Navigate to home
+            await goto('/', { replaceState: true });
         } catch (err) {
-            fieldErrors = { non_field_errors: [(err as Error).message] };
+            console.error('Login error:', err);
+            error = 'An error occurred during login';
         } finally {
             loading = false;
         }
@@ -70,7 +70,6 @@
                     label={t.auth.login.email}
                     bind:value={email}
                     placeholder="seu@email.com"
-                    errors={fieldErrors}
                 />
 
                 <FormField
@@ -79,12 +78,11 @@
                     label={t.auth.login.senha}
                     bind:value={password}
                     placeholder="••••••••"
-                    errors={fieldErrors}
                 />
 
-                <!-- Mensagem de Erro Geral -->
-                {#if fieldErrors.non_field_errors}
-                    <div class="text-red-500 text-sm">{fieldErrors.non_field_errors[0]}</div>
+                <!-- Mensagem de Erro -->
+                {#if error}
+                    <div class="text-red-500 text-sm">{error}</div>
                 {/if}
 
                 <!-- Botão de Login -->

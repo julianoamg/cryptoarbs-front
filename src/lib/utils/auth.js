@@ -7,24 +7,24 @@ import { redirect } from '@sveltejs/kit';
  */
 export function isAuthenticated() {
     if (!browser) return false;
-    return !!localStorage.getItem('accessToken');
+    return !!localStorage.getItem('token');
 }
 
 /**
- * Requires authentication or redirects to login
- * @param {string} url - Current URL to redirect back after login
+ * Protected route handler
+ * @param {URL} url - Current URL
  */
-export function requireAuth(url) {
+export function protectRoute(url) {
     if (!isAuthenticated()) {
-        throw redirect(302, `/login?redirect=${encodeURIComponent(url)}`);
+        throw redirect(303, `/login?redirect=${encodeURIComponent(url.pathname)}`);
     }
 }
 
 /**
- * Redirects to home if authenticated
+ * Public route handler - redirects to home if already authenticated
  */
-export function redirectIfAuthenticated() {
+export function handlePublicRoute() {
     if (isAuthenticated()) {
-        throw redirect(302, '/');
+        throw redirect(303, '/');
     }
 } 

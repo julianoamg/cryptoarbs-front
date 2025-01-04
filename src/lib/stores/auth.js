@@ -3,30 +3,36 @@ import { browser } from '$app/environment';
 
 /**
  * @typedef {Object} AuthState
- * @property {string | null} token
- * @property {number | null} userId
- * @property {string | null} email
+ * @property {string|null} token
+ * @property {number|null} userId
+ * @property {string|null} email
  * @property {boolean} isAuthenticated
  */
 
 function createAuthStore() {
-    const { subscribe, set, update } = writable({
-        token: browser ? sessionStorage.getItem('token') : null,
-        userId: browser ? Number(sessionStorage.getItem('userId')) : null,
-        email: browser ? sessionStorage.getItem('email') : null,
-        isAuthenticated: browser ? !!sessionStorage.getItem('token') : false
-    });
+    /** @type {AuthState} */
+    const initialState = {
+        token: browser ? localStorage.getItem('token') : null,
+        userId: browser ? Number(localStorage.getItem('userId')) : null,
+        email: browser ? localStorage.getItem('email') : null,
+        isAuthenticated: browser ? !!localStorage.getItem('token') : false
+    };
+
+    const { subscribe, set, update } = writable(initialState);
 
     return {
         subscribe,
         /**
-         * @param {{ token: string, user_id: number, email: string }} authData
+         * @param {{ token: string, refresh_token?: string, user_id: number, email: string }} authData
          */
         setAuth: (authData) => {
             if (browser) {
-                sessionStorage.setItem('token', authData.token);
-                sessionStorage.setItem('userId', String(authData.user_id));
-                sessionStorage.setItem('email', authData.email);
+                localStorage.setItem('token', authData.token);
+                localStorage.setItem('userId', String(authData.user_id));
+                localStorage.setItem('email', authData.email);
+                if (authData.refresh_token) {
+                    localStorage.setItem('refreshToken', authData.refresh_token);
+                }
             }
             set({ 
                 token: authData.token,
@@ -37,9 +43,10 @@ function createAuthStore() {
         },
         clearAuth: () => {
             if (browser) {
-                sessionStorage.removeItem('token');
-                sessionStorage.removeItem('userId');
-                sessionStorage.removeItem('email');
+                localStorage.removeItem('token');
+                localStorage.removeItem('userId');
+                localStorage.removeItem('email');
+                localStorage.removeItem('refreshToken');
             }
             set({ 
                 token: null,
