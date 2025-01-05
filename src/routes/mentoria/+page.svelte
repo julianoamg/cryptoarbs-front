@@ -60,7 +60,9 @@
                         {t.hero.description}
                     </p>
                     <button class="inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-green-400 text-neutral-900 font-bold shadow-lg shadow-emerald-500/20">
-                        {t.hero.cta}
+                        <a href="https://wa.me/5511999999999?text={encodeURIComponent($language === 'pt-BR' ? 'Olá! Gostaria de saber mais sobre a mentoria.' : $language === 'en' ? 'Hello! I would like to know more about the mentoring program.' : 'Hola! Me gustaría saber más sobre el programa de mentoría.')}" target="_blank" rel="noopener noreferrer">
+                            {t.hero.cta}
+                        </a>
                     </button>
                 </div>
                 <div class="lg:w-1/3">
@@ -98,10 +100,14 @@
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <button class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-green-400 text-neutral-900 font-bold shadow-lg shadow-emerald-500/20">
-                    {t.cta.primary}
+                    <a href="https://wa.me/5511999999999?text={encodeURIComponent($language === 'pt-BR' ? 'Olá! Gostaria de saber mais sobre a mentoria.' : $language === 'en' ? 'Hello! I would like to know more about the mentoring program.' : 'Hola! Me gustaría saber más sobre el programa de mentoría.')}" target="_blank" rel="noopener noreferrer">
+                        {t.cta.primary}
+                    </a>
                 </button>
                 <button class="px-6 py-3 rounded-lg bg-neutral-800 text-neutral-200 hover:bg-neutral-700">
-                    {t.cta.secondary}
+                    <a href="https://wa.me/5511999999999?text={encodeURIComponent($language === 'pt-BR' ? 'Olá! Gostaria de saber mais sobre a mentoria.' : $language === 'en' ? 'Hello! I would like to know more about the mentoring program.' : 'Hola! Me gustaría saber más sobre el programa de mentoría.')}" target="_blank" rel="noopener noreferrer">
+                        {t.cta.secondary}
+                    </a>
                 </button>
             </div>
         </div>
