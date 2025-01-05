@@ -1,7 +1,7 @@
-import { redirectIfAuthenticated } from '$lib/utils/auth';
+import { handlePublicRoute } from '$lib/utils/auth';
 
 /** @type {import('./$types').PageLoad} */
 export function load() {
-    redirectIfAuthenticated();
+    handlePublicRoute();
     return {};
 } 

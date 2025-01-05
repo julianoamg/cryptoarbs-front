@@ -2,6 +2,7 @@
     import { goto } from '$app/navigation';
     import { browser } from '$app/environment';
     import { PUBLIC_API_URL } from '$env/static/public';
+    import { auth } from '$lib/stores/auth';
     import FormField from '../../components/forms/FormField.svelte';
     import LanguageSelector from '../../components/LanguageSelector.svelte';
     import { language } from '$lib/stores/i18n';
@@ -34,16 +35,14 @@
                 return;
             }
 
-            // Store token in localStorage
-            if (browser) {
-                localStorage.setItem('token', data.token);
-                if (data.refresh_token) {
-                    localStorage.setItem('refreshToken', data.refresh_token);
-                }
-            }
+            // Use auth store to set token and email
+            auth.setAuth({
+                token: data.token,
+                email: email
+            });
 
             // Navigate to home
-            await goto('/', { replaceState: true });
+            window.location.href = '/';
         } catch (err) {
             console.error('Login error:', err);
             error = 'An error occurred during login';
