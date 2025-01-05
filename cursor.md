@@ -787,3 +787,7 @@ Event attributes replace event directives: Instead of on:click={handler} you wri
 Svelte 5 uses an extra <svelte-css-wrapper> element instead of a <div> to wrap the component when using CSS custom properties.
 
 voce deve obrigatoriamente fazer alteracoes pequenas que sejam facilmente revertidas
+
+use sempre a paleta de cores ja utilizada na maioria dos componentes para criar qualquer component novo ou layout, para ter harmonia com as cores
+
+todos os componentes devem respeitar a implementacoes de traducoes para seus textos, obrigatoriamente, e uma condicao importante e deve ser extremamente respeitada
