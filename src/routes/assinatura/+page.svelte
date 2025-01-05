@@ -111,9 +111,19 @@
           </div>
         </div>
       {/if}
-      <button class="w-full py-2 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-neutral-900 font-semibold transition-colors">
-        {t.subscribe}
-      </button>
+      <a 
+        href={period === 'monthly' ? 'https://mpago.la/2RjQGAc' : 
+             period === 'quarterly' ? 'https://mpago.la/2jGTm8q' :
+             period === 'semiannual' ? 'https://mpago.la/2YfQQB9' :
+             'https://mpago.la/1SKWi3k'}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="block w-full"
+      >
+        <button class="w-full py-2 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-neutral-900 font-semibold transition-colors">
+          {t.subscribe}
+        </button>
+      </a>
       <div class="text-sm text-neutral-400 text-center">
         {#if period === 'monthly'}
           997 {t.perMonth}
