@@ -1,50 +1,50 @@
-<script>
+<script lang="ts">
     import PageHeader from '../../components/forms/PageHeader.svelte';
     import { Target, Users, Calendar, MessageCircle, Zap, Award } from 'lucide-svelte';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
+    import type { Translation, Language } from '$lib/i18n/types';
 
-    const benefits = [
+    interface Benefit {
+        icon: any;
+        key: keyof Translation['pages']['mentoring']['benefits'];
+    }
+
+    const benefits: Benefit[] = [
         {
             icon: Target,
-            title: 'Estratégias Avançadas',
-            description: 'Aprenda técnicas exclusivas de arbitragem para maximizar seus resultados'
+            key: 'advancedStrategies'
         },
         {
             icon: Users,
-            title: 'Mentoria em Grupo',
-            description: 'Participe de sessões semanais com outros traders e aprenda com suas experiências'
+            key: 'groupMentoring'
         },
         {
             icon: Calendar,
-            title: 'Horários Flexíveis',
-            description: 'Escolha os melhores horários para participar das sessões de mentoria'
+            key: 'flexibleSchedule'
         },
         {
             icon: MessageCircle,
-            title: 'Suporte Dedicado',
-            description: 'Acesso direto aos mentores para tirar dúvidas e receber orientações'
+            key: 'dedicatedSupport'
         },
         {
             icon: Zap,
-            title: 'Conteúdo Atualizado',
-            description: 'Material didático sempre atualizado com as últimas tendências do mercado'
+            key: 'updatedContent'
         },
         {
             icon: Award,
-            title: 'Certificado',
-            description: 'Receba um certificado ao completar o programa de mentoria'
+            key: 'certificate'
         }
     ];
 
-    $: t = translations[$language];
+    const t = $derived(translations[$language as Language].pages.mentoring);
 </script>
 
 <div class="flex flex-col items-center py-4">
     <div class="w-full max-w-7xl space-y-12">
         <PageHeader 
-            title={t.pages.mentoring.title}
-            description={t.pages.mentoring.subtitle}
+            title={t.title}
+            description={t.subtitle}
             icon={Target}
         ></PageHeader>
 
@@ -54,14 +54,13 @@
             <div class="relative flex flex-col lg:flex-row items-center gap-8 p-8 lg:p-12">
                 <div class="flex-1 space-y-6">
                     <h2 class="text-3xl font-bold text-neutral-200">
-                        Transforme seu Conhecimento em Resultados
+                        {t.hero.title}
                     </h2>
                     <p class="text-lg text-neutral-300">
-                        Nossa mentoria foi desenvolvida para ajudar você a dominar as técnicas de arbitragem 
-                        e construir uma operação lucrativa e sustentável no mercado de criptomoedas.
+                        {t.hero.description}
                     </p>
                     <button class="inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-green-400 text-neutral-900 font-bold shadow-lg shadow-emerald-500/20">
-                        Começar Agora
+                        {t.hero.cta}
                     </button>
                 </div>
                 <div class="lg:w-1/3">
@@ -79,10 +78,12 @@
             {#each benefits as benefit}
                 <div class="flex flex-col p-6 rounded-xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-sm">
                     <div class="w-12 h-12 rounded-lg bg-emerald-500/20 flex items-center justify-center mb-4">
-                        <svelte:component this={benefit.icon} class="w-6 h-6 text-emerald-500" />
+                        {#if benefit.icon}
+                            <benefit.icon class="w-6 h-6 text-emerald-500" />
+                        {/if}
                     </div>
-                    <h3 class="text-xl font-bold text-neutral-200 mb-2">{benefit.title}</h3>
-                    <p class="text-neutral-400">{benefit.description}</p>
+                    <h3 class="text-xl font-bold text-neutral-200 mb-2">{t.benefits[benefit.key].title}</h3>
+                    <p class="text-neutral-400">{t.benefits[benefit.key].description}</p>
                 </div>
             {/each}
         </div>
@@ -90,17 +91,17 @@
         <!-- CTA Section -->
         <div class="max-w-3xl mx-auto text-center space-y-6">
             <h2 class="text-2xl font-bold text-neutral-200">
-                Pronto para Começar?
+                {t.cta.title}
             </h2>
             <p class="text-lg text-neutral-400">
-                Junte-se a nossa comunidade de traders de sucesso e comece sua jornada rumo à independência financeira.
+                {t.cta.description}
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <button class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-green-400 text-neutral-900 font-bold shadow-lg shadow-emerald-500/20">
-                    Agendar Mentoria
+                    {t.cta.primary}
                 </button>
                 <button class="px-6 py-3 rounded-lg bg-neutral-800 text-neutral-200 hover:bg-neutral-700">
-                    Saber Mais
+                    {t.cta.secondary}
                 </button>
             </div>
         </div>

@@ -217,7 +217,44 @@ export const translations = {
             },
             mentoring: {
                 title: 'Mentoria',
-                subtitle: 'Aprenda com especialistas'
+                subtitle: 'Aprenda com especialistas',
+                hero: {
+                    title: 'Transforme seu Conhecimento em Resultados',
+                    description: 'Nossa mentoria foi desenvolvida para ajudar você a dominar as técnicas de arbitragem e construir uma operação lucrativa e sustentável no mercado de criptomoedas.',
+                    cta: 'Começar Agora'
+                },
+                benefits: {
+                    advancedStrategies: {
+                        title: 'Estratégias Avançadas',
+                        description: 'Aprenda técnicas exclusivas de arbitragem para maximizar seus resultados'
+                    },
+                    groupMentoring: {
+                        title: 'Mentoria em Grupo',
+                        description: 'Participe de sessões semanais com outros traders e aprenda com suas experiências'
+                    },
+                    flexibleSchedule: {
+                        title: 'Horários Flexíveis',
+                        description: 'Escolha os melhores horários para participar das sessões de mentoria'
+                    },
+                    dedicatedSupport: {
+                        title: 'Suporte Dedicado',
+                        description: 'Acesso direto aos mentores para tirar dúvidas e receber orientações'
+                    },
+                    updatedContent: {
+                        title: 'Conteúdo Atualizado',
+                        description: 'Material didático sempre atualizado com as últimas tendências do mercado'
+                    },
+                    certificate: {
+                        title: 'Certificado',
+                        description: 'Receba um certificado ao completar o programa de mentoria'
+                    }
+                },
+                cta: {
+                    title: 'Pronto para Começar?',
+                    description: 'Junte-se a nossa comunidade de traders de sucesso e comece sua jornada rumo à independência financeira.',
+                    primary: 'Agendar Mentoria',
+                    secondary: 'Saber Mais'
+                }
             }
         }
     },
@@ -439,7 +476,44 @@ export const translations = {
             },
             mentoring: {
                 title: 'Mentoring',
-                subtitle: 'Learn from experts'
+                subtitle: 'Learn from experts',
+                hero: {
+                    title: 'Transform Your Knowledge into Results',
+                    description: 'Our mentoring was developed to help you master arbitrage techniques and build a profitable and sustainable operation in the cryptocurrency market.',
+                    cta: 'Start Now'
+                },
+                benefits: {
+                    advancedStrategies: {
+                        title: 'Advanced Strategies',
+                        description: 'Learn exclusive arbitrage techniques to maximize your results'
+                    },
+                    groupMentoring: {
+                        title: 'Group Mentoring',
+                        description: 'Participate in weekly sessions with other traders and learn from their experiences'
+                    },
+                    flexibleSchedule: {
+                        title: 'Flexible Schedule',
+                        description: 'Choose the best times to participate in mentoring sessions'
+                    },
+                    dedicatedSupport: {
+                        title: 'Dedicated Support',
+                        description: 'Direct access to mentors to ask questions and receive guidance'
+                    },
+                    updatedContent: {
+                        title: 'Updated Content',
+                        description: 'Educational material always updated with the latest market trends'
+                    },
+                    certificate: {
+                        title: 'Certificate',
+                        description: 'Receive a certificate upon completing the mentoring program'
+                    }
+                },
+                cta: {
+                    title: 'Ready to Start?',
+                    description: 'Join our community of successful traders and start your journey towards financial independence.',
+                    primary: 'Schedule Mentoring',
+                    secondary: 'Learn More'
+                }
             }
         }
     },
@@ -661,7 +735,44 @@ export const translations = {
             },
             mentoring: {
                 title: 'Mentoría',
-                subtitle: 'Aprende de expertos'
+                subtitle: 'Aprende de expertos',
+                hero: {
+                    title: 'Transforma tu Conocimiento en Resultados',
+                    description: 'Nuestra mentoría fue desarrollada para ayudarte a dominar las técnicas de arbitraje y construir una operación rentable y sostenible en el mercado de criptomonedas.',
+                    cta: 'Empezar Ahora'
+                },
+                benefits: {
+                    advancedStrategies: {
+                        title: 'Estrategias Avanzadas',
+                        description: 'Aprende técnicas exclusivas de arbitraje para maximizar tus resultados'
+                    },
+                    groupMentoring: {
+                        title: 'Mentoría en Grupo',
+                        description: 'Participa en sesiones semanales con otros traders y aprende de sus experiencias'
+                    },
+                    flexibleSchedule: {
+                        title: 'Horarios Flexibles',
+                        description: 'Elige los mejores horarios para participar en las sesiones de mentoría'
+                    },
+                    dedicatedSupport: {
+                        title: 'Soporte Dedicado',
+                        description: 'Acceso directo a los mentores para resolver dudas y recibir orientación'
+                    },
+                    updatedContent: {
+                        title: 'Contenido Actualizado',
+                        description: 'Material didáctico siempre actualizado con las últimas tendencias del mercado'
+                    },
+                    certificate: {
+                        title: 'Certificado',
+                        description: 'Recibe un certificado al completar el programa de mentoría'
+                    }
+                },
+                cta: {
+                    title: '¿Listo para Empezar?',
+                    description: 'Únete a nuestra comunidad de traders exitosos y comienza tu camino hacia la independencia financiera.',
+                    primary: 'Agendar Mentoría',
+                    secondary: 'Saber Más'
+                }
             }
         }
     }

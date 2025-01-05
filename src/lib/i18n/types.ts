@@ -17,6 +17,35 @@ export interface GettingStartedPage {
     faqs: FAQ[];
 }
 
+export interface MentoringBenefit {
+    title: string;
+    description: string;
+}
+
+export interface MentoringPage {
+    title: string;
+    subtitle: string;
+    hero: {
+        title: string;
+        description: string;
+        cta: string;
+    };
+    benefits: {
+        advancedStrategies: MentoringBenefit;
+        groupMentoring: MentoringBenefit;
+        flexibleSchedule: MentoringBenefit;
+        dedicatedSupport: MentoringBenefit;
+        updatedContent: MentoringBenefit;
+        certificate: MentoringBenefit;
+    };
+    cta: {
+        title: string;
+        description: string;
+        primary: string;
+        secondary: string;
+    };
+}
+
 export interface Pages {
     gettingStarted: GettingStartedPage;
     home: {
@@ -58,10 +87,7 @@ export interface Pages {
             };
         };
     };
-    mentoring: {
-        title: string;
-        subtitle: string;
-    };
+    mentoring: MentoringPage;
 }
 
 export interface Menu {
