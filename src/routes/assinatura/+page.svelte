@@ -1,6 +1,8 @@
 <script>
   import { CreditCard, Check } from 'lucide-svelte';
   import PageHeader from '../../components/forms/PageHeader.svelte';
+  import { language } from '$lib/stores/i18n';
+  import { translations } from '$lib/i18n/translations';
   
   let selectedPeriod = $state('monthly');
   
@@ -53,22 +55,24 @@
       answer: 'Sim, precisamos de algumas informações básicas para criar sua conta e emitir a nota fiscal, mas todos os dados são protegidos conforme a LGPD.'
     }
   ];
+
+  const t = $derived(translations[$language].pages.subscription);
 </script>
 
-{#snippet periodDisplay(data)}
+{#snippet periodDisplay(period)}
   <div class="flex flex-col h-full">
     <div class="flex flex-col items-center">
       <!-- Ícone do plano -->
       <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center mb-3">
-        {#if data.interval === 'por mês'}
+        {#if period === 'monthly'}
           <svg class="w-6 h-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
-        {:else if data.interval === 'por trimestre'}
+        {:else if period === 'quarterly'}
           <svg class="w-6 h-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
-        {:else if data.interval === 'por semestre'}
+        {:else if period === 'semiannual'}
           <svg class="w-6 h-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -78,53 +82,47 @@
           </svg>
         {/if}
       </div>
-      <div class="text-lg font-semibold mb-2 text-neutral-200">{data.name}</div>
+      <div class="text-lg font-semibold mb-2 text-neutral-200">{t[period].name}</div>
       <!-- Preço com ícone -->
       <div class="flex items-center gap-2 mb-1">
         <svg class="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <div class="text-3xl font-bold text-emerald-500">{data.price}</div>
+        <div class="text-3xl font-bold text-emerald-500">{t[period].price}</div>
       </div>
       <!-- Intervalo com ícone -->
       <div class="flex items-center gap-1 mb-3">
         <svg class="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
-        <div class="text-sm text-neutral-400">{data.interval}</div>
+        <div class="text-sm text-neutral-400">{t[`per${period.charAt(0).toUpperCase() + period.slice(1)}`]}</div>
       </div>
       <!-- Descrição sem ícone -->
-      <p class="text-sm text-neutral-300 text-left w-full mb-4">{data.description}</p>
+      <p class="text-sm text-neutral-300 text-left w-full mb-4">{t[period].description}</p>
     </div>
     <div class="mt-auto space-y-3">
-      {#if data.interval !== 'por mês'}
+      {#if period !== 'monthly'}
         <div class="flex justify-center items-center gap-1.5">
           <svg class="w-4 h-4 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
           </svg>
           <div class="text-sm font-medium text-cyan-300">
-            {#if data.interval === 'por trimestre'}
-              Economia de 7%
-            {:else if data.interval === 'por semestre'}
-              Economia de 28%
-            {:else}
-              Economia de 33%
-            {/if}
+            {t.savings[period]}
           </div>
         </div>
       {/if}
       <button class="w-full py-2 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-neutral-900 font-semibold transition-colors">
-        Assinar
+        {t.subscribe}
       </button>
       <div class="text-sm text-neutral-400 text-center">
-        {#if data.interval === 'por mês'}
-          997 por mês
-        {:else if data.interval === 'por trimestre'}
-          932 por mês
-        {:else if data.interval === 'por semestre'}
-          716 por mês
+        {#if period === 'monthly'}
+          997 {t.perMonth}
+        {:else if period === 'quarterly'}
+          932 {t.perMonth}
+        {:else if period === 'semiannual'}
+          716 {t.perMonth}
         {:else}
-          666 por mês
+          666 {t.perMonth}
         {/if}
       </div>
     </div>
@@ -133,8 +131,8 @@
 
 <div class="max-w-4xl mx-auto p-4 pb-32 space-y-12">
   <PageHeader
-    title="Planos de Assinatura"
-    description="Maximize seus lucros com nossas ferramentas profissionais de arbitragem"
+    title={t.title}
+    description={t.subtitle}
     icon={CreditCard}
   />
 
@@ -142,54 +140,54 @@
   <div class="space-y-4">
     <!-- Desktop view -->
     <div class="hidden lg:grid lg:grid-cols-4 gap-4">
-      {#each Object.entries(periods) as [key, value]}
+      {#each ['monthly', 'quarterly', 'semiannual', 'annual'] as period}
         <div 
           role="button"
           tabindex="0"
           class="p-4 rounded-lg border transition-all duration-200 text-center hover:shadow-lg backdrop-blur-sm cursor-pointer
-            {selectedPeriod === key ? 
+            {selectedPeriod === period ? 
               'border-emerald-500/30 bg-gradient-to-b from-emerald-500/10 to-neutral-900/90' : 
               'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'}"
-          onclick={() => selectedPeriod = key}
-          onkeydown={(e) => e.key === 'Enter' && (selectedPeriod = key)}
+          onclick={() => selectedPeriod = period}
+          onkeydown={(e) => e.key === 'Enter' && (selectedPeriod = period)}
         >
-          {@render periodDisplay(value)}
+          {@render periodDisplay(period)}
         </div>
       {/each}
     </div>
 
     <!-- Tablet view -->
     <div class="hidden sm:grid lg:hidden sm:grid-cols-2 gap-4">
-      {#each Object.entries(periods) as [key, value]}
+      {#each ['monthly', 'quarterly', 'semiannual', 'annual'] as period}
         <div 
           role="button"
           tabindex="0"
           class="p-4 rounded-lg border transition-all duration-200 text-center hover:shadow-lg backdrop-blur-sm cursor-pointer
-            {selectedPeriod === key ? 
+            {selectedPeriod === period ? 
               'border-emerald-500/30 bg-gradient-to-b from-emerald-500/10 to-neutral-900/90' : 
               'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'}"
-          onclick={() => selectedPeriod = key}
-          onkeydown={(e) => e.key === 'Enter' && (selectedPeriod = key)}
+          onclick={() => selectedPeriod = period}
+          onkeydown={(e) => e.key === 'Enter' && (selectedPeriod = period)}
         >
-          {@render periodDisplay(value)}
+          {@render periodDisplay(period)}
         </div>
       {/each}
     </div>
 
     <!-- Mobile view -->
     <div class="sm:hidden space-y-4">
-      {#each Object.entries(periods) as [key, value]}
+      {#each ['monthly', 'quarterly', 'semiannual', 'annual'] as period}
         <div 
           role="button"
           tabindex="0"
           class="w-full p-4 rounded-lg border transition-all duration-200 text-center hover:shadow-lg backdrop-blur-sm cursor-pointer
-            {selectedPeriod === key ? 
+            {selectedPeriod === period ? 
               'border-emerald-500/30 bg-gradient-to-b from-emerald-500/10 to-neutral-900/90' : 
               'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'}"
-          onclick={() => selectedPeriod = key}
-          onkeydown={(e) => e.key === 'Enter' && (selectedPeriod = key)}
+          onclick={() => selectedPeriod = period}
+          onkeydown={(e) => e.key === 'Enter' && (selectedPeriod = period)}
         >
-          {@render periodDisplay(value)}
+          {@render periodDisplay(period)}
         </div>
       {/each}
     </div>
@@ -197,10 +195,10 @@
 
   <!-- FAQ -->
   <div class="space-y-6 max-w-3xl mx-auto">
-    <h2 class="text-xl font-bold text-center text-neutral-200 mb-4">Perguntas Frequentes</h2>
+    <h2 class="text-xl font-bold text-center text-neutral-200 mb-4">{t.faq.title}</h2>
     
     <div class="space-y-2">
-      {#each faqs as faq}
+      {#each t.faq.items as faq}
         <div class="rounded-lg border border-neutral-800 bg-neutral-900/50 backdrop-blur-sm overflow-hidden">
           <details class="group">
             <summary class="flex items-center justify-between p-4 cursor-pointer">
@@ -252,15 +250,15 @@
           </svg>
         </div>
         <div class="space-y-1">
-          <h2 class="text-lg font-bold text-neutral-200">Compra 100% Segura</h2>
+          <h2 class="text-lg font-bold text-neutral-200">{t.securePurchase.title}</h2>
           <!-- Textos completos apenas para desktop -->
           <div class="hidden md:flex gap-4">
-            <p class="text-sm text-neutral-400">Ambiente seguro com criptografia SSL</p>
-            <p class="text-sm text-neutral-400">Pagamento processado por gateway homologado</p>
-            <p class="text-sm text-neutral-400">Dados protegidos conforme LGPD</p>
+            <p class="text-sm text-neutral-400">{t.securePurchase.ssl}</p>
+            <p class="text-sm text-neutral-400">{t.securePurchase.gateway}</p>
+            <p class="text-sm text-neutral-400">{t.securePurchase.lgpd}</p>
           </div>
           <!-- Texto único para mobile -->
-          <p class="md:hidden text-sm text-neutral-400">Dados protegidos conforme LGPD</p>
+          <p class="md:hidden text-sm text-neutral-400">{t.securePurchase.lgpd}</p>
         </div>
       </div>
 

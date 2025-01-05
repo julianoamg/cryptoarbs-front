@@ -2,6 +2,7 @@ O projeto utiliza SvelteKit, TailwindCSS, LucideIcons, Vite e Yarn para gerencia
 Deve respeitar as boas práticas de acessibilidade, responsividade, SEO, programação clean code e reutilização de código.
 Os componentes do sveltekit devem ser criados no diretorio /src/components
 Os componentes do sveltekit nao devem utilizar typescript
+E proibido usar typescript, apenas javascript
 As cores do tailwind devem ser baseadas em tons de cinza escuro e sem classes com cores hexadecimais
 Procure sempre utilizar pouco codigo, de maneira simples e objetiva
 

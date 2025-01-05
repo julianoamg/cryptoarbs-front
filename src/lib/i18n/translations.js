@@ -111,6 +111,71 @@ export const translations = {
                     }
                 ]
             },
+            subscription: {
+                title: 'Planos de Assinatura',
+                subtitle: 'Maximize seus lucros com nossas ferramentas profissionais de arbitragem',
+                subscribe: 'Assinar',
+                perMonth: 'por mês',
+                perQuarter: 'por trimestre',
+                perSemester: 'por semestre',
+                perYear: 'por ano',
+                monthly: {
+                    name: 'Mensal',
+                    price: '997',
+                    description: 'Ideal para quem está começando no mercado de arbitragem e quer validar os resultados mês a mês.'
+                },
+                quarterly: {
+                    name: 'Trimestral',
+                    price: '2.797',
+                    description: 'Perfeito para traders que já conhecem o mercado e buscam consistência nos resultados com economia.'
+                },
+                semiannual: {
+                    name: 'Semestral',
+                    price: '4.297',
+                    description: 'Excelente para profissionais que desejam maximizar seus ganhos com estratégias exclusivas de arbitragem.'
+                },
+                annual: {
+                    name: 'Anual',
+                    price: '7.997',
+                    description: 'A escolha dos traders profissionais que buscam as melhores oportunidades com o maior custo-benefício.'
+                },
+                savings: {
+                    quarterly: 'Economia de 7%',
+                    semiannual: 'Economia de 28%',
+                    annual: 'Economia de 33%'
+                },
+                faq: {
+                    title: 'Perguntas Frequentes',
+                    items: [
+                        {
+                            question: 'Como funciona o período de teste?',
+                            answer: 'Oferecemos 7 dias de teste gratuito em todos os planos. Você pode cancelar a qualquer momento durante este período sem custo algum.'
+                        },
+                        {
+                            question: 'Posso mudar de plano depois?',
+                            answer: 'Sim, você pode fazer upgrade ou downgrade do seu plano a qualquer momento. A diferença será calculada proporcionalmente.'
+                        },
+                        {
+                            question: 'Qual a política de reembolso?',
+                            answer: 'Oferecemos garantia de reembolso de 7 dias. Se você não estiver satisfeito, devolvemos 100% do seu investimento.'
+                        },
+                        {
+                            question: 'Quais formas de pagamento são aceitas?',
+                            answer: 'Aceitamos cartões de crédito, PIX e transferência bancária. Todas as transações são processadas de forma segura.'
+                        },
+                        {
+                            question: 'Preciso fornecer dados pessoais?',
+                            answer: 'Sim, precisamos de algumas informações básicas para criar sua conta e emitir a nota fiscal, mas todos os dados são protegidos conforme a LGPD.'
+                        }
+                    ]
+                },
+                securePurchase: {
+                    title: 'Compra 100% Segura',
+                    ssl: 'Ambiente seguro com criptografia SSL',
+                    gateway: 'Pagamento processado por gateway homologado',
+                    lgpd: 'Dados protegidos conforme LGPD'
+                }
+            },
             home: {
                 title: 'Arbitragem de Futuros',
                 subtitle: 'Esta página é atualizada automaticamente.',
@@ -268,6 +333,71 @@ export const translations = {
                     }
                 ]
             },
+            subscription: {
+                title: 'Subscription Plans',
+                subtitle: 'Maximize your profits with our professional arbitrage tools',
+                subscribe: 'Subscribe',
+                perMonth: 'per month',
+                perQuarter: 'per quarter',
+                perSemester: 'per semester',
+                perYear: 'per year',
+                monthly: {
+                    name: 'Monthly',
+                    price: '997',
+                    description: 'Ideal for those starting in the arbitrage market and want to validate results month by month.'
+                },
+                quarterly: {
+                    name: 'Quarterly',
+                    price: '2,797',
+                    description: 'Perfect for traders who already know the market and seek consistency in results with savings.'
+                },
+                semiannual: {
+                    name: 'Semiannual',
+                    price: '4,297',
+                    description: 'Excellent for professionals who want to maximize their earnings with exclusive arbitrage strategies.'
+                },
+                annual: {
+                    name: 'Annual',
+                    price: '7,997',
+                    description: 'The choice of professional traders who seek the best opportunities with the best cost-benefit.'
+                },
+                savings: {
+                    quarterly: '7% savings',
+                    semiannual: '28% savings',
+                    annual: '33% savings'
+                },
+                faq: {
+                    title: 'Frequently Asked Questions',
+                    items: [
+                        {
+                            question: 'How does the trial period work?',
+                            answer: 'We offer a 7-day free trial on all plans. You can cancel at any time during this period at no cost.'
+                        },
+                        {
+                            question: 'Can I change plans later?',
+                            answer: 'Yes, you can upgrade or downgrade your plan at any time. The difference will be calculated proportionally.'
+                        },
+                        {
+                            question: 'What is the refund policy?',
+                            answer: 'We offer a 7-day money-back guarantee. If you are not satisfied, we will refund 100% of your investment.'
+                        },
+                        {
+                            question: 'What payment methods are accepted?',
+                            answer: 'We accept credit cards, PIX, and bank transfer. All transactions are processed securely.'
+                        },
+                        {
+                            question: 'Do I need to provide personal data?',
+                            answer: 'Yes, we need some basic information to create your account and issue the invoice, but all data is protected according to LGPD.'
+                        }
+                    ]
+                },
+                securePurchase: {
+                    title: '100% Secure Purchase',
+                    ssl: 'Secure environment with SSL encryption',
+                    gateway: 'Payment processed by approved gateway',
+                    lgpd: 'Data protected according to LGPD'
+                }
+            },
             home: {
                 title: 'Futures Arbitrage',
                 subtitle: 'This page updates automatically.',
@@ -424,6 +554,71 @@ export const translations = {
                         answer: 'El apalancamiento puede amplificar tanto los beneficios como las pérdidas. En el mercado de futuros, es común usar apalancamiento para optimizar el capital, pero es crucial usarlo de manera responsable. Se recomienda comenzar con un apalancamiento bajo (2-3x) y aumentar gradualmente a medida que se gana experiencia.'
                     }
                 ]
+            },
+            subscription: {
+                title: 'Planes de Suscripción',
+                subtitle: 'Maximiza tus ganancias con nuestras herramientas profesionales de arbitraje',
+                subscribe: 'Suscribirse',
+                perMonth: 'por mes',
+                perQuarter: 'por trimestre',
+                perSemester: 'por semestre',
+                perYear: 'por año',
+                monthly: {
+                    name: 'Mensual',
+                    price: '997',
+                    description: 'Ideal para quienes comienzan en el mercado de arbitraje y quieren validar resultados mes a mes.'
+                },
+                quarterly: {
+                    name: 'Trimestral',
+                    price: '2.797',
+                    description: 'Perfecto para traders que ya conocen el mercado y buscan consistencia en los resultados con ahorro.'
+                },
+                semiannual: {
+                    name: 'Semestral',
+                    price: '4.297',
+                    description: 'Excelente para profesionales que desean maximizar sus ganancias con estrategias exclusivas de arbitraje.'
+                },
+                annual: {
+                    name: 'Anual',
+                    price: '7.997',
+                    description: 'La elección de los traders profesionales que buscan las mejores oportunidades con la mejor relación costo-beneficio.'
+                },
+                savings: {
+                    quarterly: 'Ahorro del 7%',
+                    semiannual: 'Ahorro del 28%',
+                    annual: 'Ahorro del 33%'
+                },
+                faq: {
+                    title: 'Preguntas Frecuentes',
+                    items: [
+                        {
+                            question: '¿Cómo funciona el período de prueba?',
+                            answer: 'Ofrecemos 7 días de prueba gratuita en todos los planes. Puedes cancelar en cualquier momento durante este período sin costo alguno.'
+                        },
+                        {
+                            question: '¿Puedo cambiar de plan después?',
+                            answer: 'Sí, puedes hacer upgrade o downgrade de tu plan en cualquier momento. La diferencia se calculará proporcionalmente.'
+                        },
+                        {
+                            question: '¿Cuál es la política de reembolso?',
+                            answer: 'Ofrecemos garantía de devolución de 7 días. Si no estás satisfecho, te devolvemos el 100% de tu inversión.'
+                        },
+                        {
+                            question: '¿Qué métodos de pago se aceptan?',
+                            answer: 'Aceptamos tarjetas de crédito, PIX y transferencia bancaria. Todas las transacciones se procesan de forma segura.'
+                        },
+                        {
+                            question: '¿Necesito proporcionar datos personales?',
+                            answer: 'Sí, necesitamos información básica para crear tu cuenta y emitir la factura, pero todos los datos están protegidos según la LGPD.'
+                        }
+                    ]
+                },
+                securePurchase: {
+                    title: 'Compra 100% Segura',
+                    ssl: 'Entorno seguro con encriptación SSL',
+                    gateway: 'Pago procesado por gateway homologado',
+                    lgpd: 'Datos protegidos según LGPD'
+                }
             },
             home: {
                 title: 'Arbitraje de Futuros',
