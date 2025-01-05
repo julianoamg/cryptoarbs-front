@@ -791,3 +791,5 @@ voce deve obrigatoriamente fazer alteracoes pequenas que sejam facilmente revert
 use sempre a paleta de cores ja utilizada na maioria dos componentes para criar qualquer component novo ou layout, para ter harmonia com as cores
 
 todos os componentes devem respeitar a implementacoes de traducoes para seus textos, obrigatoriamente, e uma condicao importante e deve ser extremamente respeitada
+
+faca somente o que for extremamente necessario para concluir a tarefa

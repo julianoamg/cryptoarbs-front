@@ -143,45 +143,54 @@
     <!-- Desktop view -->
     <div class="hidden lg:grid lg:grid-cols-4 gap-4">
       {#each Object.entries(periods) as [key, value]}
-        <button 
-          class="p-4 rounded-lg border transition-all duration-200 text-center hover:shadow-lg backdrop-blur-sm
+        <div 
+          role="button"
+          tabindex="0"
+          class="p-4 rounded-lg border transition-all duration-200 text-center hover:shadow-lg backdrop-blur-sm cursor-pointer
             {selectedPeriod === key ? 
               'border-emerald-500/30 bg-gradient-to-b from-emerald-500/10 to-neutral-900/90' : 
               'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'}"
           onclick={() => selectedPeriod = key}
+          onkeydown={(e) => e.key === 'Enter' && (selectedPeriod = key)}
         >
           {@render periodDisplay(value)}
-        </button>
+        </div>
       {/each}
     </div>
 
     <!-- Tablet view -->
     <div class="hidden sm:grid lg:hidden sm:grid-cols-2 gap-4">
       {#each Object.entries(periods) as [key, value]}
-        <button 
-          class="p-4 rounded-lg border transition-all duration-200 text-center hover:shadow-lg backdrop-blur-sm
+        <div 
+          role="button"
+          tabindex="0"
+          class="p-4 rounded-lg border transition-all duration-200 text-center hover:shadow-lg backdrop-blur-sm cursor-pointer
             {selectedPeriod === key ? 
               'border-emerald-500/30 bg-gradient-to-b from-emerald-500/10 to-neutral-900/90' : 
               'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'}"
           onclick={() => selectedPeriod = key}
+          onkeydown={(e) => e.key === 'Enter' && (selectedPeriod = key)}
         >
           {@render periodDisplay(value)}
-        </button>
+        </div>
       {/each}
     </div>
 
     <!-- Mobile view -->
     <div class="sm:hidden space-y-4">
       {#each Object.entries(periods) as [key, value]}
-        <button 
-          class="w-full p-4 rounded-lg border transition-all duration-200 text-center hover:shadow-lg backdrop-blur-sm
+        <div 
+          role="button"
+          tabindex="0"
+          class="w-full p-4 rounded-lg border transition-all duration-200 text-center hover:shadow-lg backdrop-blur-sm cursor-pointer
             {selectedPeriod === key ? 
               'border-emerald-500/30 bg-gradient-to-b from-emerald-500/10 to-neutral-900/90' : 
               'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'}"
           onclick={() => selectedPeriod = key}
+          onkeydown={(e) => e.key === 'Enter' && (selectedPeriod = key)}
         >
           {@render periodDisplay(value)}
-        </button>
+        </div>
       {/each}
     </div>
   </div>
