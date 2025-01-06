@@ -21,6 +21,7 @@
         profit: string;
         created: string;
         modified: string;
+        symbol?: string;
     }
 
     $: t = translations[$language];
@@ -123,58 +124,59 @@
                 <div class="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl overflow-hidden hover:border-neutral-700 transition-colors relative">
                     <button
                         on:click={() => abrirModal(index)}
-                        class="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-800/40 backdrop-blur-sm text-neutral-300 hover:bg-red-500/30 hover:text-red-400 transition-all duration-200"
+                        class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full bg-neutral-800/40 backdrop-blur-sm text-neutral-300 hover:bg-red-500/30 hover:text-red-400 transition-all duration-200"
                         title={t.pages.home.removeOpportunity}
                         aria-label={t.pages.home.removeOpportunity}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M6 6l12 12M6 18L18 6" />
-                        </svg>
+                        <X class="w-4 h-4" />
                     </button>
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center space-x-3">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-lg font-bold text-neutral-200">{opp.exchange_a}</span>
-                                    <ArrowRight class="w-5 h-5 text-neutral-500" />
-                                    <span class="text-lg font-bold text-neutral-200">{opp.exchange_b}</span>
-                                </div>
+                    <div class="p-4 sm:p-6 space-y-4">
+                        <!-- Header com Exchanges e Lucro -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-base sm:text-lg font-bold text-neutral-200">{opp.exchange_a}</span>
+                                <ArrowRight class="w-4 h-4 sm:w-5 sm:h-5 text-neutral-500" />
+                                <span class="text-base sm:text-lg font-bold text-neutral-200">{opp.exchange_b}</span>
                             </div>
                             <div class="flex items-baseline space-x-1">
-                                <span class="text-2xl font-bold text-emerald-500">{opp.profit}%</span>
+                                <span class="text-xl sm:text-2xl font-bold text-emerald-500">{opp.profit}%</span>
                                 <span class="text-sm text-emerald-500/70">{t.pages.home.profit}</span>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4 mb-4">
+                        <!-- Trading Pair, Spread e Profit Fees -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            {#if opp.symbol}
+                                <div class="col-span-2 sm:col-span-1">
+                                    <p class="text-xs sm:text-sm font-medium text-neutral-400">{t.pages.home.tradingPair}</p>
+                                    <p class="text-sm sm:text-base text-neutral-200 font-medium">{opp.symbol}</p>
+                                </div>
+                            {/if}
                             <div>
-                                <p class="text-sm font-medium text-neutral-400 mb-1">{t.pages.home.spread}</p>
-                                <p class="text-neutral-200">{opp.spread}%</p>
+                                <p class="text-xs sm:text-sm font-medium text-neutral-400">{t.pages.home.spread}</p>
+                                <p class="text-sm sm:text-base text-neutral-200">{opp.spread}%</p>
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-neutral-400 mb-1">Profit after fees</p>
-                                <p class="text-neutral-200">{opp.profit_fee}%</p>
+                                <p class="text-xs sm:text-sm font-medium text-neutral-400">{t.pages.home.profitAfterFees}</p>
+                                <p class="text-sm sm:text-base text-neutral-200">{opp.profit_fee}%</p>
                             </div>
                         </div>
 
+                        <!-- Preços -->
                         <div class="border-t border-neutral-800 pt-4">
-                            <div class="grid grid-cols-2 gap-6">
+                            <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <p class="text-sm font-medium text-neutral-400 mb-2">{opp.exchange_a}</p>
-                                    <div class="space-y-1">
-                                        <div class="flex justify-between">
-                                            <span class="text-sm text-neutral-300">{t.pages.home.price}</span>
-                                            <span class="text-sm text-neutral-300">{opp.exchange_a_price}</span>
-                                        </div>
+                                    <p class="text-xs sm:text-sm font-medium text-neutral-400 mb-2">{opp.exchange_a}</p>
+                                    <div class="flex justify-between">
+                                        <span class="text-xs sm:text-sm text-neutral-400">{t.pages.home.price}</span>
+                                        <span class="text-xs sm:text-sm text-neutral-200">{opp.exchange_a_price}</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-neutral-400 mb-2">{opp.exchange_b}</p>
-                                    <div class="space-y-1">
-                                        <div class="flex justify-between">
-                                            <span class="text-sm text-neutral-300">{t.pages.home.price}</span>
-                                            <span class="text-sm text-neutral-300">{opp.exchange_b_price}</span>
-                                        </div>
+                                    <p class="text-xs sm:text-sm font-medium text-neutral-400 mb-2">{opp.exchange_b}</p>
+                                    <div class="flex justify-between">
+                                        <span class="text-xs sm:text-sm text-neutral-400">{t.pages.home.price}</span>
+                                        <span class="text-xs sm:text-sm text-neutral-200">{opp.exchange_b_price}</span>
                                     </div>
                                 </div>
                             </div>

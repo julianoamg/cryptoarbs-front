@@ -1,6 +1,13 @@
 import { PUBLIC_API_URL } from '$env/static/public';
 
 /**
+ * @typedef {Object} Exchange
+ * @property {string} id - UUID of the exchange
+ * @property {string} name - Name of the exchange
+ * @property {boolean} is_preferred - Whether the exchange is preferred
+ */
+
+/**
  * @typedef {Object} ArbitrageOpportunity
  * @property {string} id - UUID of the opportunity
  * @property {string} exchange_a - Name of exchange A
@@ -12,7 +19,36 @@ import { PUBLIC_API_URL } from '$env/static/public';
  * @property {string} profit - Total profit percentage
  * @property {string} created - Creation timestamp
  * @property {string} modified - Last modification timestamp
+ * @property {string} symbol - Trading pair symbol (e.g. BTC/USDT)
  */
+
+/**
+ * Fetches the list of available exchanges
+ * @param {string} accessToken - Current access token
+ * @returns {Promise<Exchange[]>} List of exchanges
+ */
+export async function getExchanges(accessToken) {
+    try {
+        const response = await fetch(`${PUBLIC_API_URL}/exchanges/list/`, {
+            headers: {
+                'Authorization': `Token ${accessToken}`
+            }
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.detail || 'Failed to fetch exchanges');
+        }
+
+        const data = await response.json();
+        return data.results;
+    } catch (err) {
+        if (err instanceof Error) {
+            throw err;
+        }
+        throw new Error('Failed to connect to the server');
+    }
+}
 
 /**
  * Fetches arbitrage opportunities from the API

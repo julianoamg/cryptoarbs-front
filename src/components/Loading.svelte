@@ -6,7 +6,7 @@
     export let noData = false;
 
     $: t = translations[$language];
-    $: message = noData ? 'Buscando Oportunidades' : t.loading || 'Loading...';
+    $: message = 'Buscando Oportunidades';
 </script>
 
 <style>
@@ -41,7 +41,7 @@
     }
 </style>
 
-<div class="gradient-bg rounded-xl p-12 backdrop-blur-[2px]" transition:fade>
+<div class="gradient-bg rounded-xl p-12 backdrop-blur-[2px]">
     <div class="flex flex-col items-center gap-8">
         <div class="spinner"></div>
         <div class="text-center">

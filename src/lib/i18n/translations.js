@@ -194,26 +194,16 @@ export const translations = {
                 entryValue: 'Valor',
                 estimatedProfit: 'Lucro estimado',
                 searching: 'Procurando...',
-                waitingMessage: 'Não se preocupe, estamos buscando as melhores oportunidades para você'
+                waitingMessage: 'Não se preocupe, estamos buscando as melhores oportunidades para você',
+                tradingPair: 'Par',
+                profitAfterFees: 'Lucro após taxas'
             },
             settings: {
                 title: 'Configurações',
-                subtitle: 'Gerencie suas preferências e conexões',
+                subtitle: 'Gerencie suas preferências',
                 exchanges: {
-                    title: 'Exchanges',
-                    features: {
-                        lowFees: 'Baixas taxas',
-                        highLiquidity: 'Alta liquidez',
-                        multiplePairs: 'Múltiplos pares',
-                        pixDeposit: 'Depósito via PIX',
-                        localSupport: 'Suporte local',
-                        brlCurrency: 'Real (BRL)',
-                        altcoins: 'Grande variedade',
-                        staking: 'Staking',
-                        support24_7: 'Suporte 24/7',
-                        intuitiveInterface: 'Interface intuitiva',
-                        marginTrading: 'Trading com margem'
-                    },
+                    title: 'Selecione suas exchanges favoritas',
+                    defaultDescription: 'Exchange de criptomoedas',
                     descriptions: {
                         binance: 'Exchange global com alta liquidez',
                         mercadoBitcoin: 'Maior exchange brasileira',
@@ -222,7 +212,8 @@ export const translations = {
                         okx: 'Exchange com foco em derivativos',
                         novadax: 'Exchange brasileira com foco em usabilidade'
                     }
-                }
+                },
+                saveButton: 'Salvar configurações'
             },
             mentoring: {
                 title: 'Mentoria',
@@ -462,26 +453,16 @@ export const translations = {
                 entryValue: 'Value',
                 estimatedProfit: 'Estimated profit',
                 searching: 'Searching...',
-                waitingMessage: "Don't worry, we're finding the best opportunities for you"
+                waitingMessage: "Don't worry, we're finding the best opportunities for you",
+                tradingPair: 'Pair',
+                profitAfterFees: 'Lucro após taxas'
             },
             settings: {
                 title: 'Settings',
-                subtitle: 'Manage your preferences and connections',
+                subtitle: 'Manage your preferences',
                 exchanges: {
-                    title: 'Exchanges',
-                    features: {
-                        lowFees: 'Low fees',
-                        highLiquidity: 'High liquidity',
-                        multiplePairs: 'Multiple pairs',
-                        pixDeposit: 'PIX deposit',
-                        localSupport: 'Local support',
-                        brlCurrency: 'Brazilian Real (BRL)',
-                        altcoins: 'Wide variety',
-                        staking: 'Staking',
-                        support24_7: '24/7 Support',
-                        intuitiveInterface: 'Intuitive interface',
-                        marginTrading: 'Margin trading'
-                    },
+                    title: 'Select your favorite exchanges',
+                    defaultDescription: 'Cryptocurrency exchange',
                     descriptions: {
                         binance: 'Global exchange with high liquidity',
                         mercadoBitcoin: 'Largest Brazilian exchange',
@@ -490,7 +471,8 @@ export const translations = {
                         okx: 'Exchange focused on derivatives',
                         novadax: 'Brazilian exchange focused on usability'
                     }
-                }
+                },
+                saveButton: 'Save settings'
             },
             mentoring: {
                 title: 'Mentoring',
@@ -730,35 +712,26 @@ export const translations = {
                 entryValue: 'Valor',
                 estimatedProfit: 'Beneficio estimado',
                 searching: 'Buscando...',
-                waitingMessage: 'No te preocupes, estamos buscando las mejores oportunidades para ti'
+                waitingMessage: 'No te preocupes, estamos buscando las mejores oportunidades para ti',
+                tradingPair: 'Par de trading',
+                profitAfterFees: 'Lucro após taxas'
             },
             settings: {
-                title: 'Configuración',
-                subtitle: 'Gestiona tus preferencias y conexiones',
+                title: 'Configuraciones',
+                subtitle: 'Administra tus preferencias',
                 exchanges: {
-                    title: 'Exchanges',
-                    features: {
-                        lowFees: 'Comisiones bajas',
-                        highLiquidity: 'Alta liquidez',
-                        multiplePairs: 'Múltiples pares',
-                        pixDeposit: 'Depósito PIX',
-                        localSupport: 'Soporte local',
-                        brlCurrency: 'Real brasileño (BRL)',
-                        altcoins: 'Gran variedad',
-                        staking: 'Staking',
-                        support24_7: 'Soporte 24/7',
-                        intuitiveInterface: 'Interfaz intuitiva',
-                        marginTrading: 'Trading con margen'
-                    },
+                    title: 'Selecciona tus exchanges favoritas',
+                    defaultDescription: 'Exchange de criptomonedas',
                     descriptions: {
                         binance: 'Exchange global con alta liquidez',
-                        mercadoBitcoin: 'Mayor exchange brasileño',
-                        kucoin: 'Exchange enfocado en altcoins',
-                        foxbit: 'Exchange brasileño tradicional',
-                        okx: 'Exchange enfocado en derivados',
-                        novadax: 'Exchange brasileño enfocado en usabilidad'
+                        mercadoBitcoin: 'Mayor exchange brasileña',
+                        kucoin: 'Exchange enfocada en altcoins',
+                        foxbit: 'Exchange brasileña tradicional',
+                        okx: 'Exchange enfocada en derivados',
+                        novadax: 'Exchange brasileña enfocada en usabilidad'
                     }
-                }
+                },
+                saveButton: 'Guardar configuraciones'
             },
             mentoring: {
                 title: 'Mentoría',
