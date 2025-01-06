@@ -92,7 +92,7 @@ export const translations: Translations = {
                 ]
             },
             home: {
-                title: 'Arbitragem de Futuros',
+                title: 'Arbitragem de Criptomoedas',
                 subtitle: 'Esta página é atualizada automaticamente.',
                 removeOpportunity: 'Remover oportunidade',
                 profit: 'lucro',
@@ -227,7 +227,7 @@ export const translations: Translations = {
                 ]
             },
             home: {
-                title: 'Futures Arbitrage',
+                title: 'Cryptocurrency Arbitrage',
                 subtitle: 'This page updates automatically.',
                 removeOpportunity: 'Remove opportunity',
                 profit: 'profit',
@@ -362,7 +362,7 @@ export const translations: Translations = {
                 ]
             },
             home: {
-                title: 'Arbitraje de Futuros',
+                title: 'Arbitraje de Criptomoedas',
                 subtitle: 'Esta página se actualiza automáticamente.',
                 removeOpportunity: 'Eliminar oportunidad',
                 profit: 'beneficio',
