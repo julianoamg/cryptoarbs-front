@@ -33,11 +33,14 @@ export async function getOpportunities(accessToken) {
         }
         const data = await response.json();
         
-        // Round profit fields to 2 decimal places
+        // Round profit fields to 2 decimal places and format prices with 6 decimal places
         const opportunities = data.results.map(opportunity => ({
             ...opportunity,
-            profit: Number(opportunity.profit).toFixed(2),
-            profit_fee: Number(opportunity.profit_fee).toFixed(2)
+            profit: Number(opportunity.profit.replace('$', '')).toFixed(2),
+            profit_fee: Number(opportunity.profit_fee.replace('$', '')).toFixed(2),
+            exchange_a_price: Number(opportunity.exchange_a_price.replace('$', '')).toFixed(6),
+            exchange_b_price: Number(opportunity.exchange_b_price.replace('$', '')).toFixed(6),
+            spread: opportunity.spread.replace('$', '')
         }));
         
         return opportunities;

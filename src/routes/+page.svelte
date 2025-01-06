@@ -40,32 +40,6 @@
     let showModal = false;
     let cardToRemove: number | null = null;
 
-    // Função para calcular o lucro baseado no valor de entrada
-    function calcularLucro(valorEntrada: number, percentualLucro: string): string {
-        const lucro = (valorEntrada * parseFloat(percentualLucro)) / 100;
-        return lucro.toFixed(2);
-    }
-
-    // Objeto para armazenar os valores de entrada para cada oportunidade
-    let valoresEntrada: Record<string, number> = {};
-
-    // Inicializar valores padrão
-    $: {
-        opportunities.forEach(opp => {
-            if (valoresEntrada[opp.id] === undefined) {
-                valoresEntrada[opp.id] = 100;
-            }
-        });
-    }
-
-    // Função para remover valor de entrada
-    function removerValor(id: string): void {
-        if (confirm('Deseja realmente remover o valor de entrada?')) {
-            delete valoresEntrada[id];
-            valoresEntrada = valoresEntrada;
-        }
-    }
-
     // Funções para controlar a modal
     function abrirModal(index: number): void {
         cardToRemove = index;
@@ -80,13 +54,7 @@
     // Função para remover o card de oportunidade
     function removerCard(): void {
         if (cardToRemove !== null) {
-            const oppToRemove = opportunities[cardToRemove];
             opportunities = opportunities.filter((_, i) => i !== cardToRemove);
-            // Remove também o valor de entrada associado
-            if (valoresEntrada[oppToRemove.id]) {
-                delete valoresEntrada[oppToRemove.id];
-                valoresEntrada = valoresEntrada;
-            }
             fecharModal();
         }
     }
@@ -160,7 +128,9 @@
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center space-x-3">
                             <div class="flex items-center space-x-2">
-                                <span class="text-lg font-bold text-neutral-200">{opp.id}</span>
+                                <span class="text-lg font-bold text-neutral-200">{opp.exchange_a}</span>
+                                <ArrowRight class="w-5 h-5 text-neutral-500" />
+                                <span class="text-lg font-bold text-neutral-200">{opp.exchange_b}</span>
                             </div>
                         </div>
                         <div class="flex items-baseline space-x-1">
@@ -198,37 +168,6 @@
                                         <span class="text-sm text-neutral-300">{t.pages.home.price}</span>
                                         <span class="text-sm text-neutral-300">{opp.exchange_b_price}</span>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4 pt-4 border-t border-neutral-800">
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-1 relative">
-                                    <label for="valor-{opp.id}" class="text-sm font-medium text-neutral-400">{t.pages.home.entryValue}</label>
-                                    <div class="relative">
-                                        <input
-                                            type="number"
-                                            id="valor-{opp.id}"
-                                            bind:value={valoresEntrada[opp.id]}
-                                            placeholder="100.00"
-                                            class="mt-1 w-full bg-neutral-800/50 border border-neutral-700 rounded-lg px-3 py-2 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
-                                        />
-                                        {#if valoresEntrada[opp.id]}
-                                            <button
-                                                on:click={() => removerValor(opp.id)}
-                                                class="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 transition-colors"
-                                            >
-                                                <X class="w-4 h-4" />
-                                            </button>
-                                        {/if}
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-neutral-400">{t.pages.home.estimatedProfit}</p>
-                                    <p class="mt-1 text-lg font-bold text-emerald-500">
-                                        {valoresEntrada[opp.id] ? calcularLucro(valoresEntrada[opp.id], opp.profit) : '0.00'}
-                                    </p>
                                 </div>
                             </div>
                         </div>

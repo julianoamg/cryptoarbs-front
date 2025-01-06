@@ -190,7 +190,7 @@ export const translations = {
                 volume24h: 'Volume 24h',
                 spread: 'Spread',
                 price: 'Preço',
-                entryValue: 'Valor de entrada ($)',
+                entryValue: 'Valor',
                 estimatedProfit: 'Lucro estimado'
             },
             settings: {
@@ -455,7 +455,7 @@ export const translations = {
                 volume24h: '24h Volume',
                 spread: 'Spread',
                 price: 'Price',
-                entryValue: 'Entry value ($)',
+                entryValue: 'Value',
                 estimatedProfit: 'Estimated profit'
             },
             settings: {
@@ -720,7 +720,7 @@ export const translations = {
                 volume24h: 'Volumen 24h',
                 spread: 'Spread',
                 price: 'Precio',
-                entryValue: 'Valor de entrada ($)',
+                entryValue: 'Valor',
                 estimatedProfit: 'Beneficio estimado'
             },
             settings: {
