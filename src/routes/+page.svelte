@@ -4,82 +4,37 @@
     import { quintOut } from 'svelte/easing';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
+    import { auth } from '$lib/stores/auth';
+    import { onMount } from 'svelte';
+    import { getOpportunities } from '$lib/services/exchange';
     import PageHeader from '../components/forms/PageHeader.svelte';
 
-    interface Exchange {
-        nome: string;
-        preco: string;
-    }
-
-    interface Opportunity {
-        ativo: string;
-        exchangeA: Exchange;
-        exchangeB: Exchange;
-        lucro: string;
+    interface ArbitrageOpportunity {
+        id: string;
+        exchange_a: string;
+        exchange_b: string;
+        exchange_a_price: string;
+        exchange_b_price: string;
         spread: string;
-        volume24h: string;
+        profit_fee: string;
+        profit: string;
+        created: string;
+        modified: string;
     }
 
     $: t = translations[$language];
 
-    let opportunities: Opportunity[] = [
-        {
-            ativo: 'LL-USDT',
-            exchangeA: {
-                nome: 'Mexc',
-                preco: '0.04529'
-            },
-            exchangeB: {
-                nome: 'Mexc (Futuros)',
-                preco: '0.0454'
-            },
-            lucro: '0.74',
-            spread: '0.738',
-            volume24h: '2.5M'
-        },
-        {
-            ativo: 'ARCA-USDT',
-            exchangeA: {
-                nome: 'Kucoin',
-                preco: '0.02503'
-            },
-            exchangeB: {
-                nome: 'Mexc (Futuros)',
-                preco: '0.02515'
-            },
-            lucro: '0.71',
-            spread: '0.7852',
-            volume24h: '1.8M'
-        },
-        {
-            ativo: 'ARCA-USDT',
-            exchangeA: {
-                nome: 'Bitget',
-                preco: '0.02506'
-            },
-            exchangeB: {
-                nome: 'Mexc (Futuros)',
-                preco: '0.02515'
-            },
-            lucro: '0.61',
-            spread: '0.6074',
-            volume24h: '1.2M'
-        },
-        {
-            ativo: 'HYPE-USDT',
-            exchangeA: {
-                nome: 'Kucoin',
-                preco: '23.541'
-            },
-            exchangeB: {
-                nome: 'Mexc (Futuros)',
-                preco: '23.48'
-            },
-            lucro: '0.6',
-            spread: '0.5978',
-            volume24h: '4.1M'
+    let opportunities: ArbitrageOpportunity[] = [];
+
+    onMount(async () => {
+        if ($auth.token) {
+            try {
+                opportunities = await getOpportunities($auth.token);
+            } catch (error) {
+                console.error('Failed to fetch opportunities:', error);
+            }
         }
-    ];
+    });
 
     // Estado da modal
     let showModal = false;
@@ -97,16 +52,16 @@
     // Inicializar valores padrão
     $: {
         opportunities.forEach(opp => {
-            if (valoresEntrada[opp.ativo] === undefined) {
-                valoresEntrada[opp.ativo] = 100;
+            if (valoresEntrada[opp.id] === undefined) {
+                valoresEntrada[opp.id] = 100;
             }
         });
     }
 
     // Função para remover valor de entrada
-    function removerValor(ativo: string): void {
+    function removerValor(id: string): void {
         if (confirm('Deseja realmente remover o valor de entrada?')) {
-            delete valoresEntrada[ativo];
+            delete valoresEntrada[id];
             valoresEntrada = valoresEntrada;
         }
     }
@@ -125,11 +80,11 @@
     // Função para remover o card de oportunidade
     function removerCard(): void {
         if (cardToRemove !== null) {
-            const ativoToRemove = opportunities[cardToRemove].ativo;
+            const oppToRemove = opportunities[cardToRemove];
             opportunities = opportunities.filter((_, i) => i !== cardToRemove);
             // Remove também o valor de entrada associado
-            if (valoresEntrada[ativoToRemove]) {
-                delete valoresEntrada[ativoToRemove];
+            if (valoresEntrada[oppToRemove.id]) {
+                delete valoresEntrada[oppToRemove.id];
                 valoresEntrada = valoresEntrada;
             }
             fecharModal();
@@ -205,43 +160,43 @@
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center space-x-3">
                             <div class="flex items-center space-x-2">
-                                <span class="text-lg font-bold text-neutral-200">{opp.ativo}</span>
+                                <span class="text-lg font-bold text-neutral-200">{opp.id}</span>
                             </div>
                         </div>
                         <div class="flex items-baseline space-x-1">
-                            <span class="text-2xl font-bold text-emerald-500">{opp.lucro}%</span>
+                            <span class="text-2xl font-bold text-emerald-500">{opp.profit}%</span>
                             <span class="text-sm text-emerald-500/70">{t.pages.home.profit}</span>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
-                            <p class="text-sm font-medium text-neutral-400 mb-1">{t.pages.home.volume24h}</p>
-                            <p class="text-neutral-200">${opp.volume24h}</p>
-                        </div>
-                        <div>
                             <p class="text-sm font-medium text-neutral-400 mb-1">{t.pages.home.spread}</p>
                             <p class="text-neutral-200">{opp.spread}%</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-neutral-400 mb-1">Profit after fees</p>
+                            <p class="text-neutral-200">{opp.profit_fee}%</p>
                         </div>
                     </div>
 
                     <div class="border-t border-neutral-800 pt-4">
                         <div class="grid grid-cols-2 gap-6">
                             <div>
-                                <p class="text-sm font-medium text-neutral-400 mb-2">{opp.exchangeA.nome}</p>
+                                <p class="text-sm font-medium text-neutral-400 mb-2">{opp.exchange_a}</p>
                                 <div class="space-y-1">
                                     <div class="flex justify-between">
                                         <span class="text-sm text-neutral-300">{t.pages.home.price}</span>
-                                        <span class="text-sm text-neutral-300">${opp.exchangeA.preco}</span>
+                                        <span class="text-sm text-neutral-300">{opp.exchange_a_price}</span>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-neutral-400 mb-2">{opp.exchangeB.nome}</p>
+                                <p class="text-sm font-medium text-neutral-400 mb-2">{opp.exchange_b}</p>
                                 <div class="space-y-1">
                                     <div class="flex justify-between">
                                         <span class="text-sm text-neutral-300">{t.pages.home.price}</span>
-                                        <span class="text-sm text-neutral-300">${opp.exchangeB.preco}</span>
+                                        <span class="text-sm text-neutral-300">{opp.exchange_b_price}</span>
                                     </div>
                                 </div>
                             </div>
@@ -250,18 +205,18 @@
                         <div class="mt-4 pt-4 border-t border-neutral-800">
                             <div class="flex items-center space-x-4">
                                 <div class="flex-1 relative">
-                                    <label for="valor-{opp.ativo}" class="text-sm font-medium text-neutral-400">{t.pages.home.entryValue}</label>
+                                    <label for="valor-{opp.id}" class="text-sm font-medium text-neutral-400">{t.pages.home.entryValue}</label>
                                     <div class="relative">
                                         <input
                                             type="number"
-                                            id="valor-{opp.ativo}"
-                                            bind:value={valoresEntrada[opp.ativo]}
+                                            id="valor-{opp.id}"
+                                            bind:value={valoresEntrada[opp.id]}
                                             placeholder="100.00"
                                             class="mt-1 w-full bg-neutral-800/50 border border-neutral-700 rounded-lg px-3 py-2 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
                                         />
-                                        {#if valoresEntrada[opp.ativo]}
+                                        {#if valoresEntrada[opp.id]}
                                             <button
-                                                on:click={() => removerValor(opp.ativo)}
+                                                on:click={() => removerValor(opp.id)}
                                                 class="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 transition-colors"
                                             >
                                                 <X class="w-4 h-4" />
@@ -269,10 +224,10 @@
                                         {/if}
                                     </div>
                                 </div>
-                                <div class="flex-1">
+                                <div>
                                     <p class="text-sm font-medium text-neutral-400">{t.pages.home.estimatedProfit}</p>
                                     <p class="mt-1 text-lg font-bold text-emerald-500">
-                                        ${valoresEntrada[opp.ativo] ? calcularLucro(valoresEntrada[opp.ativo], opp.lucro) : '0.00'}
+                                        {valoresEntrada[opp.id] ? calcularLucro(valoresEntrada[opp.id], opp.profit) : '0.00'}
                                     </p>
                                 </div>
                             </div>

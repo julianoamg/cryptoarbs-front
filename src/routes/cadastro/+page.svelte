@@ -14,6 +14,7 @@
     let email = '';
     let password = '';
     let confirmPassword = '';
+    let phone = '';
     let loading = false;
     let fieldErrors = {
         non_field_errors: [],
@@ -42,7 +43,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ first_name, email, password }),
+                body: JSON.stringify({ first_name, email, password, phone }),
             });
 
             const registerData = await registerResponse.json();
@@ -109,6 +110,15 @@
                     label={t.auth.cadastro.email}
                     bind:value={email}
                     placeholder="seu@email.com"
+                    errors={fieldErrors}
+                />
+
+                <FormField
+                    name="phone"
+                    type="tel"
+                    label={t.auth.cadastro.whatsapp}
+                    bind:value={phone}
+                    placeholder="+55 (11) 99999-9999"
                     errors={fieldErrors}
                 />
 

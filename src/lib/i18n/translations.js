@@ -35,10 +35,13 @@ export const translations = {
                 email: 'Email',
                 senha: 'Senha',
                 confirmarSenha: 'Confirmar senha',
+                whatsapp: 'WhatsApp',
                 criar: 'Criar conta',
                 criando: 'Criando...',
                 jaTemConta: 'Já tem uma conta?',
-                entrar: 'Entrar'
+                entrar: 'Entrar',
+                salvar: 'Salvar alterações',
+                salvando: 'Salvando...'
             },
             recuperarSenha: {
                 titulo: 'Recuperar senha',
@@ -52,12 +55,15 @@ export const translations = {
             success: {
                 contaCriada: 'Conta criada com sucesso!',
                 loginSucesso: 'Login realizado com sucesso!',
-                emailRecuperacaoEnviado: 'Email de recuperação enviado com sucesso!'
+                emailRecuperacaoEnviado: 'Email de recuperação enviado com sucesso!',
+                dadosAtualizados: 'Dados atualizados com sucesso!'
             },
             error: {
                 loginAutomatico: 'Erro ao fazer login automático. Por favor, faça login manualmente.',
                 senhasNaoCoincidem: 'As senhas não coincidem.',
-                verificarEmail: 'Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.'
+                verificarEmail: 'Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.',
+                atualizarDados: 'Erro ao atualizar dados. Por favor, tente novamente.',
+                semAlteracoes: 'Nenhuma alteração foi feita para salvar.'
             }
         },
         pages: {
@@ -261,7 +267,7 @@ export const translations = {
     'en': {
         // Sidebar
         menu: {
-            arbitragens: 'ARBITRAGE',
+            arbitragens: 'ARBITRAJE',
             criptomoedas: 'Cryptocurrencies',
             configuracoes: 'Settings',
             suporte: 'SUPPORT',
@@ -294,10 +300,13 @@ export const translations = {
                 email: 'Email',
                 senha: 'Password',
                 confirmarSenha: 'Confirm password',
+                whatsapp: 'WhatsApp',
                 criar: 'Create account',
                 criando: 'Creating...',
                 jaTemConta: 'Already have an account?',
-                entrar: 'Login'
+                entrar: 'Sign in',
+                salvar: 'Save changes',
+                salvando: 'Saving...'
             },
             recuperarSenha: {
                 titulo: 'Reset password',
@@ -311,12 +320,15 @@ export const translations = {
             success: {
                 contaCriada: 'Account created successfully!',
                 loginSucesso: 'Login successful!',
-                emailRecuperacaoEnviado: 'Recovery email sent successfully!'
+                emailRecuperacaoEnviado: 'Recovery email sent successfully!',
+                dadosAtualizados: 'Data updated successfully!'
             },
             error: {
                 loginAutomatico: 'Error during automatic login. Please login manually.',
                 senhasNaoCoincidem: 'Passwords do not match.',
-                verificarEmail: 'Check your inbox and follow the instructions to reset your password.'
+                verificarEmail: 'Check your inbox and follow the instructions to reset your password.',
+                atualizarDados: 'Error updating data. Please try again.',
+                semAlteracoes: 'No changes were made to save.'
             }
         },
         pages: {
@@ -553,10 +565,13 @@ export const translations = {
                 email: 'Email',
                 senha: 'Contraseña',
                 confirmarSenha: 'Confirmar contraseña',
+                whatsapp: 'WhatsApp',
                 criar: 'Crear cuenta',
                 criando: 'Creando...',
                 jaTemConta: '¿Ya tienes una cuenta?',
-                entrar: 'Entrar'
+                entrar: 'Iniciar sesión',
+                salvar: 'Guardar cambios',
+                salvando: 'Guardando...'
             },
             recuperarSenha: {
                 titulo: 'Recuperar contraseña',
@@ -570,12 +585,15 @@ export const translations = {
             success: {
                 contaCriada: '¡Cuenta creada con éxito!',
                 loginSucesso: '¡Inicio de sesión exitoso!',
-                emailRecuperacaoEnviado: '¡Correo de recuperación enviado con éxito!'
+                emailRecuperacaoEnviado: '¡Correo de recuperación enviado con éxito!',
+                dadosAtualizados: '¡Datos actualizados con éxito!'
             },
             error: {
                 loginAutomatico: 'Error en el inicio de sesión automático. Por favor, inicie sesión manualmente.',
                 senhasNaoCoincidem: 'Las contraseñas no coinciden.',
-                verificarEmail: 'Revise su bandeja de entrada y siga las instrucciones para restablecer su contraseña.'
+                verificarEmail: 'Revise su bandeja de entrada y siga las instrucciones para restablecer su contraseña.',
+                atualizarDados: 'Error al actualizar datos. Por favor, inténtelo de nuevo.',
+                semAlteracoes: 'No se realizaron cambios para guardar.'
             }
         },
         pages: {
