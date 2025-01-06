@@ -1,5 +1,6 @@
 export const translations = {
     'pt-BR': {
+        loading: 'Carregando...',
         // Sidebar
         menu: {
             arbitragens: 'ARBITRAGENS',
@@ -191,7 +192,9 @@ export const translations = {
                 spread: 'Spread',
                 price: 'Preço',
                 entryValue: 'Valor',
-                estimatedProfit: 'Lucro estimado'
+                estimatedProfit: 'Lucro estimado',
+                searching: 'Procurando...',
+                waitingMessage: 'Não se preocupe, estamos buscando as melhores oportunidades para você'
             },
             settings: {
                 title: 'Configurações',
@@ -265,6 +268,7 @@ export const translations = {
         }
     },
     'en': {
+        loading: 'Loading...',
         // Sidebar
         menu: {
             arbitragens: 'ARBITRAJE',
@@ -456,7 +460,9 @@ export const translations = {
                 spread: 'Spread',
                 price: 'Price',
                 entryValue: 'Value',
-                estimatedProfit: 'Estimated profit'
+                estimatedProfit: 'Estimated profit',
+                searching: 'Searching...',
+                waitingMessage: "Don't worry, we're finding the best opportunities for you"
             },
             settings: {
                 title: 'Settings',
@@ -530,6 +536,7 @@ export const translations = {
         }
     },
     'es': {
+        loading: 'Cargando...',
         // Sidebar
         menu: {
             arbitragens: 'ARBITRAJE',
@@ -721,7 +728,9 @@ export const translations = {
                 spread: 'Spread',
                 price: 'Precio',
                 entryValue: 'Valor',
-                estimatedProfit: 'Beneficio estimado'
+                estimatedProfit: 'Beneficio estimado',
+                searching: 'Buscando...',
+                waitingMessage: 'No te preocupes, estamos buscando las mejores oportunidades para ti'
             },
             settings: {
                 title: 'Configuración',
