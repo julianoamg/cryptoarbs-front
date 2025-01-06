@@ -122,14 +122,6 @@
         <div class="grid gap-6 grid-cols-1 lg:grid-cols-2">
             {#each opportunities as opp, index}
                 <div class="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl overflow-hidden hover:border-neutral-700 transition-colors relative">
-                    <button
-                        on:click={() => abrirModal(index)}
-                        class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full bg-neutral-800/40 backdrop-blur-sm text-neutral-300 hover:bg-red-500/30 hover:text-red-400 transition-all duration-200"
-                        title={t.pages.home.removeOpportunity}
-                        aria-label={t.pages.home.removeOpportunity}
-                    >
-                        <X class="w-4 h-4" />
-                    </button>
                     <div class="p-4 sm:p-6 space-y-4">
                         <!-- Header com Exchanges e Lucro -->
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
