@@ -159,7 +159,7 @@
                             </div>
                             <div>
                                 <p class="text-xs sm:text-sm font-medium text-neutral-400">Lucro Taxa</p>
-                                <p class="text-sm sm:text-base" class:text-emerald-500={parseFloat(opp.profit_fee) > 0} class:text-red-500={parseFloat(opp.profit_fee) < 0} class:text-neutral-200={parseFloat(opp.profit_fee) === 0}>{opp.profit_fee}%</p>
+                                <p class="text-sm sm:text-base" class:text-emerald-500={parseFloat(opp.profit_fee) > 0} class:text-red-500={parseFloat(opp.profit_fee) < 0} class:text-neutral-200={parseFloat(opp.profit_fee) === 0}>{parseFloat(opp.profit_fee).toFixed(6)}%</p>
                             </div>
                         </div>
 
