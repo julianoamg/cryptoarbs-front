@@ -158,7 +158,7 @@
                                 <p class="text-sm sm:text-base text-neutral-200">{opp.spread}%</p>
                             </div>
                             <div>
-                                <p class="text-xs sm:text-sm font-medium text-neutral-400">{t.pages.home.profitAfterFees}</p>
+                                <p class="text-xs sm:text-sm font-medium text-neutral-400">Lucro Taxa</p>
                                 <p class="text-sm sm:text-base text-neutral-200">{opp.profit_fee}%</p>
                             </div>
                         </div>
