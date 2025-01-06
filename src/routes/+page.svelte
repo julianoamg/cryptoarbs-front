@@ -28,8 +28,9 @@
 
     let opportunities: ArbitrageOpportunity[] = [];
     let loading = true;
+    let intervalId: ReturnType<typeof setInterval>;
 
-    onMount(async () => {
+    async function fetchOpportunities() {
         if ($auth.token) {
             try {
                 opportunities = await getOpportunities($auth.token);
@@ -39,6 +40,14 @@
                 loading = false;
             }
         }
+    }
+
+    onMount(() => {
+        void fetchOpportunities();
+        intervalId = setInterval(() => void fetchOpportunities(), 5000);
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
     });
 
     // Estado da modal
