@@ -78,43 +78,47 @@ export const translations = {
                 faqs: [
                     {
                         question: 'O que é arbitragem de criptomoedas?',
-                        answer: 'Arbitragem de criptomoedas é uma estratégia de trading que envolve comprar um ativo em uma exchange por um preço mais baixo e vendê-lo em outra exchange por um preço mais alto, lucrando com a diferença. No mercado de futuros, isso pode ser feito através de posições long e short simultâneas em diferentes exchanges.'
+                        answer: 'A arbitragem de criptomoedas envolve a compra e venda de criptos entre exchanges para aproveitar diferenças de preço. Essas diferenças podem ocorrer devido à demanda e liquidez variadas em diferentes mercados.'
                     },
                     {
-                        question: 'Como funciona a arbitragem no mercado de futuros?',
-                        answer: 'No mercado de futuros, a arbitragem envolve abrir posições opostas (long e short) do mesmo ativo em diferentes exchanges ou mercados. Por exemplo, se o preço do Bitcoin está mais alto no mercado futuro da Exchange A do que na Exchange B, você pode fazer um short na Exchange A e um long na Exchange B, lucrando com a convergência dos preços.'
+                        question: 'Quais são as vantagens da arbitragem de criptomoedas?',
+                        answer: 'As principais vantagens incluem: 1) Funcionamento 24 horas por dia, sem depender de horários específicos; 2) Mercado regulamentado com legislação consolidada; 3) Menor dependência de terceiros, com operações no próprio CPF; 4) Liquidez elevada para grandes volumes; 5) Rendimentos em dólar com conversão vantajosa para o real.'
                     },
                     {
-                        question: 'Quais são os riscos envolvidos?',
-                        answer: 'Os principais riscos incluem: 1) Risco de liquidez - não conseguir executar as ordens rapidamente o suficiente; 2) Risco de contraparte - problemas com as exchanges; 3) Risco de execução - slippage e taxas podem reduzir ou eliminar o lucro; 4) Risco de mercado - movimentos bruscos podem afetar as posições; 5) Risco técnico - falhas de conexão ou sistema.'
+                        question: 'Qual é o investimento inicial recomendado?',
+                        answer: 'A banca mínima é de R$ 6.000 (para quem tem muito tempo disponível). A banca recomendada é de R$ 10.000 a R$ 15.000, proporcionando mais conforto e menor necessidade de dedicação integral.'
                     },
                     {
-                        question: 'Qual é o capital mínimo recomendado?',
-                        answer: 'O capital mínimo recomendado varia dependendo das exchanges e dos pares negociados, mas geralmente recomenda-se começar com pelo menos $1000 para cobrir as taxas e ter margem suficiente. É importante considerar que você precisará manter fundos em múltiplas exchanges.'
+                        question: 'Quais são os riscos da arbitragem de criptomoedas?',
+                        answer: 'Os principais riscos incluem: 1) Erro humano em operações ou envios; 2) Falência de corretoras (mitigado usando exchanges renomadas); 3) Bloqueios temporários para verificação em volumes altos; 4) Risco de execução e liquidez; 5) Risco técnico com falhas de conexão.'
                     },
                     {
-                        question: 'Quais são as melhores exchanges para arbitragem?',
-                        answer: 'As melhores exchanges para arbitragem são aquelas com alta liquidez, baixas taxas e boa infraestrutura técnica. Algumas das mais populares incluem Binance Futures, OKX, Bybit e MEXC, pois oferecem uma boa variedade de pares e liquidez suficiente.'
+                        question: 'Quais corretoras são recomendadas?',
+                        answer: 'As principais corretoras recomendadas incluem Binance, Max e Gate.io, todas classificadas entre as melhores do mundo. É importante utilizar exchanges confiáveis para evitar problemas.'
                     },
                     {
-                        question: 'Como calcular o lucro potencial?',
-                        answer: 'O lucro potencial é calculado subtraindo todas as taxas (trading, withdrawal, network) da diferença de preço entre as exchanges. Por exemplo: se a diferença é de 1% e as taxas totais são 0.2%, seu lucro potencial seria 0.8%. Nossa plataforma já faz esse cálculo automaticamente.'
+                        question: 'Como funciona a operação de arbitragem?',
+                        answer: 'A operação envolve o mercado futuro para vender e o mercado spot para comprar. Ao observar diferenças de preço, você fecha ambas as posições, garantindo o lucro independente da direção do mercado.'
                     },
                     {
-                        question: 'Quanto tempo leva para completar uma arbitragem?',
-                        answer: 'Uma operação de arbitragem pode ser completada em segundos ou minutos, dependendo da liquidez do mercado e da velocidade de execução das ordens. No entanto, algumas estratégias podem envolver manter as posições por horas ou dias até que os preços convirjam.'
+                        question: 'Quanto posso ganhar por dia?',
+                        answer: 'O rendimento médio esperado é de 1% da banca por dia, variando conforme as oportunidades. Por exemplo: com uma banca de 10.000 dólares, 1% gera 100 dólares por dia, aproximadamente R$ 500.'
                     },
                     {
-                        question: 'Como gerenciar o risco em operações de arbitragem?',
-                        answer: 'O gerenciamento de risco envolve: 1) Diversificar entre diferentes exchanges e pares; 2) Usar apenas uma parte do capital por operação; 3) Definir stop loss para casos de divergência extrema; 4) Monitorar a saúde financeira das exchanges; 5) Manter registros detalhados das operações.'
+                        question: 'Preciso de experiência prévia?',
+                        answer: 'Não é necessária experiência prévia. O software e a comunidade fornecem todo o suporte necessário, com tutoriais, cálculos automatizados e suporte ao vivo para auxiliar nas primeiras operações.'
                     },
                     {
-                        question: 'Quais são as principais estratégias de arbitragem?',
-                        answer: 'As principais estratégias incluem: 1) Arbitragem spot-futuro - explorar diferenças entre mercados spot e futuros; 2) Arbitragem de funding rate - lucrar com taxas de financiamento; 3) Arbitragem triangular - envolvendo três ou mais mercados; 4) Arbitragem estatística - baseada em desvios estatísticos dos preços.'
+                        question: 'Quais são os custos operacionais?',
+                        answer: 'As taxas das corretoras são muito baixas e já são consideradas nas operações pelo software. Algumas exchanges oferecem cashback, reduzindo ainda mais os custos.'
                     },
                     {
-                        question: 'Como a alavancagem afeta a arbitragem?',
-                        answer: 'A alavancagem pode amplificar tanto os lucros quanto as perdas. No mercado de futuros, é comum usar alavancagem para otimizar o capital, mas é crucial usar de forma responsável. Recomenda-se começar com alavancagem baixa (2-3x) e aumentar gradualmente conforme ganha experiência.'
+                        question: 'Existe suporte técnico?',
+                        answer: 'Sim, a comunidade oferece suporte ao vivo com tutoriais detalhados e acompanhamento em tempo real para tirar dúvidas e realizar as primeiras operações.'
+                    },
+                    {
+                        question: 'A arbitragem de criptomoedas é sustentável?',
+                        answer: 'Sim. Diferente da arbitragem esportiva, o mercado de criptomoedas tem maior liquidez e menos saturação. As exchanges lucram com taxas, incentivando mais volume de transações.'
                     }
                 ]
             },
@@ -334,43 +338,47 @@ export const translations = {
                 faqs: [
                     {
                         question: 'What is cryptocurrency arbitrage?',
-                        answer: 'Cryptocurrency arbitrage is a trading strategy that involves buying an asset on one exchange at a lower price and selling it on another exchange at a higher price, profiting from the difference. In the futures market, this can be done through simultaneous long and short positions on different exchanges.'
+                        answer: 'Cryptocurrency arbitrage involves buying and selling crypto between exchanges to take advantage of price differences. These differences can occur due to varying demand and liquidity in different markets.'
                     },
                     {
-                        question: 'How does arbitrage work in the futures market?',
-                        answer: 'In the futures market, arbitrage involves opening opposite positions (long and short) of the same asset on different exchanges or markets. For example, if the Bitcoin price is higher in the futures market of Exchange A than in Exchange B, you can short on Exchange A and long on Exchange B, profiting from price convergence.'
+                        question: 'What are the advantages of cryptocurrency arbitrage?',
+                        answer: '24/7 operation without depending on specific schedules; 2) Regulated market with consolidated legislation; 3) Less dependence on third parties, with operations under your own name; 4) High liquidity for large volumes; 5) Returns in dollars with advantageous conversion to other currencies.'
                     },
                     {
-                        question: 'What are the risks involved?',
-                        answer: 'The main risks include: 1) Liquidity risk - not being able to execute orders quickly enough; 2) Counterparty risk - problems with exchanges; 3) Execution risk - slippage and fees can reduce or eliminate profit; 4) Market risk - sudden movements can affect positions; 5) Technical risk - connection or system failures.'
+                        question: 'What is the recommended initial investment?',
+                        answer: 'The minimum capital is $6,000 (for those with a lot of time available). The recommended capital is $10,000 to $15,000, providing more comfort and less need for full-time dedication.'
                     },
                     {
-                        question: 'What is the recommended minimum capital?',
-                        answer: 'The recommended minimum capital varies depending on the exchanges and traded pairs, but it is generally recommended to start with at least $1000 to cover fees and have sufficient margin. It is important to consider that you will need to maintain funds on multiple exchanges.'
+                        question: 'What are the risks of cryptocurrency arbitrage?',
+                        answer: 'The main risks include: 1) Human error in operations or transfers; 2) Exchange bankruptcy (mitigated by using reputable exchanges); 3) Temporary blocks for verification in high volumes; 4) Execution and liquidity risk; 5) Technical risk with connection failures.'
                     },
                     {
-                        question: 'Which are the best exchanges for arbitrage?',
-                        answer: 'The best exchanges for arbitrage are those with high liquidity, low fees, and good technical infrastructure. Some of the most popular ones include Binance Futures, OKX, Bybit, and MEXC, as they offer a good variety of pairs and sufficient liquidity.'
+                        question: 'Which exchanges are recommended?',
+                        answer: 'The main recommended exchanges include Binance, Max, and Gate.io, all ranked among the best in the world. It is important to use reliable exchanges to avoid problems.'
                     },
                     {
-                        question: 'How to calculate potential profit?',
-                        answer: 'Potential profit is calculated by subtracting all fees (trading, withdrawal, network) from the price difference between exchanges. For example: if the difference is 1% and total fees are 0.2%, your potential profit would be 0.8%. Our platform already does this calculation automatically.'
+                        question: 'How does arbitrage operation work?',
+                        answer: 'The operation involves the futures market for selling and the spot market for buying. When observing price differences, you close both positions, ensuring profit regardless of market direction.'
                     },
                     {
-                        question: 'How long does it take to complete an arbitrage?',
-                        answer: 'An arbitrage operation can be completed in seconds or minutes, depending on market liquidity and order execution speed. However, some strategies may involve holding positions for hours or days until prices converge.'
+                        question: 'How much can I earn per day?',
+                        answer: 'The expected average return is 1% of capital per day, varying according to opportunities. For example: with $10,000 capital, 1% generates $100 per day.'
                     },
                     {
-                        question: 'How to manage risk in arbitrage operations?',
-                        answer: 'Risk management involves: 1) Diversifying between different exchanges and pairs; 2) Using only a portion of capital per operation; 3) Setting stop loss for extreme divergence cases; 4) Monitoring exchanges financial health; 5) Maintaining detailed operation records.'
+                        question: 'Do I need previous experience?',
+                        answer: 'No previous experience is required. The software and community provide all necessary support, with tutorials, automated calculations, and live support to assist with initial operations.'
                     },
                     {
-                        question: 'What are the main arbitrage strategies?',
-                        answer: 'The main strategies include: 1) Spot-futures arbitrage - exploiting differences between spot and futures markets; 2) Funding rate arbitrage - profiting from funding fees; 3) Triangular arbitrage - involving three or more markets; 4) Statistical arbitrage - based on statistical price deviations.'
+                        question: 'What are the operational costs?',
+                        answer: 'Exchange fees are very low and are already considered in operations by the software. Some exchanges offer cashback, further reducing costs.'
                     },
                     {
-                        question: 'How does leverage affect arbitrage?',
-                        answer: 'Leverage can amplify both profits and losses. In the futures market, it is common to use leverage to optimize capital, but it is crucial to use it responsibly. It is recommended to start with low leverage (2-3x) and gradually increase as you gain experience.'
+                        question: 'Is there technical support?',
+                        answer: 'Yes, the community offers live support with detailed tutorials and real-time monitoring to answer questions and assist with initial operations.'
+                    },
+                    {
+                        question: 'Is cryptocurrency arbitrage sustainable?',
+                        answer: 'Yes. Unlike sports arbitrage, the cryptocurrency market has higher liquidity and less saturation. Exchanges profit from fees, encouraging more transaction volume.'
                     }
                 ]
             },
@@ -590,43 +598,47 @@ export const translations = {
                 faqs: [
                     {
                         question: '¿Qué es el arbitraje de criptomonedas?',
-                        answer: 'El arbitraje de criptomonedas es una estrategia de trading que implica comprar un activo en un exchange a un precio más bajo y venderlo en otro exchange a un precio más alto, beneficiándose de la diferencia. En el mercado de futuros, esto se puede hacer a través de posiciones largas y cortas simultáneas en diferentes exchanges.'
+                        answer: 'El arbitraje de criptomonedas implica comprar y vender criptomonedas entre exchanges para aprovechar las diferencias de precio. Estas diferencias pueden ocurrir debido a la demanda y liquidez variables en diferentes mercados.'
                     },
                     {
-                        question: '¿Cómo funciona el arbitraje en el mercado de futuros?',
-                        answer: 'En el mercado de futuros, el arbitraje implica abrir posiciones opuestas (larga y corta) del mismo activo en diferentes exchanges o mercados. Por ejemplo, si el precio del Bitcoin es más alto en el mercado de futuros del Exchange A que en el Exchange B, puede hacer un corto en el Exchange A y un largo en el Exchange B, beneficiándose de la convergencia de precios.'
+                        question: '¿Cuáles son las ventajas del arbitraje de criptomonedas?',
+                        answer: 'Operación 24/7 sin depender de horarios específicos; 2) Mercado regulado con legislación consolidada; 3) Menor dependencia de terceros, con operaciones bajo su propio nombre; 4) Alta liquidez para grandes volúmenes; 5) Rendimientos en dólares con conversión ventajosa a otras monedas.'
                     },
                     {
-                        question: '¿Cuáles son los riesgos involucrados?',
-                        answer: 'Los principales riesgos incluyen: 1) Riesgo de liquidez - no poder ejecutar órdenes lo suficientemente rápido; 2) Riesgo de contraparte - problemas con los exchanges; 3) Riesgo de ejecución - el deslizamiento y las comisiones pueden reducir o eliminar el beneficio; 4) Riesgo de mercado - movimientos bruscos pueden afectar las posiciones; 5) Riesgo técnico - fallos de conexión o sistema.'
+                        question: '¿Cuál es la inversión inicial recomendada?',
+                        answer: 'El capital mínimo es de $6,000 (para quienes tienen mucho tiempo disponible). El capital recomendado es de $10,000 a $15,000, proporcionando más comodidad y menos necesidad de dedicación a tiempo completo.'
                     },
                     {
-                        question: '¿Cuál es el capital mínimo recomendado?',
-                        answer: 'El capital mínimo recomendado varía según los exchanges y los pares negociados, pero generalmente se recomienda comenzar con al menos $1000 para cubrir las comisiones y tener suficiente margen. Es importante considerar que necesitará mantener fondos en múltiples exchanges.'
+                        question: '¿Cuáles son los riesgos del arbitraje de criptomonedas?',
+                        answer: 'Los principales riesgos incluyen: 1) Error humano en operaciones o transferencias; 2) Quiebra de exchanges (mitigado usando exchanges de renombre); 3) Bloqueos temporales para verificación en altos volúmenes; 4) Riesgo de ejecución y liquidez; 5) Riesgo técnico con fallos de conexión.'
                     },
                     {
-                        question: '¿Cuáles son los mejores exchanges para arbitraje?',
-                        answer: 'Los mejores exchanges para arbitraje son aquellos con alta liquidez, bajas comisiones y buena infraestructura técnica. Algunos de los más populares incluyen Binance Futures, OKX, Bybit y MEXC, ya que ofrecen una buena variedad de pares y suficiente liquidez.'
+                        question: '¿Qué exchanges son recomendados?',
+                        answer: 'Los principales exchanges recomendados incluyen Binance, Max y Gate.io, todos clasificados entre los mejores del mundo. Es importante usar exchanges confiables para evitar problemas.'
                     },
                     {
-                        question: '¿Cómo calcular el beneficio potencial?',
-                        answer: 'El beneficio potencial se calcula restando todas las comisiones (trading, retiro, red) de la diferencia de precio entre exchanges. Por ejemplo: si la diferencia es del 1% y las comisiones totales son del 0.2%, su beneficio potencial sería del 0.8%. Nuestra plataforma ya hace este cálculo automáticamente.'
+                        question: '¿Cómo funciona la operación de arbitraje?',
+                        answer: 'La operación involucra el mercado de futuros para vender y el mercado spot para comprar. Al observar diferencias de precio, cierras ambas posiciones, asegurando ganancias independientemente de la dirección del mercado.'
                     },
                     {
-                        question: '¿Cuánto tiempo lleva completar un arbitraje?',
-                        answer: 'Una operación de arbitraje puede completarse en segundos o minutos, dependiendo de la liquidez del mercado y la velocidad de ejecución de las órdenes. Sin embargo, algunas estrategias pueden implicar mantener posiciones durante horas o días hasta que los precios converjan.'
+                        question: '¿Cuánto puedo ganar por día?',
+                        answer: 'El rendimiento promedio esperado es del 1% del capital por día, variando según las oportunidades. Por ejemplo: con un capital de $10,000, el 1% genera $100 por día.'
                     },
                     {
-                        question: '¿Cómo gestionar el riesgo en operaciones de arbitraje?',
-                        answer: 'La gestión de riesgos implica: 1) Diversificar entre diferentes exchanges y pares; 2) Usar solo una parte del capital por operación; 3) Establecer stop loss para casos de divergencia extrema; 4) Monitorear la salud financiera de los exchanges; 5) Mantener registros detallados de las operaciones.'
+                        question: '¿Necesito experiencia previa?',
+                        answer: 'No se requiere experiencia previa. El software y la comunidad proporcionan todo el soporte necesario, con tutoriales, cálculos automatizados y soporte en vivo para ayudar con las operaciones iniciales.'
                     },
                     {
-                        question: '¿Cuáles son las principales estrategias de arbitraje?',
-                        answer: 'Las principales estrategias incluyen: 1) Arbitraje spot-futuros - explotar diferencias entre mercados spot y futuros; 2) Arbitraje de tasa de financiación - beneficiarse de las tasas de financiación; 3) Arbitraje triangular - involucrando tres o más mercados; 4) Arbitraje estadístico - basado en desviaciones estadísticas de precios.'
+                        question: '¿Cuáles son los costos operativos?',
+                        answer: 'Las comisiones de los exchanges son muy bajas y ya están consideradas en las operaciones por el software. Algunos exchanges ofrecen cashback, reduciendo aún más los costos.'
                     },
                     {
-                        question: '¿Cómo afecta el apalancamiento al arbitraje?',
-                        answer: 'El apalancamiento puede amplificar tanto los beneficios como las pérdidas. En el mercado de futuros, es común usar apalancamiento para optimizar el capital, pero es crucial usarlo de manera responsable. Se recomienda comenzar con un apalancamiento bajo (2-3x) y aumentar gradualmente a medida que se gana experiencia.'
+                        question: '¿Hay soporte técnico?',
+                        answer: 'Sí, la comunidad ofrece soporte en vivo con tutoriales detallados y monitoreo en tiempo real para responder preguntas y ayudar con las operaciones iniciales.'
+                    },
+                    {
+                        question: '¿Es sostenible el arbitraje de criptomonedas?',
+                        answer: 'Sí. A diferencia del arbitraje deportivo, el mercado de criptomonedas tiene mayor liquidez y menos saturación. Los exchanges obtienen ganancias de las comisiones, incentivando más volumen de transacciones.'
                     }
                 ]
             },
@@ -680,7 +692,7 @@ export const translations = {
                         },
                         {
                             question: '¿Qué métodos de pago se aceptan?',
-                            answer: 'Aceptamos tarjetas de crédito, PIX y transferencia bancaria. Todas las transacciones se procesan de forma segura.'
+                            answer: 'Aceptamos tarjetas de crédito, PIX, y transferencia bancaria. Todas las transacciones se procesan de forma segura.'
                         },
                         {
                             question: '¿Necesito proporcionar datos personales?',

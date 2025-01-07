@@ -5,7 +5,7 @@
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
     import { auth } from '$lib/stores/auth';
-    import { onMount } from 'svelte';
+    import { onMount, onDestroy } from 'svelte';
     import { getOpportunities } from '$lib/services/exchange';
     import { getMe } from '$lib/services/user';
     import PageHeader from '../components/forms/PageHeader.svelte';
@@ -31,6 +31,17 @@
     let opportunities: ArbitrageOpportunity[] = [];
     let loading = true;
     let hasActiveSubscription = false;
+    let pollingInterval: number;
+
+    async function fetchOpportunities() {
+        if (!$auth.token || !hasActiveSubscription) return;
+        
+        try {
+            opportunities = await getOpportunities($auth.token);
+        } catch (error) {
+            console.error('Failed to fetch opportunities:', error);
+        }
+    }
 
     onMount(async () => {
         if ($auth.token) {
@@ -39,15 +50,23 @@
                 const userData = await getMe($auth.token);
                 hasActiveSubscription = userData.has_active_subscription;
 
-                // Se tiver assinatura, busca as oportunidades
+                // Se tiver assinatura, busca as oportunidades e inicia o polling
                 if (hasActiveSubscription) {
-                    opportunities = await getOpportunities($auth.token);
+                    await fetchOpportunities();
+                    // Atualiza a cada 5 segundos
+                    pollingInterval = setInterval(fetchOpportunities, 5000);
                 }
             } catch (error) {
                 console.error('Failed to fetch data:', error);
             } finally {
                 loading = false;
             }
+        }
+    });
+
+    onDestroy(() => {
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
         }
     });
 </script>
