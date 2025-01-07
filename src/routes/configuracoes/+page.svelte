@@ -24,22 +24,11 @@
 
     // Mapeamento de ícones para exchanges
     const exchangeIcons: Record<string, string> = {
-        'Binance': '🟡',
         'Mercado Bitcoin': '🔵',
         'KuCoin': '🟢',
         'Foxbit': '🟠',
         'OKX': '⚪',
         'NovaDAX': '🔴'
-    };
-
-    // Descrições das exchanges
-    const exchangeDescriptions: Record<string, string> = {
-        'Binance': t?.pages?.settings?.exchanges?.descriptions?.binance || 'Exchange global com alta liquidez',
-        'Mercado Bitcoin': t?.pages?.settings?.exchanges?.descriptions?.mercadoBitcoin || 'Maior exchange brasileira',
-        'KuCoin': t?.pages?.settings?.exchanges?.descriptions?.kucoin || 'Exchange com foco em altcoins',
-        'Foxbit': t?.pages?.settings?.exchanges?.descriptions?.foxbit || 'Exchange brasileira tradicional',
-        'OKX': t?.pages?.settings?.exchanges?.descriptions?.okx || 'Exchange com foco em derivativos',
-        'NovaDAX': t?.pages?.settings?.exchanges?.descriptions?.novadax || 'Exchange brasileira com foco em usabilidade'
     };
 
     onMount(async () => {
@@ -97,7 +86,7 @@
                                     <div class="text-2xl">{exchangeIcons[exchange.name] || '🔵'}</div>
                                     <div>
                                         <h3 class="text-lg font-bold text-neutral-200">{exchange.name}</h3>
-                                        <p class="text-sm text-neutral-400">{exchangeDescriptions[exchange.name] || t?.pages?.settings?.exchanges?.defaultDescription || 'Exchange de criptomoedas'}</p>
+                                        <p class="text-sm text-neutral-400">{exchange.description || t?.pages?.settings?.exchanges?.defaultDescription || 'Exchange de criptomoedas'}</p>
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0">

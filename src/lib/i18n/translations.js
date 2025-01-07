@@ -203,15 +203,7 @@ export const translations = {
                 subtitle: 'Gerencie suas preferências',
                 exchanges: {
                     title: 'Selecione suas exchanges favoritas',
-                    defaultDescription: 'Exchange de criptomoedas',
-                    descriptions: {
-                        binance: 'Exchange global com alta liquidez',
-                        mercadoBitcoin: 'Maior exchange brasileira',
-                        kucoin: 'Exchange com foco em altcoins',
-                        foxbit: 'Exchange brasileira tradicional',
-                        okx: 'Exchange com foco em derivativos',
-                        novadax: 'Exchange brasileira com foco em usabilidade'
-                    }
+                    defaultDescription: 'Exchange de criptomoedas'
                 },
                 saveButton: 'Salvar configurações'
             },
@@ -462,15 +454,7 @@ export const translations = {
                 subtitle: 'Manage your preferences',
                 exchanges: {
                     title: 'Select your favorite exchanges',
-                    defaultDescription: 'Cryptocurrency exchange',
-                    descriptions: {
-                        binance: 'Global exchange with high liquidity',
-                        mercadoBitcoin: 'Largest Brazilian exchange',
-                        kucoin: 'Exchange focused on altcoins',
-                        foxbit: 'Traditional Brazilian exchange',
-                        okx: 'Exchange focused on derivatives',
-                        novadax: 'Brazilian exchange focused on usability'
-                    }
+                    defaultDescription: 'Cryptocurrency exchange'
                 },
                 saveButton: 'Save settings'
             },
@@ -721,15 +705,7 @@ export const translations = {
                 subtitle: 'Administra tus preferencias',
                 exchanges: {
                     title: 'Selecciona tus exchanges favoritas',
-                    defaultDescription: 'Exchange de criptomonedas',
-                    descriptions: {
-                        binance: 'Exchange global con alta liquidez',
-                        mercadoBitcoin: 'Mayor exchange brasileña',
-                        kucoin: 'Exchange enfocada en altcoins',
-                        foxbit: 'Exchange brasileña tradicional',
-                        okx: 'Exchange enfocada en derivados',
-                        novadax: 'Exchange brasileña enfocada en usabilidad'
-                    }
+                    defaultDescription: 'Exchange de criptomonedas'
                 },
                 saveButton: 'Guardar configuraciones'
             },
