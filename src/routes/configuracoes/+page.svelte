@@ -22,14 +22,21 @@
     let loading = true;
     let selectedExchanges: boolean[] = [];
 
-    // Mapeamento de ícones para exchanges
-    const exchangeIcons: Record<string, string> = {
-        'Mercado Bitcoin': '🔵',
-        'KuCoin': '🟢',
-        'Foxbit': '🟠',
-        'OKX': '⚪',
-        'NovaDAX': '🔴'
-    };
+    // Gera um emoji colorido baseado no nome da exchange
+    function getExchangeIcon(name: string): string {
+        // Lista de emojis coloridos disponíveis
+        const colorEmojis = ['🔵', '🟢', '🟡', '🔴', '🟣', '⚪', '🟤', '🟠'];
+        
+        // Gera um índice consistente baseado no nome da exchange
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+            hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        
+        // Usa o hash para selecionar um emoji
+        const index = Math.abs(hash) % colorEmojis.length;
+        return colorEmojis[index];
+    }
 
     onMount(async () => {
         if ($auth.token) {
@@ -83,7 +90,7 @@
                             <!-- Header -->
                             <div class="flex items-start justify-between mb-3">
                                 <div class="flex items-center space-x-3">
-                                    <div class="text-2xl">{exchangeIcons[exchange.name] || '🔵'}</div>
+                                    <div class="text-2xl">{getExchangeIcon(exchange.name)}</div>
                                     <div>
                                         <h3 class="text-lg font-bold text-neutral-200">{exchange.name}</h3>
                                         <p class="text-sm text-neutral-400">{exchange.description || t?.pages?.settings?.exchanges?.defaultDescription || 'Exchange de criptomoedas'}</p>
