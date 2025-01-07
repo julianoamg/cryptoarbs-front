@@ -12,6 +12,8 @@ export async function handle({ event, resolve }) {
 
     // If no token and trying to access protected routes (anything except login), redirect to login
     if (!token && pathname !== '/login') {
+        // Clear token cookie before redirecting
+        event.cookies.delete('token', { path: '/' });
         throw redirect(303, '/login');
     }
 

@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
 import { redirect } from '@sveltejs/kit';
+import { auth } from '$lib/stores/auth';
 
 /**
  * Get cookie value by name
@@ -33,6 +34,10 @@ export function isAuthenticated() {
  */
 export function protectRoute(url) {
     if (!isAuthenticated()) {
+        // Clear auth store before redirecting
+        if (browser) {
+            auth.clearAuth();
+        }
         throw redirect(303, `/login?redirect=${encodeURIComponent(url.pathname)}`);
     }
 }
