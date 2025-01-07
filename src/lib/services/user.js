@@ -4,6 +4,7 @@ import { PUBLIC_API_URL } from '$env/static/public';
  * @typedef {Object} User
  * @property {string} email
  * @property {string} first_name
+ * @property {boolean} has_active_subscription
  */
 
 /**

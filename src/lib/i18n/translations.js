@@ -196,7 +196,12 @@ export const translations = {
                 searching: 'Procurando...',
                 waitingMessage: 'Não se preocupe, estamos buscando as melhores oportunidades para você',
                 tradingPair: 'Par',
-                profitAfterFees: 'Lucro após taxas'
+                profitAfterFees: 'Lucro após taxas',
+                subscription: {
+                    title: 'Desbloqueie Oportunidades de Arbitragem',
+                    description: 'Assine agora para ter acesso a oportunidades de arbitragem em tempo real e maximize seus lucros no mercado de criptomoedas.',
+                    button: 'Ver Planos de Assinatura'
+                }
             },
             settings: {
                 title: 'Configurações',
@@ -435,7 +440,7 @@ export const translations = {
                 }
             },
             home: {
-                title: 'Futures Arbitrage',
+                title: 'Cryptocurrency Arbitrage',
                 subtitle: 'This page updates automatically.',
                 removeOpportunity: 'Remove opportunity',
                 profit: 'profit',
@@ -447,7 +452,12 @@ export const translations = {
                 searching: 'Searching...',
                 waitingMessage: "Don't worry, we're finding the best opportunities for you",
                 tradingPair: 'Pair',
-                profitAfterFees: 'Lucro após taxas'
+                profitAfterFees: 'Profit after fees',
+                subscription: {
+                    title: 'Unlock Arbitrage Opportunities',
+                    description: 'Subscribe now to access real-time arbitrage opportunities and maximize your profits in the cryptocurrency market.',
+                    button: 'View Subscription Plans'
+                }
             },
             settings: {
                 title: 'Settings',
@@ -686,7 +696,7 @@ export const translations = {
                 }
             },
             home: {
-                title: 'Arbitraje de Criptomoedas',
+                title: 'Arbitraje de Criptomonedas',
                 subtitle: 'Esta página se actualiza automáticamente.',
                 removeOpportunity: 'Eliminar oportunidad',
                 profit: 'beneficio',
@@ -697,8 +707,13 @@ export const translations = {
                 estimatedProfit: 'Beneficio estimado',
                 searching: 'Buscando...',
                 waitingMessage: 'No te preocupes, estamos buscando las mejores oportunidades para ti',
-                tradingPair: 'Par de trading',
-                profitAfterFees: 'Lucro após taxas'
+                tradingPair: 'Par',
+                profitAfterFees: 'Beneficio después de comisiones',
+                subscription: {
+                    title: 'Desbloquea Oportunidades de Arbitraje',
+                    description: 'Suscríbete ahora para acceder a oportunidades de arbitraje en tiempo real y maximiza tus beneficios en el mercado de criptomonedas.',
+                    button: 'Ver Planes de Suscripción'
+                }
             },
             settings: {
                 title: 'Configuraciones',
