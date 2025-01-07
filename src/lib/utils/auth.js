@@ -24,10 +24,8 @@ function getCookie(name) {
  */
 export function isAuthenticated() {
     if (!browser) {
-        // On server, check cookies from request
         return false; // This will be handled by hooks.server.js
     }
-    // On client, check both localStorage and cookies
     return !!(localStorage.getItem('token') || getCookie('token'));
 }
 
@@ -41,21 +39,19 @@ export function clearAuthData() {
 }
 
 /**
- * Protected route handler
+ * Protected route handler - defers to server hooks
  * @param {URL} url - Current URL
  */
 export function protectRoute(url) {
     if (!isAuthenticated()) {
-        clearAuthData();
         throw redirect(303, `/login?redirect=${encodeURIComponent(url.pathname)}`);
     }
 }
 
 /**
- * Public route handler - redirects to home if already authenticated
+ * Public route handler - defers to server hooks
  */
 export function handlePublicRoute() {
-    if (isAuthenticated()) {
-        throw redirect(303, '/');
-    }
+    // Let server hooks handle the redirection
+    return {};
 } 

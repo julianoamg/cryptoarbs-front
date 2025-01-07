@@ -1,19 +1,28 @@
 import { redirect } from '@sveltejs/kit';
 
+const PUBLIC_ROUTES = ['/login', '/cadastro', '/recuperar-senha'];
+
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
-    const token = event.cookies.get('token');
     const pathname = event.url.pathname;
-
-    // Clear token and redirect to login for any unauthorized access
-    if (!token && pathname !== '/login' && pathname !== '/cadastro' && pathname !== '/recuperar-senha') {
+    
+    // Always clear cookies if we're accessing login page
+    if (pathname === '/login') {
         event.cookies.delete('token', { path: '/' });
-        throw redirect(303, '/login');
+        return await resolve(event);
     }
 
-    // If has token and trying to access login/register/reset pages, redirect to home
-    if (token && (pathname === '/login' || pathname === '/cadastro' || pathname === '/recuperar-senha')) {
-        throw redirect(303, '/');
+    const token = event.cookies.get('token');
+
+    // For public routes, just proceed
+    if (PUBLIC_ROUTES.includes(pathname)) {
+        return await resolve(event);
+    }
+
+    // For protected routes, require token
+    if (!token) {
+        event.cookies.delete('token', { path: '/' });
+        throw redirect(303, '/login');
     }
 
     return await resolve(event);
