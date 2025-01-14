@@ -5,6 +5,7 @@ export const translations = {
         menu: {
             arbitragens: 'ARBITRAGENS',
             criptomoedas: 'Criptomoedas',
+            analiseSentimental: 'Análise Sentimental',
             configuracoes: 'Configurações',
             suporte: 'SUPORTE',
             primeirosPassos: 'Primeiros Passos',
@@ -201,6 +202,16 @@ export const translations = {
                 waitingMessage: 'Não se preocupe, estamos buscando as melhores oportunidades para você',
                 tradingPair: 'Par',
                 profitAfterFees: 'Lucro após taxas',
+                table: {
+                    pair: 'Par',
+                    buyPrice: 'Preço Compra',
+                    sellPrice: 'Preço Venda',
+                    profit: 'Lucro',
+                    spread: 'Spread',
+                    gross: 'bruto',
+                    net: 'líquido',
+                    mobileHint: 'Dica: Role a tabela horizontalmente para ver todos os dados em telas menores'
+                },
                 subscription: {
                     title: 'Desbloqueie Oportunidades de Arbitragem',
                     description: 'Assine agora para ter acesso a oportunidades de arbitragem em tempo real e maximize seus lucros no mercado de criptomoedas.',
@@ -263,8 +274,9 @@ export const translations = {
         loading: 'Loading...',
         // Sidebar
         menu: {
-            arbitragens: 'ARBITRAJE',
+            arbitragens: 'ARBITRAGE',
             criptomoedas: 'Cryptocurrencies',
+            analiseSentimental: 'Sentiment Analysis',
             configuracoes: 'Settings',
             suporte: 'SUPPORT',
             primeirosPassos: 'Getting Started',
@@ -461,6 +473,16 @@ export const translations = {
                 waitingMessage: "Don't worry, we're finding the best opportunities for you",
                 tradingPair: 'Pair',
                 profitAfterFees: 'Profit after fees',
+                table: {
+                    pair: 'Pair',
+                    buyPrice: 'Buy Price',
+                    sellPrice: 'Sell Price',
+                    profit: 'Profit',
+                    spread: 'Spread',
+                    gross: 'Gross',
+                    net: 'Net',
+                    mobileHint: 'Tip: Scroll horizontally on mobile devices to view all data'
+                },
                 subscription: {
                     title: 'Unlock Arbitrage Opportunities',
                     description: 'Subscribe now to access real-time arbitrage opportunities and maximize your profits in the cryptocurrency market.',
@@ -525,7 +547,8 @@ export const translations = {
         menu: {
             arbitragens: 'ARBITRAJE',
             criptomoedas: 'Criptomonedas',
-            configuracoes: 'Configuración',
+            analiseSentimental: 'Análisis de Sentimiento',
+            configuracoes: 'Configuraciones',
             suporte: 'SOPORTE',
             primeirosPassos: 'Primeros Pasos',
             mentoria: 'Mentoría',
@@ -721,6 +744,16 @@ export const translations = {
                 waitingMessage: 'No te preocupes, estamos buscando las mejores oportunidades para ti',
                 tradingPair: 'Par',
                 profitAfterFees: 'Beneficio después de comisiones',
+                table: {
+                    pair: 'Par',
+                    buyPrice: 'Precio Compra',
+                    sellPrice: 'Precio Venta',
+                    profit: 'Beneficio',
+                    spread: 'Spread',
+                    gross: 'bruto',
+                    net: 'líquido',
+                    mobileHint: 'Consejo: Desliza horizontalmente en dispositivos móviles para ver todos los datos'
+                },
                 subscription: {
                     title: 'Desbloquea Oportunidades de Arbitraje',
                     description: 'Suscríbete ahora para acceder a oportunidades de arbitraje en tiempo real y maximiza tus beneficios en el mercado de criptomonedas.',
