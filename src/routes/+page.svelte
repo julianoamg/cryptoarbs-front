@@ -203,7 +203,7 @@
                                                 <span class="text-sm font-medium text-neutral-200">{opp.exchange_b_price}</span>
                                                 <div class="flex items-center gap-1 mt-1">
                                                     <span class="text-xs text-neutral-400">em</span>
-                                                    <span class="text-xs font-medium text-emerald-500">{opp.exchange_b}</span>
+                                                    <span class="text-xs font-medium text-emerald-500">{opp.exchange_b} (Futures)</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -245,7 +245,7 @@
                                     <div class="flex items-center space-x-2">
                                         <span class="text-base sm:text-lg font-bold text-neutral-200">{opp.exchange_a}</span>
                                         <ArrowRight class="w-4 h-4 sm:w-5 sm:h-5 text-neutral-500" />
-                                        <span class="text-base sm:text-lg font-bold text-neutral-200">{opp.exchange_b}</span>
+                                        <span class="text-base sm:text-lg font-bold text-neutral-200">{opp.exchange_b} (Futures)</span>
                                     </div>
                                     <div class="flex items-baseline space-x-1">
                                         <span class="text-xl sm:text-2xl font-bold text-emerald-500">{opp.profit}%</span>
@@ -282,7 +282,7 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <p class="text-xs sm:text-sm font-medium text-neutral-400 mb-2">{opp.exchange_b}</p>
+                                            <p class="text-xs sm:text-sm font-medium text-neutral-400 mb-2">{opp.exchange_b} (Futures)</p>
                                             <div class="flex justify-between">
                                                 <span class="text-xs sm:text-sm text-neutral-400">{t.pages.home.price}</span>
                                                 <span class="text-xs sm:text-sm text-neutral-200">{opp.exchange_b_price}</span>
