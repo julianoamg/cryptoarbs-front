@@ -228,19 +228,15 @@
         }
     }
 
-    $: {
-        if (minSpread !== undefined && maxSpread !== undefined && minSpread !== "" && maxSpread !== "") {
-            updateSpreadPreferences();
-        }
-    }
-
     function handleSpreadChange() {
         if (spreadUpdateTimeout) {
             clearTimeout(spreadUpdateTimeout);
         }
         
         spreadUpdateTimeout = setTimeout(() => {
-            updateSpreadPreferences();
+            if (minSpread !== undefined && maxSpread !== undefined && minSpread !== "" && maxSpread !== "") {
+                updateSpreadPreferences();
+            }
         }, 300);
     }
 
@@ -417,6 +413,7 @@
                         step="0.1"
                         onkeypress="return event.charCode >= 48"
                         on:input={handleSpreadChange}
+                        on:change={handleSpreadChange}
                     />
                     <FormField
                         type="number"
@@ -428,6 +425,7 @@
                         step="0.1"
                         onkeypress="return event.charCode >= 48"
                         on:input={handleSpreadChange}
+                        on:change={handleSpreadChange}
                     />
                 </div>
                 <p class="mt-2 text-sm text-neutral-300">
