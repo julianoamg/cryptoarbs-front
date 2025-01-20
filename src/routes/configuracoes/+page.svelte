@@ -37,8 +37,8 @@
     let loadingPairs = false;
     let tradingPairs: TradingPair[] = [];
     let selectedPairs: boolean[] = [];
-    let minSpread = "0.5";
-    let maxSpread = "5.0";
+    let minSpread = "";
+    let maxSpread = "";
     let searchQuery = "";
     let currentPage = 1;
     let spreadUpdateController: AbortController | null = null;
@@ -131,8 +131,8 @@
             try {
                 // Busca dados do usuário incluindo preferências de spread
                 const userData = await getMe($auth.token);
-                minSpread = userData.min_spread?.toString() || "0.5";
-                maxSpread = userData.max_spread?.toString() || "5.0";
+                minSpread = userData.min_spread?.toString() || "";
+                maxSpread = userData.max_spread?.toString() || "";
 
                 await fetchExchanges();
                 await fetchTradingPairs();
@@ -229,6 +229,7 @@
 
     async function updateSpreadPreferences() {
         if (!$auth.token) return;
+        if (!minSpread || !maxSpread) return;
 
         // Cancela requisição anterior se existir
         if (spreadUpdateController) {
@@ -277,7 +278,7 @@
 
     // Observa mudanças nos valores de spread
     $: {
-        if (minSpread !== undefined && maxSpread !== undefined) {
+        if (minSpread !== undefined && maxSpread !== undefined && minSpread !== "" && maxSpread !== "") {
             updateSpreadPreferences();
         }
     }
