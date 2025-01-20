@@ -228,27 +228,21 @@
         }
     }
 
-    function handleSpreadChange() {
-        if (spreadUpdateTimeout) {
-            clearTimeout(spreadUpdateTimeout);
-        }
-        
-        spreadUpdateTimeout = setTimeout(() => {
-            if (minSpread !== undefined && maxSpread !== undefined && minSpread !== "" && maxSpread !== "") {
+    $: {
+        if (minSpread !== undefined && maxSpread !== undefined) {
+            const min = parseFloat(minSpread);
+            const max = parseFloat(maxSpread);
+            
+            if (!isNaN(min) && !isNaN(max)) {
                 updateSpreadPreferences();
             }
-        }, 300);
+        }
     }
 
     async function updateSpreadPreferences() {
-        if (!$auth.token || !minSpread || !maxSpread) return;
+        if (!$auth.token) return;
 
         try {
-            const min = Math.max(0, parseFloat(minSpread));
-            const max = Math.max(0, parseFloat(maxSpread));
-
-            if (isNaN(min) || isNaN(max)) return;
-
             const response = await fetch(`${PUBLIC_API_URL}/exchanges/preferences/spread/`, {
                 method: 'POST',
                 headers: {
@@ -256,8 +250,8 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    min_spread: min,
-                    max_spread: max
+                    min_spread: parseFloat(minSpread),
+                    max_spread: parseFloat(maxSpread)
                 })
             });
 
@@ -396,7 +390,6 @@
                         max="100"
                         step="0.1"
                         onkeypress="return event.charCode >= 48"
-                        on:change={updateSpreadPreferences}
                     />
                     <FormField
                         type="number"
@@ -407,7 +400,6 @@
                         max="100"
                         step="0.1"
                         onkeypress="return event.charCode >= 48"
-                        on:change={updateSpreadPreferences}
                     />
                 </div>
                 <p class="mt-2 text-sm text-neutral-300">
