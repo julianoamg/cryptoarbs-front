@@ -42,6 +42,7 @@
     let searchQuery = "";
     let currentPage = 1;
     let spreadUpdateController: AbortController | null = null;
+    let spreadUpdateTimeout: number | null = null;
 
     // Filtra os pares baseado na pesquisa
     $: filteredPairs = tradingPairs.filter(pair => 
@@ -236,6 +237,11 @@
             spreadUpdateController.abort();
         }
 
+        // Cancela timeout anterior se existir
+        if (spreadUpdateTimeout) {
+            clearTimeout(spreadUpdateTimeout);
+        }
+
         // Cria novo controller para esta requisição
         spreadUpdateController = new AbortController();
 
@@ -276,11 +282,16 @@
         }
     }
 
-    // Observa mudanças nos valores de spread
-    $: {
-        if (minSpread !== undefined && maxSpread !== undefined && minSpread !== "" && maxSpread !== "") {
-            updateSpreadPreferences();
+    function handleSpreadChange() {
+        if (spreadUpdateTimeout) {
+            clearTimeout(spreadUpdateTimeout);
         }
+        
+        spreadUpdateTimeout = setTimeout(() => {
+            if (minSpread !== undefined && maxSpread !== undefined && minSpread !== "" && maxSpread !== "") {
+                updateSpreadPreferences();
+            }
+        }, 300);
     }
 </script>
 
@@ -406,6 +417,7 @@
                         max="100"
                         step="0.1"
                         onkeypress="return event.charCode >= 48"
+                        on:input={handleSpreadChange}
                     />
                     <FormField
                         type="number"
@@ -416,6 +428,7 @@
                         max="100"
                         step="0.1"
                         onkeypress="return event.charCode >= 48"
+                        on:input={handleSpreadChange}
                     />
                 </div>
                 <p class="mt-2 text-sm text-neutral-300">
