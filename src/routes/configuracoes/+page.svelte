@@ -241,22 +241,12 @@
     }
 
     async function updateSpreadPreferences() {
-        if (!$auth.token) return;
-        if (!minSpread || !maxSpread) return;
-
-        // Cancela requisição anterior se existir
-        if (spreadUpdateController) {
-            spreadUpdateController.abort();
-        }
-
-        // Cria novo controller para esta requisição
-        spreadUpdateController = new AbortController();
+        if (!$auth.token || !minSpread || !maxSpread) return;
 
         try {
             const min = Math.max(0, parseFloat(minSpread));
             const max = Math.max(0, parseFloat(maxSpread));
 
-            // Verifica se os valores são números válidos e não negativos
             if (isNaN(min) || isNaN(max)) return;
 
             const response = await fetch(`${PUBLIC_API_URL}/exchanges/preferences/spread/`, {
@@ -268,8 +258,7 @@
                 body: JSON.stringify({
                     min_spread: min,
                     max_spread: max
-                }),
-                signal: spreadUpdateController.signal
+                })
             });
 
             if (!response.ok) {
@@ -280,12 +269,7 @@
             minSpread = data.min_spread.toString();
             maxSpread = data.max_spread.toString();
         } catch (error) {
-            if (error.name === 'AbortError') {
-                return; // Ignora erros de requisições canceladas
-            }
             console.error('Failed to update spread preferences:', error);
-        } finally {
-            spreadUpdateController = null;
         }
     }
 </script>
@@ -412,8 +396,7 @@
                         max="100"
                         step="0.1"
                         onkeypress="return event.charCode >= 48"
-                        on:input={handleSpreadChange}
-                        on:change={handleSpreadChange}
+                        on:change={updateSpreadPreferences}
                     />
                     <FormField
                         type="number"
@@ -424,8 +407,7 @@
                         max="100"
                         step="0.1"
                         onkeypress="return event.charCode >= 48"
-                        on:input={handleSpreadChange}
-                        on:change={handleSpreadChange}
+                        on:change={updateSpreadPreferences}
                     />
                 </div>
                 <p class="mt-2 text-sm text-neutral-300">
