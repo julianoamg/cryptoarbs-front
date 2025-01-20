@@ -35,6 +35,7 @@
     let hasActiveSubscription = false;
     let pollingInterval: number;
     let isListView = false;
+    let showOnlyPositiveFunding = false;
 
     // Carrega a preferência do usuário do localStorage
     function loadViewPreference(): void {
@@ -92,6 +93,10 @@
         isListView = !isListView;
         saveViewPreference(isListView);
     }
+
+    $: filteredOpportunities = opportunities.filter(opp => 
+        !showOnlyPositiveFunding || parseFloat(opp.profit_fee) >= 0
+    );
 </script>
 
 <div class="flex flex-col items-center">
@@ -103,18 +108,27 @@
                 icon={ArrowLeftRight}
             />
             {#if !loading && hasActiveSubscription && opportunities.length > 0}
-                <button
-                    class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-900/50 border border-neutral-800 hover:border-neutral-700 transition-colors"
-                    on:click={toggleView}
-                >
-                    {#if isListView}
-                        <LayoutGrid class="w-4 h-4 text-neutral-400" />
-                        <span class="text-sm text-neutral-400">Grid</span>
-                    {:else}
-                        <List class="w-4 h-4 text-neutral-400" />
-                        <span class="text-sm text-neutral-400">Lista</span>
-                    {/if}
-                </button>
+                <div class="flex items-center gap-2">
+                    <button
+                        class="flex items-center gap-2 px-3 py-2 rounded-lg {showOnlyPositiveFunding ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-neutral-900/50 border-neutral-800'} border hover:border-neutral-700 transition-colors"
+                        on:click={() => showOnlyPositiveFunding = !showOnlyPositiveFunding}
+                    >
+                        <Percent class="w-4 h-4 {showOnlyPositiveFunding ? 'text-emerald-500' : 'text-neutral-400'}" />
+                        <span class="text-sm {showOnlyPositiveFunding ? 'text-emerald-500' : 'text-neutral-400'}">Taxa Positiva</span>
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-900/50 border border-neutral-800 hover:border-neutral-700 transition-colors"
+                        on:click={toggleView}
+                    >
+                        {#if isListView}
+                            <LayoutGrid class="w-4 h-4 text-neutral-400" />
+                            <span class="text-sm text-neutral-400">Grid</span>
+                        {:else}
+                            <List class="w-4 h-4 text-neutral-400" />
+                            <span class="text-sm text-neutral-400">Lista</span>
+                        {/if}
+                    </button>
+                </div>
             {/if}
         </div>
 
@@ -173,7 +187,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-neutral-800/50">
-                                {#each opportunities as opp}
+                                {#each filteredOpportunities as opp}
                                     <tr class="hover:bg-emerald-500/5 transition-colors group">
                                         <td class="py-4 px-4">
                                             <div class="flex flex-col gap-1">
@@ -237,7 +251,7 @@
             {:else}
                 <!-- Grid View -->
                 <div class="grid gap-6 grid-cols-1 lg:grid-cols-2">
-                    {#each opportunities as opp}
+                    {#each filteredOpportunities as opp}
                         <div class="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl overflow-hidden hover:border-neutral-700 transition-colors">
                             <div class="p-4 sm:p-6 space-y-4">
                                 <!-- Header com Exchanges e Lucro -->
