@@ -212,13 +212,13 @@
                                                 <div class="flex flex-col items-end">
                                                     <div class="flex items-baseline gap-1">
                                                         <span class="text-base font-bold text-emerald-500">{opp.profit}%</span>
-                                                        <span class="text-xs text-emerald-500/70">{t.pages.home.table.gross}</span>
+                                                        <span class="text-xs text-emerald-500/70">{t.pages.home.profit}</span>
                                                     </div>
                                                     <div class="flex items-center gap-1">
                                                         <span class="text-xs" class:text-emerald-500={parseFloat(opp.profit_fee) > 0} class:text-red-500={parseFloat(opp.profit_fee) < 0} class:text-neutral-400={parseFloat(opp.profit_fee) === 0}>
                                                             {parseFloat(opp.profit_fee).toFixed(6)}%
                                                         </span>
-                                                        <span class="text-xs text-neutral-400">{t.pages.home.table.net}</span>
+                                                        <span class="text-xs text-neutral-400">Taxa de Financiamento</span>
                                                     </div>
                                                 </div>
                                             </div>
