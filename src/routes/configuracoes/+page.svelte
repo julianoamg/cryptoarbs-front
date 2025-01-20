@@ -5,6 +5,7 @@
     import { translations } from '$lib/i18n/translations';
     import { auth } from '$lib/stores/auth';
     import { getExchanges } from '$lib/services/exchange';
+    import { getMe } from '$lib/services/user';
     import PageHeader from '../../components/forms/PageHeader.svelte';
     import Card from '../../components/forms/Card.svelte';
     import Button from '../../components/forms/Button.svelte';
@@ -19,13 +20,13 @@
     }
 
     interface TradingPair {
+        id: string;
         symbol: string;
-        name: string;
-        price: string;
-        change24h: string;
-        volume24h: string;
-        is_selected: boolean;
-        exchange: string;
+        asset: string;
+        price_current: string;
+        price_24h_change: string;
+        real_volume_24h: string;
+        marked: boolean;
     }
 
     $: t = translations[$language];
@@ -40,11 +41,12 @@
     let maxSpread = "5.0";
     let searchQuery = "";
     let currentPage = 1;
+    let spreadUpdateController: AbortController | null = null;
 
     // Filtra os pares baseado na pesquisa
     $: filteredPairs = tradingPairs.filter(pair => 
         pair.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        pair.name.toLowerCase().includes(searchQuery.toLowerCase())
+        pair.asset.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     // Gera um emoji colorido baseado no nome da exchange
@@ -56,6 +58,23 @@
         }
         const index = Math.abs(hash) % colorEmojis.length;
         return colorEmojis[index];
+    }
+
+    function formatPrice(price: string | number): string {
+        const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+        return numPrice.toFixed(6);
+    }
+
+    function formatVolume(volume: string | number): string {
+        const numVolume = typeof volume === 'string' ? parseFloat(volume) : volume;
+        
+        if (numVolume >= 1e9) {
+            return (numVolume / 1e9).toFixed(2) + 'B';
+        } else if (numVolume >= 1e6) {
+            return (numVolume / 1e6).toFixed(2) + 'M';
+        } else {
+            return numVolume.toFixed(2);
+        }
     }
 
     async function fetchExchanges() {
@@ -82,27 +101,43 @@
         }
     }
 
+    async function fetchTradingPairs() {
+        if (!$auth.token) return;
+        
+        loadingPairs = true;
+        try {
+            const response = await fetch(`${PUBLIC_API_URL}/exchanges/cryptoassets/?page=${currentPage}`, {
+                headers: {
+                    'Authorization': `Token ${$auth.token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch trading pairs');
+            }
+
+            const data = await response.json();
+            tradingPairs = data.results;
+            selectedPairs = tradingPairs.map(p => p.marked);
+        } catch (error) {
+            console.error('Failed to fetch trading pairs:', error);
+        } finally {
+            loadingPairs = false;
+        }
+    }
+
     onMount(async () => {
         if ($auth.token) {
             try {
+                // Busca dados do usuário incluindo preferências de spread
+                const userData = await getMe($auth.token);
+                minSpread = userData.min_spread?.toString() || "0.5";
+                maxSpread = userData.max_spread?.toString() || "5.0";
+
                 await fetchExchanges();
-                
-                // Carrega os pares de trading iniciais
-                loadingPairs = true;
-                try {
-                    // Dados mockados para exemplo
-                    tradingPairs = [
-                        { symbol: 'BTC', name: 'Bitcoin', price: '43,250.00', change24h: '+2.5%', volume24h: '24.5B', is_selected: true, exchange: 'Binance' },
-                        { symbol: 'ETH', name: 'Ethereum', price: '2,250.00', change24h: '+3.2%', volume24h: '12.8B', is_selected: true, exchange: 'Binance' },
-                        { symbol: 'SOL', name: 'Solana', price: '98.50', change24h: '+5.8%', volume24h: '2.1B', is_selected: true, exchange: 'Binance' },
-                        { symbol: 'BNB', name: 'BNB', price: '315.20', change24h: '+1.2%', volume24h: '890M', is_selected: false, exchange: 'Binance' }
-                    ];
-                    selectedPairs = tradingPairs.map(p => p.is_selected);
-                } finally {
-                    loadingPairs = false;
-                }
+                await fetchTradingPairs();
             } catch (error) {
-                console.error('Failed to fetch exchanges:', error);
+                console.error('Failed to fetch data:', error);
             } finally {
                 loading = false;
             }
@@ -136,9 +171,32 @@
         }
     }
 
-    function togglePair(index: number): void {
-        selectedPairs[index] = !selectedPairs[index];
-        selectedPairs = [...selectedPairs];
+    async function togglePair(index: number): Promise<void> {
+        if (!$auth.token) return;
+
+        const pair = tradingPairs[index];
+        try {
+            const response = await fetch(`${PUBLIC_API_URL}/exchanges/cryptoassets/toggle-mark/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${$auth.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    asset_id: pair.id
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update pair preference');
+            }
+
+            const data = await response.json();
+            selectedPairs[index] = data.marked;
+            selectedPairs = [...selectedPairs];
+        } catch (error) {
+            console.error('Failed to toggle pair:', error);
+        }
     }
 
     // Computa o estado dos pares selecionados
@@ -146,8 +204,82 @@
     $: somePairsSelected = selectedPairs.some(Boolean);
     $: noPairsSelected = selectedPairs.length > 0 && !selectedPairs.some(Boolean);
 
-    function toggleAllPairs(): void {
-        selectedPairs = tradingPairs.map(() => !allPairsSelected);
+    async function toggleAllPairs(): Promise<void> {
+        if (!$auth.token) return;
+
+        try {
+            const response = await fetch(`${PUBLIC_API_URL}/exchanges/cryptoassets/mark-all/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${$auth.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to mark all pairs');
+            }
+
+            // Recarrega a lista para refletir o novo estado
+            await fetchTradingPairs();
+        } catch (error) {
+            console.error('Failed to toggle all pairs:', error);
+        }
+    }
+
+    async function updateSpreadPreferences() {
+        if (!$auth.token) return;
+
+        // Cancela requisição anterior se existir
+        if (spreadUpdateController) {
+            spreadUpdateController.abort();
+        }
+
+        // Cria novo controller para esta requisição
+        spreadUpdateController = new AbortController();
+
+        try {
+            const min = Math.max(0, parseFloat(minSpread));
+            const max = Math.max(0, parseFloat(maxSpread));
+
+            // Verifica se os valores são números válidos e não negativos
+            if (isNaN(min) || isNaN(max)) return;
+
+            const response = await fetch(`${PUBLIC_API_URL}/exchanges/preferences/spread/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${$auth.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    min_spread: min,
+                    max_spread: max
+                }),
+                signal: spreadUpdateController.signal
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update spread preferences');
+            }
+
+            const data = await response.json();
+            minSpread = data.min_spread.toString();
+            maxSpread = data.max_spread.toString();
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                return; // Ignora erros de requisições canceladas
+            }
+            console.error('Failed to update spread preferences:', error);
+        } finally {
+            spreadUpdateController = null;
+        }
+    }
+
+    // Observa mudanças nos valores de spread
+    $: {
+        if (minSpread !== undefined && maxSpread !== undefined) {
+            updateSpreadPreferences();
+        }
     }
 </script>
 
@@ -239,11 +371,11 @@
                                     <div class="flex flex-col gap-0.5 min-w-0">
                                         <div class="flex items-center gap-2 overflow-hidden">
                                             <h3 class="font-medium text-neutral-200 truncate">{pair.symbol}</h3>
-                                            <span class="text-sm font-medium text-neutral-300 whitespace-nowrap">$ {pair.price}</span>
+                                            <span class="text-sm font-medium text-neutral-300 whitespace-nowrap">$ {formatPrice(pair.price_current)}</span>
                                         </div>
                                         <div class="flex items-center gap-2">
-                                            <span class="text-sm text-neutral-300 truncate">{pair.name}</span>
-                                            <span class="text-xs text-neutral-400 whitespace-nowrap">Vol: ${pair.volume24h}</span>
+                                            <span class="text-sm text-neutral-300 truncate">{pair.asset}</span>
+                                            <span class="text-xs text-neutral-400 whitespace-nowrap">Vol: ${formatVolume(pair.real_volume_24h)}</span>
                                         </div>
                                     </div>
                                     <div class="w-4 h-4 ml-2 rounded-full border transition-colors flex-shrink-0 flex items-center justify-center {selectedPairs[tradingPairs.indexOf(pair)] ? 'border-emerald-500 bg-emerald-500' : 'border-neutral-700'}">
@@ -270,7 +402,9 @@
                         label="Spread Mínimo (%)"
                         bind:value={minSpread}
                         min="0"
+                        max="100"
                         step="0.1"
+                        onkeypress="return event.charCode >= 48"
                     />
                     <FormField
                         type="number"
@@ -278,7 +412,9 @@
                         label="Spread Máximo (%)"
                         bind:value={maxSpread}
                         min="0"
+                        max="100"
                         step="0.1"
+                        onkeypress="return event.charCode >= 48"
                     />
                 </div>
                 <p class="mt-2 text-sm text-neutral-300">

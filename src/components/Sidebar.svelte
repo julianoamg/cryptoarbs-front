@@ -70,7 +70,6 @@
             title: t.menu.arbitragens,
             items: [
                 {name: t.menu.criptomoedas, icon: ArrowLeftRight, href: '/'},
-                {name: t.menu.analiseSentimental, icon: Target, href: '/analise-sentimental'},
                 {name: t.menu.configuracoes, icon: Settings, href: '/configuracoes'}
             ]
         },
