@@ -228,6 +228,22 @@
         }
     }
 
+    $: {
+        if (minSpread !== undefined && maxSpread !== undefined && minSpread !== "" && maxSpread !== "") {
+            updateSpreadPreferences();
+        }
+    }
+
+    function handleSpreadChange() {
+        if (spreadUpdateTimeout) {
+            clearTimeout(spreadUpdateTimeout);
+        }
+        
+        spreadUpdateTimeout = setTimeout(() => {
+            updateSpreadPreferences();
+        }, 300);
+    }
+
     async function updateSpreadPreferences() {
         if (!$auth.token) return;
         if (!minSpread || !maxSpread) return;
@@ -235,11 +251,6 @@
         // Cancela requisição anterior se existir
         if (spreadUpdateController) {
             spreadUpdateController.abort();
-        }
-
-        // Cancela timeout anterior se existir
-        if (spreadUpdateTimeout) {
-            clearTimeout(spreadUpdateTimeout);
         }
 
         // Cria novo controller para esta requisição
@@ -280,18 +291,6 @@
         } finally {
             spreadUpdateController = null;
         }
-    }
-
-    function handleSpreadChange() {
-        if (spreadUpdateTimeout) {
-            clearTimeout(spreadUpdateTimeout);
-        }
-        
-        spreadUpdateTimeout = setTimeout(() => {
-            if (minSpread !== undefined && maxSpread !== undefined && minSpread !== "" && maxSpread !== "") {
-                updateSpreadPreferences();
-            }
-        }, 300);
     }
 </script>
 
