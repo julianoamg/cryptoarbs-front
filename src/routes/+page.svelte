@@ -101,23 +101,25 @@
 
 <div class="flex flex-col items-center">
     <div class="w-full max-w-5xl space-y-6">
-        <div class="flex justify-between items-start">
-            <PageHeader 
-                title={t?.pages?.home?.title || 'Arbitragem de Criptomoedas'}
-                description={t?.pages?.home?.subtitle || 'Esta página é atualizada automaticamente.'}
-                icon={ArrowLeftRight}
-            />
+        <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
+            <div class="w-full sm:w-auto">
+                <PageHeader 
+                    title={t?.pages?.home?.title || 'Arbitragem de Criptomoedas'}
+                    description={t?.pages?.home?.subtitle || 'Esta página é atualizada automaticamente.'}
+                    icon={ArrowLeftRight}
+                />
+            </div>
             {#if !loading && hasActiveSubscription && opportunities.length > 0}
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                     <button
-                        class="flex items-center gap-2 px-3 py-2 rounded-lg {showOnlyPositiveFunding ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-neutral-900/50 border-neutral-800'} border hover:border-neutral-700 transition-colors"
+                        class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg {showOnlyPositiveFunding ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-neutral-900/50 border-neutral-800'} border hover:border-neutral-700 transition-colors"
                         on:click={() => showOnlyPositiveFunding = !showOnlyPositiveFunding}
                     >
                         <Percent class="w-4 h-4 {showOnlyPositiveFunding ? 'text-emerald-500' : 'text-neutral-400'}" />
                         <span class="text-sm {showOnlyPositiveFunding ? 'text-emerald-500' : 'text-neutral-400'}">Taxa Positiva</span>
                     </button>
                     <button
-                        class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-900/50 border border-neutral-800 hover:border-neutral-700 transition-colors"
+                        class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-neutral-900/50 border border-neutral-800 hover:border-neutral-700 transition-colors"
                         on:click={toggleView}
                     >
                         {#if isListView}
