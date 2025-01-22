@@ -107,7 +107,7 @@
         
         loadingPairs = true;
         try {
-            const response = await fetch(`${PUBLIC_API_URL}/exchanges/cryptoassets/?page=${currentPage}`, {
+            const response = await fetch(`${PUBLIC_API_URL}/exchanges/cryptoassets/`, {
                 headers: {
                     'Authorization': `Token ${$auth.token}`
                 }
@@ -118,7 +118,7 @@
             }
 
             const data = await response.json();
-            tradingPairs = data.results;
+            tradingPairs = data.results || [];
             selectedPairs = tradingPairs.map(p => p.marked);
         } catch (error) {
             console.error('Failed to fetch trading pairs:', error);
@@ -345,7 +345,7 @@
                         </div>
                     {:else if filteredPairs.length > 0}
                         <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-                            {#each filteredPairs as pair, i}
+                            {#each filteredPairs as pair, i (pair.id)}
                                 <div 
                                     class="relative flex items-center justify-between p-3 rounded-lg border transition-colors cursor-pointer {selectedPairs[tradingPairs.indexOf(pair)] ? 'border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-transparent' : 'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'}"
                                     on:click={() => togglePair(tradingPairs.indexOf(pair))}
