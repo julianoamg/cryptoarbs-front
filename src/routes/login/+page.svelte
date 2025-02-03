@@ -5,6 +5,7 @@
     import { auth } from '$lib/stores/auth';
     import FormField from '../../components/forms/FormField.svelte';
     import LanguageSelector from '../../components/LanguageSelector.svelte';
+    import Logo from '$lib/components/Logo.svelte';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
 
@@ -56,7 +57,7 @@
     <div class="w-full max-w-md">
         <!-- Logo e Título -->
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-neutral-200">CryptoArbs</h1>
+            <Logo size="large" className="mb-4" />
             <p class="mt-2 text-neutral-400">{t.auth.login.titulo}</p>
         </div>
 

@@ -11,6 +11,7 @@
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
     import LanguageSelector from '../components/LanguageSelector.svelte';
+    import Logo from '$lib/components/Logo.svelte';
     import {
         ArrowLeftRight,
         Settings,
@@ -109,9 +110,7 @@
         <!-- Header -->
         <div class="relative flex items-center h-14 px-3 border-b border-neutral-800 bg-gradient-to-r from-emerald-500/5 to-transparent">
             <div class="flex items-center space-x-2" class:hidden={$sidebarCollapsed}>
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 flex items-center justify-center">
-                    <ArrowRightLeft class="w-5 h-5 text-emerald-500/80" />
-                </div>
+                <Logo size={$sidebarCollapsed ? 'small' : 'default'} />
                 <div class="flex flex-col">
                     <span class="text-sm font-semibold text-neutral-200 tracking-tight">CryptoArbs</span>
                     <span class="text-xs font-medium text-neutral-500">{userEmail || t.menu.carregando}</span>

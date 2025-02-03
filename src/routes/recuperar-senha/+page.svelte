@@ -8,6 +8,7 @@
     import { toast } from '$lib/stores/toast';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
+    import Logo from '$lib/components/Logo.svelte';
 
     let email = '';
     let loading = false;
@@ -55,11 +56,9 @@
 
 <div class="min-h-screen flex items-center justify-center bg-neutral-950 p-4">
     <div class="w-full max-w-md">
-        <div class="mb-8">
-            <PageHeader 
-                title="CryptoArbs"
-                description={t.auth.recuperarSenha.titulo}
-            ></PageHeader>
+        <div class="text-center mb-8">
+            <Logo size="large" className="mb-4" />
+            <p class="mt-2 text-neutral-400">{t.auth.recuperarSenha.titulo}</p>
         </div>
 
         <!-- Card do Formulário -->
