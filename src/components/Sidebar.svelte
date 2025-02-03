@@ -108,19 +108,16 @@
         class="fixed lg:static flex flex-col h-screen transition-transform lg:translate-x-0 {$sidebarOpen ? 'translate-x-0' : '-translate-x-full'} {$sidebarCollapsed ? 'w-[4.5rem]' : 'w-64'} bg-gradient-to-b from-neutral-900 to-neutral-950 border-r border-neutral-800 z-50"
     >
         <!-- Header -->
-        <div class="relative flex items-center h-14 px-3 border-b border-neutral-800 bg-gradient-to-r from-emerald-500/5 to-transparent">
-            <div class="flex items-center space-x-2" class:hidden={$sidebarCollapsed}>
-                <Logo size={$sidebarCollapsed ? 'small' : 'default'} />
-                <div class="flex flex-col">
-                    <span class="text-sm font-semibold text-neutral-200 tracking-tight">CryptoArbs</span>
-                    <span class="text-xs font-medium text-neutral-500">{userEmail || t.menu.carregando}</span>
-                </div>
+        <div class="relative flex flex-col items-center h-20 px-3 border-b border-neutral-800 bg-gradient-to-r from-emerald-500/5 to-transparent">
+            <div class="flex flex-col items-center justify-center h-full" class:hidden={$sidebarCollapsed}>
+                <Logo size={$sidebarCollapsed ? 'small' : 'default'} className="mb-1" />
+                <span class="text-xs font-medium text-neutral-500 truncate max-w-full">{userEmail || t.menu.carregando}</span>
+            </div>
+            <div class="flex items-center justify-center h-full" class:hidden={!$sidebarCollapsed}>
+                <Logo size="small" />
             </div>
             <button 
-                class="hidden lg:flex items-center justify-center w-6 h-6 rounded hover:bg-neutral-800 text-neutral-400"
-                class:absolute={!$sidebarCollapsed}
-                class:right-3={!$sidebarCollapsed}
-                class:mx-auto={$sidebarCollapsed}
+                class="hidden lg:flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-6 h-6 rounded hover:bg-neutral-800 text-neutral-400"
                 on:click={toggleCollapse}
             >
                 <div class="transform transition-transform" class:rotate-180={$sidebarCollapsed}>
