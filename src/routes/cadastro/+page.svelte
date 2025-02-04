@@ -10,6 +10,7 @@
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
     import Logo from '$lib/components/Logo.svelte';
+    import { page } from '$app/stores';
 
     let first_name = '';
     let email = '';
@@ -21,6 +22,13 @@
         non_field_errors: [],
         password: []
     };
+
+    $: {
+        const urlEmail = $page.url.searchParams.get('email');
+        if (urlEmail) {
+            email = urlEmail;
+        }
+    }
 
     $: t = translations[$language];
 
