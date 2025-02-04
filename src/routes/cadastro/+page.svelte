@@ -1,16 +1,15 @@
-<script>
+<script lang="ts">
     import { goto } from '$app/navigation';
     import { handleApiResponse } from '$lib/utils/api';
     import { PUBLIC_API_URL } from '$env/static/public';
     import FormField from '../../components/forms/FormField.svelte';
     import LanguageSelector from '../../components/LanguageSelector.svelte';
-    import PageHeader from '../../components/forms/PageHeader.svelte';
     import { toast } from '$lib/stores/toast';
     import { auth } from '$lib/stores/auth';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
     import Logo from '$lib/components/Logo.svelte';
-    import { page } from '$app/stores';
+    import { browser } from '$app/environment';
 
     let first_name = '';
     let email = '';
@@ -18,19 +17,21 @@
     let confirmPassword = '';
     let phone = '';
     let loading = false;
-    let fieldErrors = {
+    let fieldErrors: {
+        non_field_errors: string[];
+        password: string[];
+    } = {
         non_field_errors: [],
         password: []
     };
 
-    $: {
-        const urlEmail = $page.url.searchParams.get('email');
-        if (urlEmail) {
-            email = urlEmail;
-        }
+    $: if (browser) {
+        const params = new URLSearchParams(window.location.search);
+        const urlEmail = params.get('email');
+        if (urlEmail) email = urlEmail;
     }
 
-    $: t = translations[$language];
+    $: t = translations[$language as keyof typeof translations];
 
     async function handleSubmit() {
         loading = true;
