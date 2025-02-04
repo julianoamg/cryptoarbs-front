@@ -22,7 +22,8 @@
         ChevronLeft,
         CreditCard,
         UserCircle,
-        LogOut
+        LogOut,
+        Robot
     } from 'lucide-svelte';
 
     const sidebarOpen = writable(false);
