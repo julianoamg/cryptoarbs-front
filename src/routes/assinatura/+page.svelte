@@ -6,6 +6,24 @@
   
   let selectedPeriod = $state('monthly');
   
+  function getPaymentLink(period) {
+    const domain = typeof window !== 'undefined' ? window.location.hostname : '';
+    
+    if (domain === 'app.cryptone.ai') {
+      return 'https://pay.kirvano.com/8efbeb2f-1e70-4ca1-9b38-b8a50ca59651';
+    }
+
+    // Default Mercado Pago links
+    const mpLinks = {
+      monthly: 'https://mpago.la/2RjQGAc',
+      quarterly: 'https://mpago.la/2jGTm8q',
+      semiannual: 'https://mpago.la/2YfQQB9',
+      annual: 'https://mpago.la/1SKWi3k'
+    };
+
+    return mpLinks[period];
+  }
+  
   const periods = {
     monthly: {
       name: 'Mensal',
@@ -112,10 +130,7 @@
         </div>
       {/if}
       <a 
-        href={period === 'monthly' ? 'https://mpago.la/2RjQGAc' : 
-             period === 'quarterly' ? 'https://mpago.la/2jGTm8q' :
-             period === 'semiannual' ? 'https://mpago.la/2YfQQB9' :
-             'https://mpago.la/1SKWi3k'}
+        href={getPaymentLink(period)}
         target="_blank"
         rel="noopener noreferrer"
         class="block w-full"
