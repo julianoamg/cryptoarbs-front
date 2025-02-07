@@ -53,25 +53,25 @@
   const periods = {
     monthly: {
       name: 'Mensal',
-      price: '997',
+      price: '497',
       interval: 'por mês',
       description: 'Ideal para quem está começando no mercado de arbitragem e quer validar os resultados mês a mês.'
     },
     quarterly: {
       name: 'Trimestral',
-      price: '2.797',
+      price: '1.197',
       interval: 'por trimestre',
       description: 'Perfeito para traders que já conhecem o mercado e buscam consistência nos resultados com economia.'
     },
     semiannual: {
       name: 'Semestral',
-      price: '4.297',
+      price: '1.697',
       interval: 'por semestre',
       description: 'Excelente para profissionais que desejam maximizar seus ganhos com estratégias exclusivas de arbitragem.'
     },
     annual: {
       name: 'Anual',
-      price: '7.997',
+      price: '2.697',
       interval: 'por ano',
       description: 'A escolha dos traders profissionais que buscam as melhores oportunidades com o maior custo-benefício.'
     }
@@ -164,13 +164,13 @@
       </button>
       <div class="text-sm text-neutral-400 text-center">
         {#if period === 'monthly'}
-          997 {t.perMonth}
+          497 {t.perMonth}
         {:else if period === 'quarterly'}
-          932 {t.perMonth}
+          399 {t.perMonth}
         {:else if period === 'semiannual'}
-          716 {t.perMonth}
+          283 {t.perMonth}
         {:else}
-          666 {t.perMonth}
+          225 {t.perMonth}
         {/if}
       </div>
     </div>
