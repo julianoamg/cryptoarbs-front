@@ -134,36 +134,6 @@ export const translations: Translations = {
             mentoring: {
                 title: 'Mentoria',
                 subtitle: 'Aprenda com especialistas'
-            },
-            arbify: {
-                title: 'Configuração do Robô',
-                subtitle: 'Configure os parâmetros do seu robô de arbitragem',
-                basicSettings: 'Configurações Básicas',
-                robotName: 'Nome do Robô',
-                enabled: 'Ativo',
-                exchanges: 'Exchanges',
-                pairs: 'Pares',
-                strategy: 'Estratégia',
-                tradingParameters: 'Parâmetros de Trading',
-                minSpread: 'Spread Mínimo (%)',
-                maxSpread: 'Spread Máximo (%)',
-                minVolume: 'Volume Mínimo (USDT)',
-                maxVolume: 'Volume Máximo (USDT)',
-                minProfit: 'Lucro Mínimo (%)',
-                maxLoss: 'Perda Máxima (%)',
-                riskManagement: 'Gerenciamento de Risco',
-                stopLoss: 'Stop Loss (%)',
-                takeProfit: 'Take Profit (%)',
-                trailingStop: 'Stop Móvel',
-                trailingStopDistance: 'Distância do Stop Móvel (%)',
-                maxPositions: 'Máximo de Posições',
-                maxDailyTrades: 'Máximo de Trades Diários',
-                maxDailyLoss: 'Perda Máxima Diária (%)',
-                maxDrawdown: 'Drawdown Máximo (%)',
-                positionSize: 'Tamanho da Posição (USDT)',
-                leverageLevel: 'Alavancagem',
-                save: 'Salvar Configurações',
-                saving: 'Salvando...'
             }
         }
     },
@@ -300,36 +270,6 @@ export const translations: Translations = {
             mentoring: {
                 title: 'Mentoring',
                 subtitle: 'Learn from experts'
-            },
-            arbify: {
-                title: 'Configuração do Robô',
-                subtitle: 'Configure os parâmetros do seu robô de arbitragem',
-                basicSettings: 'Configurações Básicas',
-                robotName: 'Nome do Robô',
-                enabled: 'Ativo',
-                exchanges: 'Exchanges',
-                pairs: 'Pares',
-                strategy: 'Estratégia',
-                tradingParameters: 'Parâmetros de Trading',
-                minSpread: 'Spread Mínimo (%)',
-                maxSpread: 'Spread Máximo (%)',
-                minVolume: 'Volume Mínimo (USDT)',
-                maxVolume: 'Volume Máximo (USDT)',
-                minProfit: 'Lucro Mínimo (%)',
-                maxLoss: 'Perda Máxima (%)',
-                riskManagement: 'Gerenciamento de Risco',
-                stopLoss: 'Stop Loss (%)',
-                takeProfit: 'Take Profit (%)',
-                trailingStop: 'Stop Móvel',
-                trailingStopDistance: 'Distância do Stop Móvel (%)',
-                maxPositions: 'Máximo de Posições',
-                maxDailyTrades: 'Máximo de Trades Diários',
-                maxDailyLoss: 'Perda Máxima Diária (%)',
-                maxDrawdown: 'Drawdown Máximo (%)',
-                positionSize: 'Tamanho da Posição (USDT)',
-                leverageLevel: 'Alavancagem',
-                save: 'Salvar Configurações',
-                saving: 'Salvando...'
             }
         }
     },
@@ -466,36 +406,6 @@ export const translations: Translations = {
             mentoring: {
                 title: 'Mentoría',
                 subtitle: 'Aprende de expertos'
-            },
-            arbify: {
-                title: 'Configuração do Robô',
-                subtitle: 'Configure os parâmetros do seu robô de arbitragem',
-                basicSettings: 'Configurações Básicas',
-                robotName: 'Nome do Robô',
-                enabled: 'Ativo',
-                exchanges: 'Exchanges',
-                pairs: 'Pares',
-                strategy: 'Estratégia',
-                tradingParameters: 'Parâmetros de Trading',
-                minSpread: 'Spread Mínimo (%)',
-                maxSpread: 'Spread Máximo (%)',
-                minVolume: 'Volume Mínimo (USDT)',
-                maxVolume: 'Volume Máximo (USDT)',
-                minProfit: 'Lucro Mínimo (%)',
-                maxLoss: 'Perda Máxima (%)',
-                riskManagement: 'Gerenciamento de Risco',
-                stopLoss: 'Stop Loss (%)',
-                takeProfit: 'Take Profit (%)',
-                trailingStop: 'Stop Móvel',
-                trailingStopDistance: 'Distância do Stop Móvel (%)',
-                maxPositions: 'Máximo de Posições',
-                maxDailyTrades: 'Máximo de Trades Diários',
-                maxDailyLoss: 'Perda Máxima Diária (%)',
-                maxDrawdown: 'Drawdown Máximo (%)',
-                positionSize: 'Tamanho da Posição (USDT)',
-                leverageLevel: 'Alavancagem',
-                save: 'Salvar Configurações',
-                saving: 'Salvando...'
             }
         }
     }

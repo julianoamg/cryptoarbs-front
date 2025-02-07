@@ -1,9 +1,10 @@
 <script lang="ts">
     import { Eye, EyeOff } from 'lucide-svelte';
-    export let name: string;
-    export let label: string;
+    export let name = '';
+    export let label = '';
+    export let value: string | number = '';
     export let type = 'text';
-    export let value: string;
+    export let step: string | undefined = undefined;
     export let placeholder = '';
     export let errors: { [key: string]: string[] } = {};
 
@@ -11,23 +12,26 @@
     $: fieldError = errors[name]?.[0];
     $: inputType = type === 'password' ? (showPassword ? 'text' : 'password') : type;
 
+    let id = `field-${Math.random().toString(36).slice(2)}`;
+
     function togglePassword() {
         showPassword = !showPassword;
     }
 </script>
 
-<div>
-    <label for={name} class="block text-sm font-medium text-neutral-400 mb-1">
+<div class="space-y-2">
+    <label for={id} class="text-sm font-medium text-neutral-300">
         {label}
     </label>
     <div class="relative">
         <input
-            type={inputType}
+            {id}
             {name}
-            id={name}
+            {type}
+            {step}
             bind:value
             {placeholder}
-            class="w-full bg-neutral-800/50 border border-neutral-700 rounded-lg px-3 py-2 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
+            class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50"
             class:border-red-500={fieldError}
             class:pr-10={type === 'password'}
         />
