@@ -134,12 +134,69 @@ export const translations: Translations = {
             mentoring: {
                 title: 'Mentoria',
                 subtitle: 'Aprenda com especialistas'
+            },
+            subscription: {
+                title: 'Planos e Preços',
+                subtitle: 'Escolha o plano que melhor se adapta às suas necessidades',
+                monthly: {
+                    name: 'Mensal',
+                    price: '497',
+                    description: 'Ideal para quem está começando no mercado de arbitragem e quer validar os resultados mês a mês.'
+                },
+                quarterly: {
+                    name: 'Trimestral',
+                    price: '1.197',
+                    description: 'Perfeito para traders que já conhecem o mercado e buscam consistência nos resultados com economia.'
+                },
+                semiannual: {
+                    name: 'Semestral',
+                    price: '1.697',
+                    description: 'Excelente para profissionais que desejam maximizar seus ganhos com estratégias exclusivas de arbitragem.'
+                },
+                annual: {
+                    name: 'Anual',
+                    price: '2.697',
+                    description: 'A escolha dos traders profissionais que buscam as melhores oportunidades com o maior custo-benefício.'
+                },
+                perMonth: 'por mês',
+                perQuarterly: 'por trimestre',
+                perSemiannual: 'por semestre',
+                perAnnual: 'por ano',
+                subscribe: 'Assinar agora',
+                savings: {
+                    quarterly: 'Economize 20%',
+                    semiannual: 'Economize 43%',
+                    annual: 'Economize 55%'
+                },
+                securePurchase: {
+                    title: 'Compra 100% Segura',
+                    ssl: 'Conexão SSL Segura',
+                    gateway: 'Gateway de Pagamento Confiável',
+                    lgpd: 'Dados Protegidos (LGPD)'
+                },
+                faq: {
+                    title: 'Perguntas Frequentes',
+                    items: [
+                        {
+                            question: 'Como funciona o período de teste?',
+                            answer: 'Oferecemos 7 dias de teste gratuito em todos os planos. Você pode cancelar a qualquer momento durante este período sem custo algum.'
+                        },
+                        {
+                            question: 'Posso mudar de plano depois?',
+                            answer: 'Sim, você pode fazer upgrade ou downgrade do seu plano a qualquer momento. A diferença será calculada proporcionalmente.'
+                        },
+                        {
+                            question: 'Qual a política de reembolso?',
+                            answer: 'Oferecemos garantia de reembolso de 7 dias. Se você não estiver satisfeito, devolvemos 100% do seu investimento.'
+                        }
+                    ]
+                }
             }
         }
     },
     'en': {
         menu: {
-            arbitragens: 'ARBITRAGE',
+            arbitragens: 'ARBITRAJE',
             criptomoedas: 'Cryptocurrencies',
             robo: 'Robô',
             configuracoes: 'Settings',
@@ -270,6 +327,63 @@ export const translations: Translations = {
             mentoring: {
                 title: 'Mentoring',
                 subtitle: 'Learn from experts'
+            },
+            subscription: {
+                title: 'Plans & Pricing',
+                subtitle: 'Choose the plan that best fits your needs',
+                monthly: {
+                    name: 'Monthly',
+                    price: '497',
+                    description: 'Perfect for those starting in the arbitrage market and want to validate results month by month.'
+                },
+                quarterly: {
+                    name: 'Quarterly',
+                    price: '1.197',
+                    description: 'Great for traders who know the market and seek consistent results with savings.'
+                },
+                semiannual: {
+                    name: 'Semiannual',
+                    price: '1.697',
+                    description: 'Excellent for professionals who want to maximize their gains with exclusive arbitrage strategies.'
+                },
+                annual: {
+                    name: 'Annual',
+                    price: '2.697',
+                    description: 'The choice of professional traders looking for the best opportunities with the best cost-benefit.'
+                },
+                perMonth: 'per month',
+                perQuarterly: 'per quarter',
+                perSemiannual: 'per semester',
+                perAnnual: 'per year',
+                subscribe: 'Subscribe now',
+                savings: {
+                    quarterly: 'Save 20%',
+                    semiannual: 'Save 43%',
+                    annual: 'Save 55%'
+                },
+                securePurchase: {
+                    title: '100% Secure Purchase',
+                    ssl: 'Secure SSL Connection',
+                    gateway: 'Trusted Payment Gateway',
+                    lgpd: 'Protected Data (GDPR)'
+                },
+                faq: {
+                    title: 'Frequently Asked Questions',
+                    items: [
+                        {
+                            question: 'How does the trial period work?',
+                            answer: 'We offer a 7-day free trial on all plans. You can cancel at any time during this period at no cost.'
+                        },
+                        {
+                            question: 'Can I change plans later?',
+                            answer: 'Yes, you can upgrade or downgrade your plan at any time. The difference will be calculated proportionally.'
+                        },
+                        {
+                            question: 'What is the refund policy?',
+                            answer: 'We offer a 7-day money-back guarantee. If you are not satisfied, we will refund 100% of your investment.'
+                        }
+                    ]
+                }
             }
         }
     },
@@ -406,6 +520,63 @@ export const translations: Translations = {
             mentoring: {
                 title: 'Mentoría',
                 subtitle: 'Aprende de expertos'
+            },
+            subscription: {
+                title: 'Planes y Precios',
+                subtitle: 'Elige el plan que mejor se adapte a tus necesidades',
+                monthly: {
+                    name: 'Mensual',
+                    price: '497',
+                    description: 'Ideal para quienes comienzan en el mercado de arbitraje y quieren validar resultados mes a mes.'
+                },
+                quarterly: {
+                    name: 'Trimestral',
+                    price: '1.197',
+                    description: 'Perfecto para traders que ya conocen el mercado y buscan consistencia en los resultados con ahorro.'
+                },
+                semiannual: {
+                    name: 'Semestral',
+                    price: '1.697',
+                    description: 'Excelente para profesionales que desean maximizar sus ganancias con estrategias exclusivas de arbitraje.'
+                },
+                annual: {
+                    name: 'Anual',
+                    price: '2.697',
+                    description: 'La elección de los traders profesionales que buscan las mejores oportunidades con la mejor relación costo-beneficio.'
+                },
+                perMonth: 'por mes',
+                perQuarterly: 'por trimestre',
+                perSemiannual: 'por semestre',
+                perAnnual: 'por año',
+                subscribe: 'Suscribirse ahora',
+                savings: {
+                    quarterly: 'Ahorra 20%',
+                    semiannual: 'Ahorra 43%',
+                    annual: 'Ahorra 55%'
+                },
+                securePurchase: {
+                    title: 'Compra 100% Segura',
+                    ssl: 'Conexión SSL Segura',
+                    gateway: 'Pasarela de Pago Confiable',
+                    lgpd: 'Datos Protegidos (LGPD)'
+                },
+                faq: {
+                    title: 'Preguntas Frecuentes',
+                    items: [
+                        {
+                            question: '¿Cómo funciona el período de prueba?',
+                            answer: 'Ofrecemos 7 días de prueba gratuita en todos los planes. Puedes cancelar en cualquier momento durante este período sin costo alguno.'
+                        },
+                        {
+                            question: '¿Puedo cambiar de plan después?',
+                            answer: 'Sí, puedes hacer upgrade o downgrade de tu plan en cualquier momento. La diferencia se calculará proporcionalmente.'
+                        },
+                        {
+                            question: '¿Cuál es la política de reembolso?',
+                            answer: 'Ofrecemos garantía de devolución de 7 días. Si no estás satisfecho, te devolvemos el 100% de tu inversión.'
+                        }
+                    ]
+                }
             }
         }
     }
