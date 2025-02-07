@@ -5,23 +5,49 @@
   import { translations } from '$lib/i18n/translations';
   
   let selectedPeriod = $state('monthly');
+  let loading = $state(false);
   
-  function getPaymentLink(period) {
+  async function handlePayment(period) {
+    loading = true;
     const domain = typeof window !== 'undefined' ? window.location.hostname : '';
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
     
-    if (domain === 'app.cryptone.ai') {
-      return 'https://pay.kirvano.com/8efbeb2f-1e70-4ca1-9b38-b8a50ca59651';
+    try {
+      if (domain === 'app.cryptone.ai' && path === '/assinatura') {
+        const response = await fetch('https://pay.kirvano.com/8efbeb2f-1e70-4ca1-9b38-b8a50ca59651', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ period })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          window.location.href = data.redirectUrl || 'https://pay.kirvano.com/8efbeb2f-1e70-4ca1-9b38-b8a50ca59651';
+        } else {
+          // Fallback to direct link if POST fails
+          window.location.href = 'https://pay.kirvano.com/8efbeb2f-1e70-4ca1-9b38-b8a50ca59651';
+        }
+      } else {
+        // Default Mercado Pago links
+        const mpLinks = {
+          monthly: 'https://mpago.la/1XmuLaQ',
+          quarterly: 'https://mpago.la/2EJC3dh',
+          semiannual: 'https://mpago.la/1iLHzAx',
+          annual: 'https://mpago.la/1Yo7W4K'
+        };
+        window.location.href = mpLinks[period];
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      // Fallback to direct link if there's an error
+      window.location.href = domain === 'app.cryptone.ai' ? 
+        'https://pay.kirvano.com/8efbeb2f-1e70-4ca1-9b38-b8a50ca59651' : 
+        mpLinks[period];
+    } finally {
+      loading = false;
     }
-
-    // Default Mercado Pago links
-    const mpLinks = {
-      monthly: 'https://mpago.la/2RjQGAc',
-      quarterly: 'https://mpago.la/2jGTm8q',
-      semiannual: 'https://mpago.la/2YfQQB9',
-      annual: 'https://mpago.la/1SKWi3k'
-    };
-
-    return mpLinks[period];
   }
   
   const periods = {
@@ -129,16 +155,13 @@
           </div>
         </div>
       {/if}
-      <a 
-        href={getPaymentLink(period)}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="block w-full"
+      <button 
+        onclick={() => handlePayment(period)}
+        class="block w-full py-2 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-neutral-900 font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled={loading}
       >
-        <button class="w-full py-2 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-neutral-900 font-semibold transition-colors">
-          {t.subscribe}
-        </button>
-      </a>
+        {loading ? 'Processando...' : t.subscribe}
+      </button>
       <div class="text-sm text-neutral-400 text-center">
         {#if period === 'monthly'}
           997 {t.perMonth}

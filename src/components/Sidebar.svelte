@@ -23,7 +23,7 @@
         CreditCard,
         UserCircle,
         LogOut,
-        Robot
+        Bot
     } from 'lucide-svelte';
 
     const sidebarOpen = writable(false);
@@ -72,6 +72,7 @@
             title: t.menu.arbitragens,
             items: [
                 {name: t.menu.criptomoedas, icon: ArrowLeftRight, href: '/'},
+                {name: t.menu.robo, icon: Bot, href: '/arbify'},
                 {name: t.menu.configuracoes, icon: Settings, href: '/configuracoes'}
             ]
         },
