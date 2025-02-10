@@ -26,6 +26,26 @@
         created: string;
         modified: string;
         symbol?: string;
+        exchange_a_url?: string;
+        exchange_b_url?: string;
+    }
+
+    interface ApiResponse {
+        results: Array<{
+            id: string;
+            exchange_a: string;
+            exchange_b: string;
+            exchange_a_price: string;
+            exchange_b_price: string;
+            spread: string;
+            profit_fee: string;
+            profit: string;
+            created: string;
+            modified: string;
+            symbol?: string;
+            exchange_a_url?: string;
+            exchange_b_url?: string;
+        }>;
     }
 
     $: t = translations[$language];
@@ -56,9 +76,24 @@
         if (!$auth.token || !hasActiveSubscription) return;
         
         try {
-            opportunities = await getOpportunities($auth.token);
+            const data = await getOpportunities($auth.token) as ApiResponse;
+
+            if (!data || !Array.isArray(data.results)) {
+                console.error('Invalid data structure received:', data);
+                return;
+            }
+
+            opportunities = data.results.map((opp) => ({
+                ...opp,
+                profit: opp.profit?.replace('$', '') ?? '0',
+                profit_fee: opp.profit_fee?.replace('$', '') ?? '0',
+                exchange_a_price: opp.exchange_a_price?.replace('$', '') ?? '0',
+                exchange_b_price: opp.exchange_b_price?.replace('$', '') ?? '0',
+                spread: opp.spread?.replace('$', '') ?? '0'
+            }));
         } catch (error) {
             console.error('Failed to fetch opportunities:', error);
+            opportunities = []; // Reset on error
         }
     }
 
@@ -210,7 +245,7 @@
                                                 <span class="text-sm font-medium text-neutral-200">{opp.exchange_a_price}</span>
                                                 <div class="flex items-center gap-1 mt-1">
                                                     <span class="text-xs text-neutral-400">em</span>
-                                                    <span class="text-xs font-medium text-emerald-500">{opp.exchange_a}</span>
+                                                    <a href={opp.exchange_a_url} target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-emerald-500 hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_a}</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -219,7 +254,7 @@
                                                 <span class="text-sm font-medium text-neutral-200">{opp.exchange_b_price}</span>
                                                 <div class="flex items-center gap-1 mt-1">
                                                     <span class="text-xs text-neutral-400">em</span>
-                                                    <span class="text-xs font-medium text-emerald-500">{opp.exchange_b} (Futures)</span>
+                                                    <a href={opp.exchange_b_url} target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-emerald-500 hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_b} (Futures)</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -259,9 +294,9 @@
                                 <!-- Header com Exchanges e Lucro -->
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                     <div class="flex items-center space-x-2">
-                                        <span class="text-base sm:text-lg font-bold text-neutral-200">{opp.exchange_a}</span>
+                                        <a href={opp.exchange_a_url} target="_blank" rel="noopener noreferrer" class="text-base sm:text-lg font-bold text-neutral-200 hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_a}</a>
                                         <ArrowRight class="w-4 h-4 sm:w-5 sm:h-5 text-neutral-500" />
-                                        <span class="text-base sm:text-lg font-bold text-neutral-200">{opp.exchange_b} (Futures)</span>
+                                        <a href={opp.exchange_b_url} target="_blank" rel="noopener noreferrer" class="text-base sm:text-lg font-bold text-neutral-200 hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_b} (Futures)</a>
                                     </div>
                                     <div class="flex items-baseline space-x-1">
                                         <span class="text-xl sm:text-2xl font-bold text-emerald-500">{opp.profit}%</span>
@@ -291,14 +326,18 @@
                                 <div class="border-t border-neutral-800 pt-4">
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <p class="text-xs sm:text-sm font-medium text-neutral-400 mb-2">{opp.exchange_a}</p>
+                                            <p class="text-xs sm:text-sm font-medium text-neutral-400 mb-2">
+                                                <a href={opp.exchange_a_url} target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_a}</a>
+                                            </p>
                                             <div class="flex justify-between">
                                                 <span class="text-xs sm:text-sm text-neutral-400">{t.pages.home.price}</span>
                                                 <span class="text-xs sm:text-sm text-neutral-200">{opp.exchange_a_price}</span>
                                             </div>
                                         </div>
                                         <div>
-                                            <p class="text-xs sm:text-sm font-medium text-neutral-400 mb-2">{opp.exchange_b} (Futures)</p>
+                                            <p class="text-xs sm:text-sm font-medium text-neutral-400 mb-2">
+                                                <a href={opp.exchange_b_url} target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_b} (Futures)</a>
+                                            </p>
                                             <div class="flex justify-between">
                                                 <span class="text-xs sm:text-sm text-neutral-400">{t.pages.home.price}</span>
                                                 <span class="text-xs sm:text-sm text-neutral-200">{opp.exchange_b_price}</span>

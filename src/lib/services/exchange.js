@@ -72,14 +72,14 @@ export async function getOpportunities(accessToken) {
         // Round profit fields to 2 decimal places and format prices with 6 decimal places
         const opportunities = data.results.map(opportunity => ({
             ...opportunity,
-            profit: Number(opportunity.profit.replace('$', '')).toFixed(2),
-            profit_fee: Number(opportunity.profit_fee.replace('$', '')).toFixed(2),
-            exchange_a_price: Number(opportunity.exchange_a_price.replace('$', '')).toFixed(6),
-            exchange_b_price: Number(opportunity.exchange_b_price.replace('$', '')).toFixed(6),
-            spread: opportunity.spread.replace('$', '')
+            profit: opportunity.profit ? Number(opportunity.profit.replace('$', '')).toFixed(2) : '0.00',
+            profit_fee: opportunity.profit_fee ? Number(opportunity.profit_fee.replace('$', '')).toFixed(2) : '0.00',
+            exchange_a_price: opportunity.exchange_a_price ? Number(opportunity.exchange_a_price.replace('$', '')).toFixed(6) : '0.000000',
+            exchange_b_price: opportunity.exchange_b_price ? Number(opportunity.exchange_b_price.replace('$', '')).toFixed(6) : '0.000000',
+            spread: opportunity.spread ? opportunity.spread.replace('$', '') : '0'
         }));
         
-        return opportunities;
+        return { results: opportunities };
     } catch (err) {
         if (err instanceof Error) {
             throw err;
