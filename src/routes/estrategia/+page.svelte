@@ -7,9 +7,8 @@
     import { onMount } from 'svelte';
     import PageHeader from '../../components/forms/PageHeader.svelte';
     import ValidatedField from '../../components/forms/ValidatedField.svelte';
-    import Button from '../../components/forms/Button.svelte';
     import Card from '../../components/forms/Card.svelte';
-    import { LineChart, DollarSign, Percent, AlertTriangle, HelpCircle } from 'lucide-svelte';
+    import { LineChart } from 'lucide-svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
 
     interface Settings {
