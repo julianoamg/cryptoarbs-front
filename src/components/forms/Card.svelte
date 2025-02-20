@@ -3,15 +3,17 @@
     export let icon = null;
 </script>
 
-<div class="bg-neutral-900 border border-neutral-800 rounded-lg">
-    <div class="p-4 border-b border-neutral-800">
-        <div class="flex items-center gap-2">
-            {#if icon}
-                <svelte:component this={icon} class="w-5 h-5 text-emerald-500" />
-            {/if}
-            <h2 class="text-lg font-semibold text-neutral-200">{title}</h2>
+<div class="bg-neutral-900 border border-neutral-800 rounded">
+    {#if title || icon}
+        <div class="p-4 border-b border-neutral-800">
+            <div class="flex items-center gap-2">
+                {#if icon}
+                    <svelte:component this={icon} class="w-5 h-5 text-emerald-500" />
+                {/if}
+                <h2 class="text-lg font-semibold text-neutral-200">{title}</h2>
+            </div>
         </div>
-    </div>
+    {/if}
     <div class="p-4">
         <slot />
     </div>

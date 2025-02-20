@@ -1,16 +1,18 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { Settings, Check } from 'lucide-svelte';
+    import { Settings, Check, Plus } from 'lucide-svelte';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
     import { auth } from '$lib/stores/auth';
     import { getExchanges } from '$lib/services/exchange';
     import { getMe } from '$lib/services/user';
+    import { exchangeCredentials } from '$lib/stores/exchangeCredentials';
     import PageHeader from '../../components/forms/PageHeader.svelte';
     import Card from '../../components/forms/Card.svelte';
     import Button from '../../components/forms/Button.svelte';
     import Loading from '../../components/Loading.svelte';
     import FormField from '../../components/forms/FormField.svelte';
+    import ExchangeCredentialsModal from '../../components/forms/ExchangeCredentialsModal.svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
 
     interface Exchange {
@@ -280,6 +282,19 @@
             <Loading />
         {:else}
             <Card title={t?.pages?.settings?.exchanges?.title || 'Selecione suas exchanges favoritas'}>
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                    <div>
+                        <p class="text-sm text-neutral-400">Gerencie suas exchanges e suas credenciais</p>
+                    </div>
+                    <button
+                        class="flex items-center justify-center gap-2 px-4 py-2 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20 transition-colors w-full sm:w-auto"
+                        on:click={() => exchangeCredentials.showModal()}
+                    >
+                        <Plus class="w-4 h-4" />
+                        <span class="text-sm font-medium">Adicionar Credencial</span>
+                    </button>
+                </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {#each exchanges as exchange, i}
                         <div 
@@ -301,6 +316,34 @@
                         </div>
                     {/each}
                 </div>
+            </Card>
+
+            <Card title="Filtro de Spread">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <FormField
+                        type="number"
+                        name="minSpread"
+                        label="Spread Mínimo (%)"
+                        bind:value={minSpread}
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        onkeypress="return event.charCode >= 48"
+                    />
+                    <FormField
+                        type="number"
+                        name="maxSpread"
+                        label="Spread Máximo (%)"
+                        bind:value={maxSpread}
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        onkeypress="return event.charCode >= 48"
+                    />
+                </div>
+                <p class="mt-2 text-sm text-neutral-300">
+                    Apenas oportunidades com spread entre {minSpread}% e {maxSpread}% serão exibidas.
+                </p>
             </Card>
 
             <Card title="Moedas">
@@ -378,34 +421,14 @@
                     {/if}
                 </div>
             </Card>
-
-            <Card title="Filtro de Spread">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField
-                        type="number"
-                        name="minSpread"
-                        label="Spread Mínimo (%)"
-                        bind:value={minSpread}
-                        min="0"
-                        max="100"
-                        step="0.1"
-                        onkeypress="return event.charCode >= 48"
-                    />
-                    <FormField
-                        type="number"
-                        name="maxSpread"
-                        label="Spread Máximo (%)"
-                        bind:value={maxSpread}
-                        min="0"
-                        max="100"
-                        step="0.1"
-                        onkeypress="return event.charCode >= 48"
-                    />
-                </div>
-                <p class="mt-2 text-sm text-neutral-300">
-                    Apenas oportunidades com spread entre {minSpread}% e {maxSpread}% serão exibidas.
-                </p>
-            </Card>
         {/if}
     </div>
-</div> 
+</div>
+
+{#if $exchangeCredentials.showModal}
+    <ExchangeCredentialsModal
+        show={true}
+        onClose={() => exchangeCredentials.hideModal()}
+        onSuccess={fetchExchanges}
+    />
+{/if} 

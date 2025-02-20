@@ -7,6 +7,9 @@ export const translations = {
             criptomoedas: 'Criptomoedas',
             analiseSentimental: 'Análise Sentimental',
             configuracoes: 'Configurações',
+            arbify: 'ARBIFY',
+            estrategia: 'Estratégia',
+            operacoes: 'Operações',
             suporte: 'SUPORTE',
             primeirosPassos: 'Primeiros Passos',
             mentoria: 'Mentoria',
@@ -267,6 +270,54 @@ export const translations = {
                     primary: 'Agendar Mentoria',
                     secondary: 'Saber Mais'
                 }
+            },
+            strategy: {
+                title: 'Estratégia',
+                subtitle: 'Configure os parâmetros da sua estratégia de arbitragem',
+                cardTitle: 'Configurações de Arbitragem',
+                minProfit: 'Lucro Mínimo',
+                minProfitDescription: 'Defina o lucro mínimo aceitável para executar uma operação (%)',
+                maxProfit: 'Lucro Máximo',
+                maxProfitDescription: 'Defina o lucro máximo para filtrar oportunidades irreais (%)',
+                tolerance: 'Tolerância',
+                toleranceDescription: 'Margem de tolerância para variações de preço durante a execução (%)',
+                stake: 'Stake em USDT',
+                stakeDescription: 'Valor em USDT para cada operação de arbitragem',
+                saveButton: 'Salvar Configurações',
+                success: 'Configurações salvas com sucesso!',
+                error: 'Erro ao salvar configurações'
+            },
+            operations: {
+                title: 'Operações',
+                subtitle: 'Acompanhe suas operações de arbitragem em tempo real',
+                cardTitle: 'Histórico de Operações',
+                noOperations: 'Nenhuma operação encontrada',
+                date: 'Data',
+                startDate: 'Data Inicial',
+                endDate: 'Data Final',
+                pair: 'Par',
+                type: 'Tipo',
+                entry: 'Entrada',
+                exit: 'Saída',
+                profit: 'Lucro',
+                statusLabel: 'Status',
+                status: {
+                    open: 'Aberta',
+                    closed: 'Fechada',
+                    pending: 'Pendente'
+                },
+                dateRanges: {
+                    today: 'Hoje',
+                    yesterday: 'Ontem',
+                    week: 'Últimos 7 dias',
+                    fifteenDays: 'Últimos 15 dias',
+                    thirtyDays: 'Últimos 30 dias',
+                    sixtyDays: 'Últimos 60 dias',
+                    ninetyDays: 'Últimos 90 dias',
+                    sixMonths: 'Últimos 6 meses',
+                    oneYear: 'Último ano',
+                    allPeriod: 'Todo período'
+                }
             }
         }
     },
@@ -274,10 +325,13 @@ export const translations = {
         loading: 'Loading...',
         // Sidebar
         menu: {
-            arbitragens: 'ARBITRAGE',
+            arbitragens: 'ARBITRAJE',
             criptomoedas: 'Cryptocurrencies',
             analiseSentimental: 'Sentiment Analysis',
             configuracoes: 'Settings',
+            arbify: 'ARBIFY',
+            estrategia: 'Strategy',
+            operacoes: 'Operations',
             suporte: 'SUPPORT',
             primeirosPassos: 'Getting Started',
             mentoria: 'Mentoring',
@@ -538,6 +592,54 @@ export const translations = {
                     primary: 'Schedule Mentoring',
                     secondary: 'Learn More'
                 }
+            },
+            strategy: {
+                title: 'Strategy',
+                subtitle: 'Configure your arbitrage strategy parameters',
+                cardTitle: 'Arbitrage Settings',
+                minProfit: 'Minimum Profit',
+                minProfitDescription: 'Set the minimum acceptable profit to execute an operation (%)',
+                maxProfit: 'Maximum Profit',
+                maxProfitDescription: 'Set the maximum profit to filter unrealistic opportunities (%)',
+                tolerance: 'Tolerance',
+                toleranceDescription: 'Tolerance margin for price variations during execution (%)',
+                stake: 'Stake in USDT',
+                stakeDescription: 'Amount in USDT for each arbitrage operation',
+                saveButton: 'Save Settings',
+                success: 'Settings saved successfully!',
+                error: 'Error saving settings'
+            },
+            operations: {
+                title: 'Operations',
+                subtitle: 'Monitor your arbitrage operations in real-time',
+                cardTitle: 'Operations History',
+                noOperations: 'No operations found',
+                date: 'Date',
+                startDate: 'Start Date',
+                endDate: 'End Date',
+                pair: 'Pair',
+                type: 'Type',
+                entry: 'Entry',
+                exit: 'Exit',
+                profit: 'Profit',
+                statusLabel: 'Status',
+                status: {
+                    open: 'Open',
+                    closed: 'Closed',
+                    pending: 'Pending'
+                },
+                dateRanges: {
+                    today: 'Today',
+                    yesterday: 'Yesterday',
+                    week: 'Last 7 days',
+                    fifteenDays: 'Last 15 days',
+                    thirtyDays: 'Last 30 days',
+                    sixtyDays: 'Last 60 days',
+                    ninetyDays: 'Last 90 days',
+                    sixMonths: 'Last 6 months',
+                    oneYear: 'Last year',
+                    allPeriod: 'All period'
+                }
             }
         }
     },
@@ -549,6 +651,9 @@ export const translations = {
             criptomoedas: 'Criptomonedas',
             analiseSentimental: 'Análisis de Sentimiento',
             configuracoes: 'Configuraciones',
+            arbify: 'ARBIFY',
+            estrategia: 'Estrategia',
+            operacoes: 'Operaciones',
             suporte: 'SOPORTE',
             primeirosPassos: 'Primeros Pasos',
             mentoria: 'Mentoría',
@@ -808,6 +913,54 @@ export const translations = {
                     description: 'Únete a nuestra comunidad de traders exitosos y comienza tu camino hacia la independencia financiera.',
                     primary: 'Agendar Mentoría',
                     secondary: 'Saber Más'
+                }
+            },
+            strategy: {
+                title: 'Estrategia',
+                subtitle: 'Configura los parámetros de tu estrategia de arbitraje',
+                cardTitle: 'Configuraciones de Arbitraje',
+                minProfit: 'Beneficio Mínimo',
+                minProfitDescription: 'Define el beneficio mínimo aceptable para ejecutar una operación (%)',
+                maxProfit: 'Beneficio Máximo',
+                maxProfitDescription: 'Define el beneficio máximo para filtrar oportunidades irreales (%)',
+                tolerance: 'Tolerancia',
+                toleranceDescription: 'Margen de tolerancia para variaciones de precio durante la ejecución (%)',
+                stake: 'Stake en USDT',
+                stakeDescription: 'Cantidad en USDT para cada operación de arbitraje',
+                saveButton: 'Guardar Configuraciones',
+                success: '¡Configuraciones guardadas con éxito!',
+                error: 'Error al guardar configuraciones'
+            },
+            operations: {
+                title: 'Operaciones',
+                subtitle: 'Monitorea tus operaciones de arbitraje en tiempo real',
+                cardTitle: 'Historial de Operaciones',
+                noOperations: 'No se encontraron operaciones',
+                date: 'Fecha',
+                startDate: 'Fecha Inicial',
+                endDate: 'Fecha Final',
+                pair: 'Par',
+                type: 'Tipo',
+                entry: 'Entrada',
+                exit: 'Salida',
+                profit: 'Beneficio',
+                statusLabel: 'Estado',
+                status: {
+                    open: 'Abierta',
+                    closed: 'Cerrada',
+                    pending: 'Pendiente'
+                },
+                dateRanges: {
+                    today: 'Hoy',
+                    yesterday: 'Ayer',
+                    week: 'Últimos 7 días',
+                    fifteenDays: 'Últimos 15 días',
+                    thirtyDays: 'Últimos 30 días',
+                    sixtyDays: 'Últimos 60 días',
+                    ninetyDays: 'Últimos 90 días',
+                    sixMonths: 'Últimos 6 meses',
+                    oneYear: 'Último año',
+                    allPeriod: 'Todo el período'
                 }
             }
         }

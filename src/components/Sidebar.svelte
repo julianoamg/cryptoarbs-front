@@ -21,7 +21,9 @@
         ChevronLeft,
         CreditCard,
         UserCircle,
-        LogOut
+        LogOut,
+        LineChart,
+        Activity
     } from 'lucide-svelte';
 
     const sidebarOpen = writable(false);
@@ -71,6 +73,13 @@
             items: [
                 {name: t.menu.criptomoedas, icon: ArrowLeftRight, href: '/'},
                 {name: t.menu.configuracoes, icon: Settings, href: '/configuracoes'}
+            ]
+        },
+        {
+            title: t.menu.arbify,
+            items: [
+                {name: t.menu.estrategia, icon: LineChart, href: '/estrategia'},
+                {name: t.menu.operacoes, icon: Activity, href: '/operacoes'}
             ]
         },
         {

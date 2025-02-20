@@ -25,7 +25,7 @@
         <!-- Sidebar Variant -->
         <button
             on:click={toggleDropdown}
-            class="w-full flex items-center justify-between px-2 py-2 text-sm text-neutral-300 rounded-lg hover:bg-gradient-to-r hover:from-emerald-500/10 hover:to-transparent group border border-neutral-800"
+            class="w-full flex items-center justify-between px-2 py-2 text-sm text-neutral-300 rounded hover:bg-gradient-to-r hover:from-emerald-500/10 hover:to-transparent group border border-neutral-800"
         >
             <div class="flex items-center space-x-2">
                 <Globe class="w-5 h-5 text-emerald-500/80 group-hover:text-emerald-400" />
@@ -44,7 +44,7 @@
         <!-- Default Variant -->
         <button
             on:click={toggleDropdown}
-            class="flex items-center space-x-2 px-3 py-1.5 text-sm text-neutral-300 rounded-lg hover:bg-gradient-to-r hover:from-emerald-500/10 hover:to-transparent group"
+            class="flex items-center space-x-2 px-3 py-1.5 text-sm text-neutral-300 rounded hover:bg-gradient-to-r hover:from-emerald-500/10 hover:to-transparent group"
         >
             <Globe class="w-4 h-4 text-emerald-500/80 group-hover:text-emerald-400" />
             <span class="font-medium group-hover:text-neutral-200">{languages[$language]}</span>
@@ -61,7 +61,7 @@
 
     {#if isOpen}
         <div 
-            class="absolute z-50 {variant === 'sidebar' ? 'left-0 right-0' : 'right-0'} mt-1 py-1 bg-neutral-900 border border-neutral-800 rounded-lg shadow-lg"
+            class="absolute z-50 {variant === 'sidebar' ? 'left-0 right-0' : 'right-0'} mt-1 py-1 bg-neutral-900 border border-neutral-800 rounded shadow-lg"
             class:w-full={variant === 'sidebar'}
             class:w-40={variant !== 'sidebar'}
         >

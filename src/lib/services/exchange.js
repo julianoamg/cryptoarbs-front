@@ -86,4 +86,39 @@ export async function getOpportunities(accessToken) {
         }
         throw new Error('Failed to connect to the server');
     }
+}
+
+/**
+ * Adds new exchange credentials
+ * @param {string} accessToken - Current access token
+ * @param {Object} credentials - Exchange credentials
+ * @param {string} credentials.exchange - Exchange UUID
+ * @param {string} credentials.api_key - API Key
+ * @param {string} credentials.api_secret - API Secret
+ * @param {string} [credentials.passphrase] - Optional passphrase for some exchanges
+ * @returns {Promise<Object>} Response from the server
+ */
+export async function addExchangeCredentials(accessToken, credentials) {
+    try {
+        const response = await fetch(`${PUBLIC_API_URL}/exchanges/credentials/`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(credentials)
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.detail || 'Failed to add exchange credentials');
+        }
+
+        return await response.json();
+    } catch (err) {
+        if (err instanceof Error) {
+            throw err;
+        }
+        throw new Error('Failed to connect to the server');
+    }
 } 

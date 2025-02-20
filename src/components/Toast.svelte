@@ -22,7 +22,7 @@
     <div class="max-w-xl mx-auto p-4 flex flex-col gap-2">
         {#each $toast as { id, message, type } (id)}
             <div
-                class="flex items-center justify-between gap-3 px-5 py-4 rounded-lg border shadow-lg backdrop-blur-sm {colors[type]}"
+                class="flex items-center justify-between gap-3 px-5 py-4 rounded border shadow-lg backdrop-blur-sm {colors[type]}"
                 transition:fly={{ y: -100, duration: 300 }}
                 role="alert"
             >

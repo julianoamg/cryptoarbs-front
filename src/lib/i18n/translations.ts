@@ -191,6 +191,19 @@ export const translations: Translations = {
                         }
                     ]
                 }
+            },
+            strategy: {
+                title: 'Estratégia',
+                subtitle: 'Configure os parâmetros da sua estratégia de arbitragem',
+                cardTitle: 'Configurações de Arbitragem',
+                minProfit: 'Lucro Mínimo',
+                minProfitDescription: 'Defina o lucro mínimo aceitável para executar uma operação (%)',
+                maxProfit: 'Lucro Máximo',
+                maxProfitDescription: 'Defina o lucro máximo para filtrar oportunidades irreais (%)',
+                tolerance: 'Tolerância',
+                toleranceDescription: 'Margem de tolerância para variações de preço durante a execução (%)',
+                stake: 'Valor em USDT por Operação',
+                stakeDescription: 'Valor em USDT para cada operação de arbitragem'
             }
         }
     },
@@ -384,6 +397,19 @@ export const translations: Translations = {
                         }
                     ]
                 }
+            },
+            strategy: {
+                title: 'Strategy',
+                subtitle: 'Configure your arbitrage strategy parameters',
+                cardTitle: 'Arbitrage Settings',
+                minProfit: 'Minimum Profit',
+                minProfitDescription: 'Set the minimum acceptable profit to execute an operation (%)',
+                maxProfit: 'Maximum Profit',
+                maxProfitDescription: 'Set the maximum profit to filter unrealistic opportunities (%)',
+                tolerance: 'Tolerance',
+                toleranceDescription: 'Tolerance margin for price variations during execution (%)',
+                stake: 'Value in USDT per Operation',
+                stakeDescription: 'Amount in USDT for each arbitrage operation'
             }
         }
     },
@@ -577,6 +603,19 @@ export const translations: Translations = {
                         }
                     ]
                 }
+            },
+            strategy: {
+                title: 'Estrategia',
+                subtitle: 'Configura los parámetros de tu estrategia de arbitraje',
+                cardTitle: 'Configuraciones de Arbitraje',
+                minProfit: 'Beneficio Mínimo',
+                minProfitDescription: 'Define el beneficio mínimo aceptable para ejecutar una operación (%)',
+                maxProfit: 'Beneficio Máximo',
+                maxProfitDescription: 'Define el beneficio máximo para filtrar oportunidades irreales (%)',
+                tolerance: 'Tolerancia',
+                toleranceDescription: 'Margen de tolerancia para variaciones de precio durante la ejecución (%)',
+                stake: 'Valor en USDT por Operación',
+                stakeDescription: 'Cantidad en USDT para cada operación de arbitraje'
             }
         }
     }
