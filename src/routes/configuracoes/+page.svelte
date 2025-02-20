@@ -1,18 +1,16 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { Settings, Check, Plus } from 'lucide-svelte';
+    import { Settings, Check } from 'lucide-svelte';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
     import { auth } from '$lib/stores/auth';
     import { getExchanges } from '$lib/services/exchange';
     import { getMe } from '$lib/services/user';
-    import { exchangeCredentials } from '$lib/stores/exchangeCredentials';
     import PageHeader from '../../components/forms/PageHeader.svelte';
     import Card from '../../components/forms/Card.svelte';
     import Button from '../../components/forms/Button.svelte';
     import Loading from '../../components/Loading.svelte';
     import FormField from '../../components/forms/FormField.svelte';
-    import ExchangeCredentialsModal from '../../components/forms/ExchangeCredentialsModal.svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
 
     interface Exchange {
@@ -284,15 +282,8 @@
             <Card title={t?.pages?.settings?.exchanges?.title || 'Selecione suas exchanges favoritas'}>
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
                     <div>
-                        <p class="text-sm text-neutral-400">Gerencie suas exchanges e suas credenciais</p>
+                        <p class="text-sm text-neutral-400">Selecione as exchanges que deseja monitorar</p>
                     </div>
-                    <button
-                        class="flex items-center justify-center gap-2 px-4 py-2 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20 transition-colors w-full sm:w-auto"
-                        on:click={() => exchangeCredentials.showModal()}
-                    >
-                        <Plus class="w-4 h-4" />
-                        <span class="text-sm font-medium">Adicionar Credencial</span>
-                    </button>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
@@ -423,12 +414,4 @@
             </Card>
         {/if}
     </div>
-</div>
-
-{#if $exchangeCredentials.showModal}
-    <ExchangeCredentialsModal
-        show={true}
-        onClose={() => exchangeCredentials.hideModal()}
-        onSuccess={fetchExchanges}
-    />
-{/if} 
+</div> 

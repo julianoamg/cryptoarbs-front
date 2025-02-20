@@ -23,11 +23,21 @@ import { PUBLIC_API_URL } from '$env/static/public';
  */
 
 /**
+ * @typedef {Object} ExchangeCredential
+ * @property {string} id - UUID of the credential
+ * @property {string} exchange - Exchange UUID
+ * @property {string} exchange_name - Exchange name
+ * @property {string} api_key_masked - Masked API key
+ * @property {string} api_secret_masked - Masked API secret
+ * @property {string} [passphrase_masked] - Optional masked passphrase
+ */
+
+/**
  * Fetches the list of available exchanges
  * @param {string} accessToken - Current access token
  * @returns {Promise<Exchange[]>} List of exchanges
  */
-export async function getExchanges(accessToken) {
+async function getExchanges(accessToken) {
     try {
         const response = await fetch(`${PUBLIC_API_URL}/exchanges/list/`, {
             headers: {
@@ -55,7 +65,7 @@ export async function getExchanges(accessToken) {
  * @param {string} accessToken - Current access token
  * @returns {Promise<ArbitrageOpportunity[]>} List of arbitrage opportunities
  */
-export async function getOpportunities(accessToken) {
+async function getOpportunities(accessToken) {
     try {
         const response = await fetch(`${PUBLIC_API_URL}/exchanges/opportunities/`, {
             headers: {
@@ -98,7 +108,7 @@ export async function getOpportunities(accessToken) {
  * @param {string} [credentials.passphrase] - Optional passphrase for some exchanges
  * @returns {Promise<Object>} Response from the server
  */
-export async function addExchangeCredentials(accessToken, credentials) {
+async function addExchangeCredentials(accessToken, credentials) {
     try {
         const response = await fetch(`${PUBLIC_API_URL}/exchanges/credentials/`, {
             method: 'POST',
@@ -121,4 +131,68 @@ export async function addExchangeCredentials(accessToken, credentials) {
         }
         throw new Error('Failed to connect to the server');
     }
-} 
+}
+
+/**
+ * Fetches the list of exchange credentials
+ * @param {string} accessToken - Current access token
+ * @returns {Promise<{ count: number, results: ExchangeCredential[] }>} List of credentials
+ */
+async function getExchangeCredentials(accessToken) {
+    try {
+        const response = await fetch(`${PUBLIC_API_URL}/exchanges/credentials/`, {
+            headers: {
+                'Authorization': `Token ${accessToken}`
+            }
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.detail || 'Failed to fetch credentials');
+        }
+
+        return await response.json();
+    } catch (err) {
+        if (err instanceof Error) {
+            throw err;
+        }
+        throw new Error('Failed to connect to the server');
+    }
+}
+
+/**
+ * Deletes an exchange credential
+ * @param {string} accessToken - Current access token
+ * @param {string} id - Credential ID to delete
+ * @returns {Promise<void>}
+ */
+async function deleteExchangeCredential(accessToken, id) {
+    try {
+        const response = await fetch(`${PUBLIC_API_URL}/exchanges/credentials/${id}/`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Token ${accessToken}`
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status !== 204) {
+                const data = await response.json();
+                throw new Error(data.detail || 'Failed to delete credential');
+            }
+        }
+    } catch (err) {
+        if (err instanceof Error) {
+            throw err;
+        }
+        throw new Error('Failed to connect to the server');
+    }
+}
+
+export { 
+    getExchanges, 
+    getOpportunities, 
+    addExchangeCredentials, 
+    getExchangeCredentials,
+    deleteExchangeCredential
+}; 

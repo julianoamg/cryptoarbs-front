@@ -5,12 +5,19 @@
     import ValidatedField from './ValidatedField.svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
 
+    interface Exchange {
+        id: string;
+        name: string;
+        has_passphrase: boolean;
+        credentials_video?: string;
+    }
+
     export let show = false;
     export let onClose = () => {};
     export let onSuccess = () => {};
 
     let loading = false;
-    let exchanges: Array<{ id: string; name: string; requires_passphrase?: boolean; credentials_video?: string }> = [];
+    let exchanges: Exchange[] = [];
     let selectedExchange = '';
     let apiKey = '';
     let apiSecret = '';
@@ -20,7 +27,7 @@
     let videoUrl: string | undefined = undefined;
 
     $: selectedExchangeData = exchanges.find(e => e.id === selectedExchange);
-    $: showPassphrase = selectedExchangeData?.requires_passphrase;
+    $: showPassphrase = selectedExchangeData?.has_passphrase;
     $: {
         if (selectedExchangeData?.credentials_video) {
             try {
@@ -49,7 +56,10 @@
             }
 
             const data = await response.json();
-            exchanges = data.results;
+            const allowedExchanges = ['bybit', 'bitget', 'kucoin'];
+            exchanges = data.results.filter((exchange: Exchange) => 
+                allowedExchanges.includes(exchange.name.toLowerCase())
+            );
             console.log('Exchanges loaded:', exchanges);
         } catch (error) {
             console.error('Error fetching exchanges:', error);
@@ -71,7 +81,7 @@
                Boolean(selectedExchange) && 
                Boolean(apiKey) && 
                Boolean(apiSecret) && 
-               Boolean(passphrase);
+               (!showPassphrase || Boolean(passphrase));
     }
 
     async function handleSubmit(event: Event) {
@@ -93,7 +103,7 @@
                 exchange: selectedExchange,
                 api_key: apiKey.trim(),
                 api_secret: apiSecret.trim(),
-                ...(showPassphrase ? { password: passphrase.trim() } : {})
+                ...(showPassphrase ? { passphrase: passphrase.trim() } : {})
             };
 
             const response = await fetch(`${PUBLIC_API_URL}/exchanges/credentials/`, {
@@ -122,8 +132,8 @@
                             case 'api_secret':
                                 errors.api_secret = errorMessage;
                                 break;
-                            case 'password':
-                                errors.password = errorMessage;
+                            case 'passphrase':
+                                errors.passphrase = errorMessage;
                                 break;
                             default:
                                 generalError = errorMessage;
@@ -136,7 +146,7 @@
 
             toast.success('Credenciais adicionadas com sucesso');
             resetForm();
-            onSuccess();
+            await onSuccess();
             onClose();
         } catch (error) {
             console.error('Error adding credentials:', error);
@@ -260,14 +270,16 @@
                                 description="Chave secreta da API fornecida pela exchange"
                             />
 
-                            <ValidatedField
-                                type="text"
-                                name="password"
-                                label="Passphrase"
-                                bind:value={passphrase}
-                                error={errors.password}
-                                description="Passphrase da API (opcional para algumas exchanges)"
-                            />
+                            {#if showPassphrase}
+                                <ValidatedField
+                                    type="text"
+                                    name="passphrase"
+                                    label="Passphrase"
+                                    bind:value={passphrase}
+                                    error={errors.passphrase}
+                                    description="Passphrase da API (opcional para algumas exchanges)"
+                                />
+                            {/if}
 
                             <div class="flex justify-end gap-3 mt-6">
                                 <button

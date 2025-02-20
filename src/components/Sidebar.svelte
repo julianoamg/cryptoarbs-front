@@ -23,7 +23,8 @@
         UserCircle,
         LogOut,
         LineChart,
-        Activity
+        Activity,
+        Key
     } from 'lucide-svelte';
 
     const sidebarOpen = writable(false);
@@ -79,6 +80,7 @@
             title: t.menu.arbify,
             items: [
                 {name: t.menu.estrategia, icon: LineChart, href: '/estrategia'},
+                {name: t.menu.credenciais, icon: Key, href: '/credenciais'},
                 {name: t.menu.operacoes, icon: Activity, href: '/operacoes'}
             ]
         },
