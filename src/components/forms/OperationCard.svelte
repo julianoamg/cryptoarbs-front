@@ -148,10 +148,10 @@
                                         <tr>
                                             <td class="py-2 px-3 text-sm text-neutral-400 text-right">Taxa de Entrada</td>
                                             <td class="py-2 px-3 text-sm text-neutral-200">
-                                                {formatNumber(parseFloat(operation.exchange_a_entrance_fee || '0'), 8)} USDT
+                                                {formatNumber(parseFloat(operation.exchange_a_entrance_fee || '0'), 8)} {operation.exchange_a_entrance_fee_currency || 'USDT'}
                                             </td>
                                             <td class="py-2 px-3 text-sm text-neutral-200">
-                                                {formatNumber(parseFloat(operation.exchange_b_entrance_fee || '0'), 8)} USDT
+                                                {formatNumber(parseFloat(operation.exchange_b_entrance_fee || '0'), 8)} {operation.exchange_b_entrance_fee_currency || 'USDT'}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -204,10 +204,10 @@
                                             <tr>
                                                 <td class="py-2 px-3 text-sm text-neutral-400 text-right">Taxa de Fechamento</td>
                                                 <td class="py-2 px-3 text-sm text-neutral-200">
-                                                    {formatNumber(parseFloat(operation.exchange_a_close_fee || '0'), 8)} USDT
+                                                    {formatNumber(parseFloat(operation.exchange_a_close_fee || '0'), 8)} {operation.exchange_a_close_fee_currency || 'USDT'}
                                                 </td>
                                                 <td class="py-2 px-3 text-sm text-neutral-200">
-                                                    {formatNumber(parseFloat(operation.exchange_b_close_fee || '0'), 8)} USDT
+                                                    {formatNumber(parseFloat(operation.exchange_b_close_fee || '0'), 8)} {operation.exchange_b_close_fee_currency || 'USDT'}
                                                 </td>
                                             </tr>
                                         </tbody>
