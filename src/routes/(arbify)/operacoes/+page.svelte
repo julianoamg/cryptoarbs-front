@@ -128,9 +128,9 @@
                         <span class="text-xs text-neutral-400">{t.pages.operations.profit}</span>
                     </div>
                     <div class="mt-1">
-                        {#if operations.some(op => op.profit_value !== null)}
+                        {#if operations.length > 0}
                             {@const totalProfit = operations
-                                .filter(op => op.status === 'closed')
+                                .filter(op => op.status === 'FINISHED')
                                 .reduce((sum, op) => sum + parseFloat(op.profit_value || '0'), 0)}
                             <span class="text-lg font-medium {totalProfit >= 0 ? 'text-emerald-400' : 'text-red-400'}">
                                 {totalProfit >= 0 ? '+' : ''}{formatCurrency(totalProfit)} USDT
