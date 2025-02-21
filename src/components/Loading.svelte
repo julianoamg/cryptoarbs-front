@@ -6,7 +6,6 @@
     export let noData = false;
 
     $: t = translations[$language];
-    $: message = 'Buscando Oportunidades';
 </script>
 
 <style>
@@ -45,7 +44,7 @@
     <div class="flex flex-col items-center gap-8">
         <div class="spinner"></div>
         <div class="text-center">
-            <p class="text-2xl font-medium text-neutral-100">{message}</p>
+            <p class="text-2xl font-medium text-neutral-100">{t.pages?.home?.searching}</p>
             {#if noData}
                 <p class="mt-3 text-lg text-neutral-400">{t.pages?.home?.waitingMessage}</p>
             {/if}

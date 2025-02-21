@@ -5,9 +5,9 @@
     import { toast } from '$lib/stores/toast';
     import { auth } from '$lib/stores/auth';
     import { onMount } from 'svelte';
-    import PageHeader from '../../components/forms/PageHeader.svelte';
-    import ValidatedField from '../../components/forms/ValidatedField.svelte';
-    import Card from '../../components/forms/Card.svelte';
+    import PageHeader from '../../../components/forms/PageHeader.svelte';
+    import ValidatedField from '../../../components/forms/ValidatedField.svelte';
+    import Card from '../../../components/forms/Card.svelte';
     import { LineChart } from 'lucide-svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
 
@@ -128,8 +128,8 @@
 <div class="flex flex-col items-center">
     <div class="w-full max-w-5xl space-y-6">
         <PageHeader 
-            title="Estratégia"
-            description="Configure os parâmetros da sua estratégia de arbitragem"
+            title={t.menu.estrategia}
+            description={t.pages.strategy.subtitle}
             icon={LineChart}
         />
 
@@ -141,8 +141,8 @@
             <Card>
                 <div class="space-y-6">
                     <div>
-                        <h2 class="text-lg font-bold text-neutral-200">Configurações da Estratégia</h2>
-                        <p class="text-sm text-neutral-400 mt-1">Ajuste os parâmetros para otimizar suas operações</p>
+                        <h2 class="text-lg font-bold text-neutral-200">{t.pages.strategy.cardTitle}</h2>
+                        <p class="text-sm text-neutral-400 mt-1">{t.pages.strategy.subtitle}</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -150,21 +150,21 @@
                             <ValidatedField
                                 type="number"
                                 name="min_profit"
-                                label="Lucro Mínimo"
+                                label={t.pages.strategy.minProfit}
                                 bind:value={settings.min_profit}
                                 error={errors.min_profit}
                                 validate={validateMinProfit}
-                                description="Porcentagem mínima de lucro para operações (0.09-2.0)"
+                                description={t.pages.strategy.minProfitDescription}
                             />
 
                             <ValidatedField
                                 type="number"
                                 name="max_profit"
-                                label="Lucro Máximo"
+                                label={t.pages.strategy.maxProfit}
                                 bind:value={settings.max_profit}
                                 error={errors.max_profit}
                                 validate={validateMaxProfit}
-                                description="Porcentagem máxima de lucro para operações (1.0-5.0)"
+                                description={t.pages.strategy.maxProfitDescription}
                             />
                         </div>
 
@@ -172,21 +172,21 @@
                             <ValidatedField
                                 type="number"
                                 name="tolerance"
-                                label="Tolerância"
+                                label={t.pages.strategy.tolerance}
                                 bind:value={settings.tolerance}
                                 error={errors.tolerance}
                                 validate={validateTolerance}
-                                description="Valor de tolerância para operações de arbitragem (2-10)"
+                                description={t.pages.strategy.toleranceDescription}
                             />
 
                             <ValidatedField
                                 type="number"
                                 name="stake"
-                                label="Stake"
+                                label={t.pages.strategy.stake}
                                 bind:value={settings.stake}
                                 error={errors.stake}
                                 validate={validateStake}
-                                description="Valor em USDT para operações (5.0-100.0)"
+                                description={t.pages.strategy.stakeDescription}
                             />
                         </div>
                     </div>
@@ -198,15 +198,15 @@
                                 <span class="text-sm font-medium text-emerald-500">!</span>
                             </div>
                             <div class="space-y-2">
-                                <p class="text-sm font-medium text-neutral-200">Dicas para Configuração</p>
+                                <p class="text-sm font-medium text-neutral-200">{t.pages.strategy.tips.title}</p>
                                 <ul class="text-sm text-neutral-400 space-y-1.5">
                                     <li class="flex items-start gap-2">
                                         <span class="text-emerald-500">•</span>
-                                        <span>Comece com valores conservadores e ajuste conforme sua experiência</span>
+                                        <span>{t.pages.strategy.tips.conservative}</span>
                                     </li>
                                     <li class="flex items-start gap-2">
                                         <span class="text-emerald-500">•</span>
-                                        <span>Monitore o desempenho da estratégia e faça ajustes graduais</span>
+                                        <span>{t.pages.strategy.tips.monitor}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -220,7 +220,7 @@
                             on:click={handleSubmit}
                             disabled={saving}
                         >
-                            {saving ? 'Salvando...' : 'Salvar Configurações'}
+                            {saving ? t.auth.cadastro.salvando : t.pages.settings.saveButton}
                         </button>
                     </div>
                 </div>

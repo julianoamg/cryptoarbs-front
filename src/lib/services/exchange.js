@@ -33,6 +33,42 @@ import { PUBLIC_API_URL } from '$env/static/public';
  */
 
 /**
+ * @typedef {Object} UserOpportunity
+ * @property {string} id - UUID da operação
+ * @property {string} symbol - Par de trading
+ * @property {string} exchange_a_name - Nome da exchange A
+ * @property {string} exchange_b_name - Nome da exchange B
+ * @property {string} profit - Lucro bruto
+ * @property {string} profit_fee - Taxa de financiamento
+ * @property {string} profit_value - Lucro descontando taxas
+ * @property {string} stake - Valor da operação
+ * @property {string} status - Status da operação
+ * @property {string} created - Data de criação
+ * @property {string} modified - Data de modificação
+ * @property {string} exchange_a_order_id - ID da ordem na exchange A
+ * @property {string} exchange_a_close_order_id - ID da ordem de fechamento na exchange A
+ * @property {string} exchange_a_open_price - Preço de abertura na exchange A
+ * @property {string} exchange_a_open_qty - Quantidade de abertura na exchange A
+ * @property {string} exchange_a_close_price - Preço de fechamento na exchange A
+ * @property {string} exchange_a_close_qty - Quantidade de fechamento na exchange A
+ * @property {string} exchange_a_entrance_fee - Taxa de entrada na exchange A
+ * @property {string} exchange_a_entrance_fee_currency - Moeda da taxa de entrada na exchange A
+ * @property {string} exchange_a_close_fee - Taxa de fechamento na exchange A
+ * @property {string} exchange_a_close_fee_currency - Moeda da taxa de fechamento na exchange A
+ * @property {string} exchange_b_order_id - ID da ordem na exchange B
+ * @property {string} exchange_b_open_price - Preço de abertura na exchange B
+ * @property {string} exchange_b_open_qty - Quantidade de abertura na exchange B
+ * @property {string} exchange_b_close_price - Preço de fechamento na exchange B
+ * @property {string} exchange_b_close_qty - Quantidade de fechamento na exchange B
+ * @property {string} exchange_b_close_order_id - ID da ordem de fechamento na exchange B
+ * @property {string} exchange_b_entrance_fee - Taxa de entrada na exchange B
+ * @property {string} exchange_b_entrance_fee_currency - Moeda da taxa de entrada na exchange B
+ * @property {string} exchange_b_close_fee - Taxa de fechamento na exchange B
+ * @property {string} exchange_b_close_fee_currency - Moeda da taxa de fechamento na exchange B
+ * @property {string} log - Log da operação
+ */
+
+/**
  * Fetches the list of available exchanges
  * @param {string} accessToken - Current access token
  * @returns {Promise<Exchange[]>} List of exchanges
@@ -189,10 +225,39 @@ async function deleteExchangeCredential(accessToken, id) {
     }
 }
 
+/**
+ * Busca as operações do usuário
+ * @param {string} accessToken - Token de acesso
+ * @param {number} page - Número da página
+ * @returns {Promise<{ count: number, next: string|null, previous: string|null, results: UserOpportunity[] }>}
+ */
+async function getUserOperations(accessToken, page = 1) {
+    try {
+        const response = await fetch(`${PUBLIC_API_URL}/exchanges/opportunities/user/?page=${page}`, {
+            headers: {
+                'Authorization': `Token ${accessToken}`
+            }
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.detail || 'Failed to fetch user operations');
+        }
+
+        return await response.json();
+    } catch (err) {
+        if (err instanceof Error) {
+            throw err;
+        }
+        throw new Error('Failed to connect to the server');
+    }
+}
+
 export { 
     getExchanges, 
     getOpportunities, 
     addExchangeCredentials, 
     getExchangeCredentials,
-    deleteExchangeCredential
+    deleteExchangeCredential,
+    getUserOperations
 }; 

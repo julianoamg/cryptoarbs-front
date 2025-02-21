@@ -202,8 +202,8 @@ export const translations = {
                 price: 'Preço',
                 entryValue: 'Valor',
                 estimatedProfit: 'Lucro estimado',
-                searching: 'Procurando...',
-                waitingMessage: 'Não se preocupe, estamos buscando as melhores oportunidades para você',
+                searching: 'Buscando Oportunidades',
+                waitingMessage: 'Aguarde enquanto buscamos as melhores oportunidades para você',
                 tradingPair: 'Par',
                 profitAfterFees: 'Lucro após taxas',
                 table: {
@@ -227,7 +227,23 @@ export const translations = {
                 subtitle: 'Gerencie suas preferências',
                 exchanges: {
                     title: 'Selecione suas exchanges favoritas',
+                    description: 'Selecione as exchanges que deseja monitorar',
                     defaultDescription: 'Exchange de criptomoedas'
+                },
+                spread: {
+                    title: 'Filtro de Spread',
+                    minSpread: 'Spread Mínimo (%)',
+                    maxSpread: 'Spread Máximo (%)',
+                    description: 'Apenas oportunidades com spread entre {min}% e {max}% serão exibidas.'
+                },
+                coins: {
+                    title: 'Moedas',
+                    search: 'Pesquisar por símbolo ou nome...',
+                    markAll: 'Marcar todas',
+                    unmarkAll: 'Desmarcar todas',
+                    volume: 'Vol: ${value}',
+                    noResults: 'Nenhuma moeda encontrada para sua pesquisa.',
+                    noCoins: 'Nenhuma moeda disponível.'
                 },
                 saveButton: 'Salvar configurações'
             },
@@ -275,18 +291,23 @@ export const translations = {
             strategy: {
                 title: 'Estratégia',
                 subtitle: 'Configure os parâmetros da sua estratégia de arbitragem',
-                cardTitle: 'Configurações de Arbitragem',
+                cardTitle: 'Configurações da Estratégia',
                 minProfit: 'Lucro Mínimo',
-                minProfitDescription: 'Defina o lucro mínimo aceitável para executar uma operação (%)',
+                minProfitDescription: 'Porcentagem mínima de lucro para operações (0.09-2.0)',
                 maxProfit: 'Lucro Máximo',
-                maxProfitDescription: 'Defina o lucro máximo para filtrar oportunidades irreais (%)',
+                maxProfitDescription: 'Porcentagem máxima de lucro para operações (1.0-5.0)',
                 tolerance: 'Tolerância',
-                toleranceDescription: 'Margem de tolerância para variações de preço durante a execução (%)',
-                stake: 'Stake em USDT',
-                stakeDescription: 'Valor em USDT para cada operação de arbitragem',
+                toleranceDescription: 'Valor de tolerância para operações de arbitragem (2-10)',
+                stake: 'Stake',
+                stakeDescription: 'Valor em USDT para operações (5.0-100.0)',
                 saveButton: 'Salvar Configurações',
                 success: 'Configurações salvas com sucesso!',
-                error: 'Erro ao salvar configurações'
+                error: 'Erro ao salvar configurações',
+                tips: {
+                    title: 'Dicas para Configuração',
+                    conservative: 'Comece com valores conservadores e ajuste conforme sua experiência',
+                    monitor: 'Monitore o desempenho da estratégia e faça ajustes graduais'
+                }
             },
             operations: {
                 title: 'Operações',
@@ -300,11 +321,11 @@ export const translations = {
                 type: 'Tipo',
                 entry: 'Entrada',
                 exit: 'Saída',
-                profit: 'Lucro',
+                profit: 'Lucro Total',
                 statusLabel: 'Status',
                 status: {
-                    open: 'Aberta',
-                    closed: 'Fechada',
+                    open: 'Operações Abertas',
+                    closed: 'Operações Fechadas',
                     pending: 'Pendente'
                 },
                 dateRanges: {
@@ -318,6 +339,54 @@ export const translations = {
                     sixMonths: 'Últimos 6 meses',
                     oneYear: 'Último ano',
                     allPeriod: 'Todo período'
+                }
+            },
+            credentials: {
+                title: 'Credenciais de API',
+                subtitle: 'Gerencie as chaves de API das suas corretoras',
+                cardTitle: 'Credenciais das Corretoras',
+                addButton: 'Adicionar Credencial',
+                noCredentials: 'Nenhuma credencial configurada',
+                addHint: 'Clique no botão acima para adicionar',
+                configuredStatus: 'Credenciais configuradas',
+                modal: {
+                    title: 'Adicionar Credenciais',
+                    exchange: {
+                        label: 'Exchange',
+                        description: 'Selecione a exchange para adicionar as credenciais',
+                        placeholder: 'Selecione exchange'
+                    },
+                    apiKey: {
+                        label: 'Chave da API',
+                        description: 'Chave pública da API fornecida pela exchange'
+                    },
+                    apiSecret: {
+                        label: 'Chave Secreta',
+                        description: 'Chave secreta da API fornecida pela exchange'
+                    },
+                    passphrase: {
+                        label: 'Passphrase',
+                        description: 'Passphrase da API (opcional para algumas exchanges)'
+                    },
+                    buttons: {
+                        cancel: 'Cancelar',
+                        save: 'Salvar Credenciais'
+                    }
+                },
+                fields: {
+                    apiKey: 'API Key',
+                    apiSecret: 'API Secret',
+                    passphrase: 'Passphrase'
+                },
+                deleteConfirm: 'Tem certeza que deseja remover as credenciais da {exchange}?',
+                success: {
+                    added: 'Credencial adicionada com sucesso',
+                    removed: 'Credencial removida com sucesso'
+                },
+                error: {
+                    load: 'Falha ao carregar credenciais',
+                    add: 'Falha ao adicionar credencial',
+                    remove: 'Falha ao remover credencial'
                 }
             }
         }
@@ -525,8 +594,8 @@ export const translations = {
                 price: 'Price',
                 entryValue: 'Value',
                 estimatedProfit: 'Estimated profit',
-                searching: 'Searching...',
-                waitingMessage: "Don't worry, we're finding the best opportunities for you",
+                searching: 'Finding Opportunities',
+                waitingMessage: 'Please wait while we find the best opportunities for you',
                 tradingPair: 'Pair',
                 profitAfterFees: 'Profit after fees',
                 table: {
@@ -550,7 +619,23 @@ export const translations = {
                 subtitle: 'Manage your preferences',
                 exchanges: {
                     title: 'Select your favorite exchanges',
+                    description: 'Select the exchanges you want to monitor',
                     defaultDescription: 'Cryptocurrency exchange'
+                },
+                spread: {
+                    title: 'Spread Filter',
+                    minSpread: 'Minimum Spread (%)',
+                    maxSpread: 'Maximum Spread (%)',
+                    description: 'Only opportunities with spread between {min}% and {max}% will be displayed.'
+                },
+                coins: {
+                    title: 'Coins',
+                    search: 'Search by symbol or name...',
+                    markAll: 'Mark all',
+                    unmarkAll: 'Unmark all',
+                    volume: 'Vol: ${value}',
+                    noResults: 'No coins found for your search.',
+                    noCoins: 'No coins available.'
                 },
                 saveButton: 'Save settings'
             },
@@ -609,7 +694,12 @@ export const translations = {
                 stakeDescription: 'Amount in USDT for each arbitrage operation',
                 saveButton: 'Save Settings',
                 success: 'Settings saved successfully!',
-                error: 'Error saving settings'
+                error: 'Error saving settings',
+                tips: {
+                    title: 'Configuration Tips',
+                    conservative: 'Start with conservative values and adjust according to your experience',
+                    monitor: 'Monitor strategy performance and make gradual adjustments'
+                }
             },
             operations: {
                 title: 'Operations',
@@ -641,6 +731,54 @@ export const translations = {
                     sixMonths: 'Last 6 months',
                     oneYear: 'Last year',
                     allPeriod: 'All period'
+                }
+            },
+            credentials: {
+                title: 'API Credentials',
+                subtitle: 'Manage your API keys for your brokers',
+                cardTitle: 'Broker Credentials',
+                addButton: 'Add Credential',
+                noCredentials: 'No credentials configured',
+                addHint: 'Click the button above to add',
+                configuredStatus: 'Credentials configured',
+                modal: {
+                    title: 'Add Credentials',
+                    exchange: {
+                        label: 'Exchange',
+                        description: 'Select the exchange to add credentials',
+                        placeholder: 'Select exchange'
+                    },
+                    apiKey: {
+                        label: 'API Key',
+                        description: 'Public API key provided by the exchange'
+                    },
+                    apiSecret: {
+                        label: 'API Secret',
+                        description: 'Secret API key provided by the exchange'
+                    },
+                    passphrase: {
+                        label: 'Passphrase',
+                        description: 'API passphrase (optional for some exchanges)'
+                    },
+                    buttons: {
+                        cancel: 'Cancel',
+                        save: 'Save Credentials'
+                    }
+                },
+                fields: {
+                    apiKey: 'API Key',
+                    apiSecret: 'API Secret',
+                    passphrase: 'Passphrase'
+                },
+                deleteConfirm: 'Are you sure you want to remove the credentials?',
+                success: {
+                    added: 'Credential added successfully',
+                    removed: 'Credential removed successfully'
+                },
+                error: {
+                    load: 'Failed to load credentials',
+                    add: 'Failed to add credential',
+                    remove: 'Failed to remove credential'
                 }
             }
         }
@@ -788,17 +926,17 @@ export const translations = {
                 },
                 quarterly: {
                     name: 'Trimestral',
-                    price: '2.797',
+                    price: '2,797',
                     description: 'Perfecto para traders que ya conocen el mercado y buscan consistencia en los resultados con ahorro.'
                 },
                 semiannual: {
                     name: 'Semestral',
-                    price: '4.297',
+                    price: '4,297',
                     description: 'Excelente para profesionales que desean maximizar sus ganancias con estrategias exclusivas de arbitraje.'
                 },
                 annual: {
                     name: 'Anual',
-                    price: '7.997',
+                    price: '7,997',
                     description: 'La elección de los traders profesionales que buscan las mejores oportunidades con la mejor relación costo-beneficio.'
                 },
                 savings: {
@@ -848,8 +986,8 @@ export const translations = {
                 price: 'Precio',
                 entryValue: 'Valor',
                 estimatedProfit: 'Beneficio estimado',
-                searching: 'Buscando...',
-                waitingMessage: 'No te preocupes, estamos buscando las mejores oportunidades para ti',
+                searching: 'Buscando Oportunidades',
+                waitingMessage: 'Espere mientras buscamos las mejores oportunidades para usted',
                 tradingPair: 'Par',
                 profitAfterFees: 'Beneficio después de comisiones',
                 table: {
@@ -873,7 +1011,23 @@ export const translations = {
                 subtitle: 'Administra tus preferencias',
                 exchanges: {
                     title: 'Selecciona tus exchanges favoritas',
+                    description: 'Selecciona los exchanges que deseas monitorear',
                     defaultDescription: 'Exchange de criptomonedas'
+                },
+                spread: {
+                    title: 'Filtro de Spread',
+                    minSpread: 'Spread Mínimo (%)',
+                    maxSpread: 'Spread Máximo (%)',
+                    description: 'Solo se mostrarán oportunidades con spread entre {min}% y {max}%.'
+                },
+                coins: {
+                    title: 'Monedas',
+                    search: 'Buscar por símbolo o nombre...',
+                    markAll: 'Marcar todas',
+                    unmarkAll: 'Desmarcar todas',
+                    volume: 'Vol: ${value}',
+                    noResults: 'No se encontraron monedas para tu búsqueda.',
+                    noCoins: 'No hay monedas disponibles.'
                 },
                 saveButton: 'Guardar configuraciones'
             },
@@ -932,7 +1086,12 @@ export const translations = {
                 stakeDescription: 'Cantidad en USDT para cada operación de arbitraje',
                 saveButton: 'Guardar Configuraciones',
                 success: '¡Configuraciones guardadas con éxito!',
-                error: 'Error al guardar configuraciones'
+                error: 'Error al guardar configuraciones',
+                tips: {
+                    title: 'Consejos de Configuración',
+                    conservative: 'Comience con valores conservadores y ajuste según su experiencia',
+                    monitor: 'Monitoree el rendimiento de la estrategia y haga ajustes graduales'
+                }
             },
             operations: {
                 title: 'Operaciones',
@@ -964,6 +1123,54 @@ export const translations = {
                     sixMonths: 'Últimos 6 meses',
                     oneYear: 'Último año',
                     allPeriod: 'Todo el período'
+                }
+            },
+            credentials: {
+                title: 'Credenciais de API',
+                subtitle: 'Gerencie as chaves de API das suas corretoras',
+                cardTitle: 'Credenciais das Corretoras',
+                addButton: 'Adicionar Credencial',
+                noCredentials: 'Nenhuma credencial configurada',
+                addHint: 'Clique no botão acima para adicionar',
+                configuredStatus: 'Credenciais configuradas',
+                modal: {
+                    title: 'Adicionar Credenciais',
+                    exchange: {
+                        label: 'Exchange',
+                        description: 'Selecione o exchange para adicionar as credenciais',
+                        placeholder: 'Selecione exchange'
+                    },
+                    apiKey: {
+                        label: 'Chave da API',
+                        description: 'Chave pública da API fornecida pela exchange'
+                    },
+                    apiSecret: {
+                        label: 'Chave Secreta',
+                        description: 'Chave secreta da API fornecida pela exchange'
+                    },
+                    passphrase: {
+                        label: 'Passphrase',
+                        description: 'Passphrase da API (opcional para algumas exchanges)'
+                    },
+                    buttons: {
+                        cancel: 'Cancelar',
+                        save: 'Salvar Credenciais'
+                    }
+                },
+                fields: {
+                    apiKey: 'API Key',
+                    apiSecret: 'API Secret',
+                    passphrase: 'Passphrase'
+                },
+                deleteConfirm: 'Tem certeza que deseja remover as credenciais da {exchange}?',
+                success: {
+                    added: 'Credencial adicionada com sucesso',
+                    removed: 'Credencial removida com sucesso'
+                },
+                error: {
+                    load: 'Falha ao carregar credenciais',
+                    add: 'Falha ao adicionar credencial',
+                    remove: 'Falha ao remover credencial'
                 }
             }
         }

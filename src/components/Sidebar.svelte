@@ -30,6 +30,7 @@
     const sidebarOpen = writable(false);
     const sidebarCollapsed = writable(false);
     let userEmail = '';
+    let hasActiveSubscription = false;
 
     $: t = translations[$language];
 
@@ -38,6 +39,7 @@
             try {
                 const userData = await getMe($auth.token);
                 userEmail = userData.email;
+                hasActiveSubscription = userData.has_active_subscription;
             } catch {
                 toast.error(t.menu.erro.carregarDados);
             }
@@ -76,14 +78,14 @@
                 {name: t.menu.configuracoes, icon: Settings, href: '/configuracoes'}
             ]
         },
-        {
+        ...(hasActiveSubscription ? [{
             title: t.menu.arbify,
             items: [
                 {name: t.menu.estrategia, icon: LineChart, href: '/estrategia'},
                 {name: t.menu.credenciais, icon: Key, href: '/credenciais'},
                 {name: t.menu.operacoes, icon: Activity, href: '/operacoes'}
             ]
-        },
+        }] : []),
         {
             title: t.menu.suporte,
             items: [

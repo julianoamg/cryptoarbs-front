@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { Settings, Check } from 'lucide-svelte';
     import { language } from '$lib/stores/i18n';
+    import type { Translation, Language } from '$lib/i18n/types';
     import { translations } from '$lib/i18n/translations';
     import { auth } from '$lib/stores/auth';
     import { getExchanges } from '$lib/services/exchange';
@@ -29,7 +30,14 @@
         marked: boolean;
     }
 
-    $: t = translations[$language];
+    interface UserData {
+        min_spread?: number;
+        max_spread?: number;
+        email: string;
+        has_active_subscription: boolean;
+    }
+
+    $: t = translations[$language as Language] as Translation;
 
     let exchanges: Exchange[] = [];
     let loading = true;
@@ -279,21 +287,19 @@
         {#if loading}
             <Loading />
         {:else}
-            <Card title={t?.pages?.settings?.exchanges?.title || 'Selecione suas exchanges favoritas'}>
+            <Card title={t?.pages?.settings?.exchanges?.title}>
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
                     <div>
-                        <p class="text-sm text-neutral-400">Selecione as exchanges que deseja monitorar</p>
+                        <p class="text-sm text-neutral-400">{t?.pages?.settings?.exchanges?.description}</p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {#each exchanges as exchange, i}
-                        <div 
+                        <button 
                             class="relative flex items-center justify-between p-3 rounded-lg border transition-colors cursor-pointer {selectedExchanges[i] ? 'border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-transparent' : 'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'}"
                             on:click={() => toggleExchange(i)}
-                            on:keydown={(e) => e.key === 'Enter' && toggleExchange(i)}
-                            role="button"
-                            tabindex="0"
+                            type="button"
                         >
                             <div class="flex items-center min-w-0">
                                 <div class="text-xl">{getExchangeIcon(exchange.name)}</div>
@@ -304,17 +310,17 @@
                                     <Check class="w-2 h-2 text-neutral-900" />
                                 {/if}
                             </div>
-                        </div>
+                        </button>
                     {/each}
                 </div>
             </Card>
 
-            <Card title="Filtro de Spread">
+            <Card title={t?.pages?.settings?.spread?.title}>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <FormField
                         type="number"
                         name="minSpread"
-                        label="Spread Mínimo (%)"
+                        label={t?.pages?.settings?.spread?.minSpread}
                         bind:value={minSpread}
                         min="0"
                         max="100"
@@ -324,7 +330,7 @@
                     <FormField
                         type="number"
                         name="maxSpread"
-                        label="Spread Máximo (%)"
+                        label={t?.pages?.settings?.spread?.maxSpread}
                         bind:value={maxSpread}
                         min="0"
                         max="100"
@@ -333,18 +339,18 @@
                     />
                 </div>
                 <p class="mt-2 text-sm text-neutral-300">
-                    Apenas oportunidades com spread entre {minSpread}% e {maxSpread}% serão exibidas.
+                    {t?.pages?.settings?.spread?.description.replace('{min}', minSpread).replace('{max}', maxSpread)}
                 </p>
             </Card>
 
-            <Card title="Moedas">
+            <Card title={t?.pages?.settings?.coins?.title}>
                 <div class="space-y-3">
                     <!-- Search and Select All -->
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                         <input
                             type="text"
                             bind:value={searchQuery}
-                            placeholder="Pesquisar por símbolo ou nome..."
+                            placeholder={t?.pages?.settings?.coins?.search}
                             class="flex-1 px-4 py-2 rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-200 placeholder-neutral-400 focus:outline-none focus:border-emerald-500/50"
                         />
                         <button
@@ -362,11 +368,9 @@
                             </div>
                             <span class="font-medium">
                                 {#if allPairsSelected}
-                                    Desmarcar todas
-                                {:else if somePairsSelected}
-                                    Marcar todas
+                                    {t?.pages?.settings?.coins?.unmarkAll}
                                 {:else}
-                                    Marcar todas
+                                    {t?.pages?.settings?.coins?.markAll}
                                 {/if}
                             </span>
                         </button>
@@ -380,12 +384,10 @@
                     {:else if filteredPairs.length > 0}
                         <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
                             {#each filteredPairs as pair, i (pair.id)}
-                                <div 
+                                <button 
                                     class="relative flex items-center justify-between p-3 rounded-lg border transition-colors cursor-pointer {selectedPairs[tradingPairs.indexOf(pair)] ? 'border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-transparent' : 'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'}"
                                     on:click={() => togglePair(tradingPairs.indexOf(pair))}
-                                    on:keydown={(e) => e.key === 'Enter' && togglePair(tradingPairs.indexOf(pair))}
-                                    role="button"
-                                    tabindex="0"
+                                    type="button"
                                 >
                                     <div class="flex flex-col gap-0.5 min-w-0">
                                         <div class="flex items-center gap-2 overflow-hidden">
@@ -394,7 +396,7 @@
                                         </div>
                                         <div class="flex items-center gap-2">
                                             <span class="text-sm text-neutral-300 truncate">{pair.asset}</span>
-                                            <span class="text-xs text-neutral-400 whitespace-nowrap">Vol: ${formatVolume(pair.real_volume_24h)}</span>
+                                            <span class="text-xs text-neutral-400 whitespace-nowrap">{t?.pages?.settings?.coins?.volume.replace('${value}', formatVolume(pair.real_volume_24h))}</span>
                                         </div>
                                     </div>
                                     <div class="w-4 h-4 ml-2 rounded-full border transition-colors flex-shrink-0 flex items-center justify-center {selectedPairs[tradingPairs.indexOf(pair)] ? 'border-emerald-500 bg-emerald-500' : 'border-neutral-700'}">
@@ -402,12 +404,12 @@
                                             <Check class="w-2 h-2 text-neutral-900" />
                                         {/if}
                                     </div>
-                                </div>
+                                </button>
                             {/each}
                         </div>
                     {:else}
                         <div class="py-8 text-center text-neutral-400">
-                            {searchQuery ? 'Nenhuma moeda encontrada para sua pesquisa.' : 'Nenhuma moeda disponível.'}
+                            {searchQuery ? t?.pages?.settings?.coins?.noResults : t?.pages?.settings?.coins?.noCoins}
                         </div>
                     {/if}
                 </div>

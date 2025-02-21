@@ -1,59 +1,60 @@
-<script>
+<script lang="ts">
     import { ArrowRight, X } from 'lucide-svelte';
-    import { translations } from '$lib/i18n/translations';
     import { language } from '$lib/stores/i18n';
+    import type { Translation, Language } from '$lib/i18n/types';
+    import { translations } from '$lib/i18n/translations';
+    import type { UserOpportunity } from '$lib/services/exchange';
 
-    export let operation;
-    export let formatNumber;
-    export let formatCurrency;
+    export let operation: UserOpportunity;
+    export let formatNumber: (value: string | number, decimals?: number) => string;
+    export let formatCurrency: (value: string | number, decimals?: number) => string;
 
     let showDetails = false;
 
-    $: t = translations[$language];
+    $: t = translations[$language as Language] as Translation;
 
-    function handleKeydown(event) {
+    function handleKeydown(event: KeyboardEvent) {
         if (event.key === 'Escape') {
             showDetails = false;
         }
+    }
+
+    function formatDate(dateString: string): string {
+        return new Date(dateString).toLocaleString();
     }
 </script>
 
 <svelte:window on:keydown={handleKeydown}/>
 
-<div class="bg-neutral-800/50 rounded-lg border border-neutral-700/50 overflow-hidden">
-    <div class="p-3">
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-1.5">
-                <a href={operation.exchange_a_url} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-neutral-200 hover:text-emerald-400">{operation.exchange_a}</a>
-                <ArrowRight class="w-4 h-4 text-neutral-500" />
-                <a href={operation.exchange_b_url} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-neutral-200 hover:text-emerald-400">{operation.exchange_b}</a>
-                <span class="text-xs text-neutral-500">(Futures)</span>
-            </div>
-            <div class="flex items-baseline gap-1">
-                <span class="text-base font-medium text-emerald-500">{operation.profit}%</span>
-                <span class="text-xs text-emerald-500/70">Lucro</span>
-            </div>
+<div class="bg-neutral-800/50 rounded p-3 border border-neutral-700/50">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-neutral-200">{operation.symbol}</span>
+            <span class="text-xs text-neutral-400">{formatDate(operation.created)}</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-xs px-2 py-1 rounded-full {operation.status === 'open' ? 'bg-blue-500/20 text-blue-400' : 'bg-emerald-500/20 text-emerald-400'}">
+                {operation.status === 'open' ? 'Aberta' : 'Fechada'}
+            </span>
+        </div>
+    </div>
+
+    <div class="mt-2 space-y-1">
+        <div class="flex items-center justify-between">
+            <span class="text-xs text-neutral-400">Exchanges</span>
+            <span class="text-xs text-neutral-200">{operation.exchange_a_name} → {operation.exchange_b_name} Futuros</span>
         </div>
 
-        <!-- Basic Info -->
-        <div class="space-y-1">
-            <div>
-                <div class="text-xs text-neutral-400">Par</div>
-                <div class="text-xs text-neutral-200">{operation.pair}</div>
-            </div>
-            <div>
-                <div class="text-xs text-neutral-400">Spread</div>
-                <div class="text-xs text-neutral-200">1.0000%</div>
-            </div>
-            <div>
-                <div class="text-xs text-neutral-400">Taxa de Financiamento</div>
-                <div class="text-xs {parseFloat(operation.funding_fee) >= 0 ? 'text-emerald-400' : 'text-red-400'}">{formatNumber(operation.funding_fee, 6)}%</div>
-            </div>
-            <div>
-                <div class="text-xs text-neutral-400">Total/Stake</div>
-                <div class="text-xs text-neutral-200">{formatCurrency(operation.entry_total)} USDT</div>
-            </div>
+        <div class="flex items-center justify-between">
+            <span class="text-xs text-neutral-400">Stake</span>
+            <span class="text-xs text-neutral-200">{formatCurrency(operation.stake)} USDT</span>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <span class="text-xs text-neutral-400">Lucro</span>
+            <span class="text-xs {parseFloat(operation.profit_value) >= 0 ? 'text-emerald-400' : 'text-red-400'}">
+                {parseFloat(operation.profit_value) >= 0 ? '+' : ''}{formatCurrency(operation.profit_value)} USDT
+            </span>
         </div>
 
         <!-- Toggle Details Button -->
@@ -69,21 +70,24 @@
 {#if showDetails}
     <div 
         class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 w-full h-full" 
-        on:click={() => showDetails = false}
-        on:keydown={(e) => e.key === 'Enter' && (showDetails = false)}
-        role="presentation"
-        tabindex="0"
+        role="dialog"
+        aria-labelledby="modal-title"
+        aria-modal="true"
     >
-        <div 
-            class="fixed inset-0 overflow-y-auto"
-            role="dialog"
-            aria-labelledby="modal-title"
-            aria-modal="true"
-        >
+        <!-- Overlay para fechar o modal -->
+        <button
+            type="button"
+            class="fixed inset-0 w-full h-full cursor-default focus:outline-none"
+            on:click={() => showDetails = false}
+            aria-label="Fechar modal"
+        ></button>
+
+        <div class="fixed inset-0 overflow-y-auto pointer-events-none">
             <div class="flex min-h-full items-center justify-center p-4">
-                <article 
-                    class="w-full max-w-[600px] bg-neutral-900 rounded-lg shadow-xl"
+                <div 
+                    class="w-full max-w-[600px] bg-neutral-900 rounded-lg shadow-xl pointer-events-auto"
                     on:click|stopPropagation
+                    on:keydown|stopPropagation
                     role="document"
                 >
                     <header class="flex items-center justify-between p-4 border-b border-neutral-800">
@@ -106,100 +110,130 @@
                                     <thead>
                                         <tr>
                                             <th class="text-right py-2 px-3 text-sm font-medium text-neutral-400">Dados</th>
-                                            <th class="text-left py-2 px-3 text-sm font-medium text-neutral-400">KuCoin</th>
-                                            <th class="text-left py-2 px-3 text-sm font-medium text-neutral-400">Bitget (Futures)</th>
+                                            <th class="text-left py-2 px-3 text-sm font-medium text-neutral-400">{operation.exchange_a_name}</th>
+                                            <th class="text-left py-2 px-3 text-sm font-medium text-neutral-400">{operation.exchange_b_name} Futuros</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td class="py-2 px-3 text-sm text-neutral-400 text-right">ID da Ordem</td>
+                                            <td class="py-2 px-3 text-sm text-neutral-200">{operation.exchange_a_order_id}</td>
+                                            <td class="py-2 px-3 text-sm text-neutral-200">{operation.exchange_b_order_id}</td>
+                                        </tr>
+                                        <tr>
                                             <td class="py-2 px-3 text-sm text-neutral-400 text-right">Preço</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">65,000.00000000 USDT</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">65,000.00000000 USDT</td>
+                                            <td class="py-2 px-3 text-sm text-neutral-200">{formatNumber(operation.exchange_a_open_price, 8)} USDT</td>
+                                            <td class="py-2 px-3 text-sm text-neutral-200">{formatNumber(operation.exchange_b_open_price, 8)} USDT</td>
                                         </tr>
                                         <tr>
                                             <td class="py-2 px-3 text-sm text-neutral-400 text-right">Quantidade</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">0.15000000</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">0.15000000</td>
+                                            <td class="py-2 px-3 text-sm text-neutral-200">{formatNumber(operation.exchange_a_open_qty, 8)}</td>
+                                            <td class="py-2 px-3 text-sm text-neutral-200">{formatNumber(operation.exchange_b_open_qty, 8)}</td>
                                         </tr>
                                         <tr>
-                                            <td class="py-2 px-3 text-sm text-neutral-400 text-right">Total/Stake</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">9,750.00 USDT</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">9,750.00 USDT</td>
+                                            <td class="py-2 px-3 text-sm text-neutral-400 text-right">Total</td>
+                                            <td class="py-2 px-3 text-sm text-neutral-200">
+                                                {formatNumber(parseFloat(operation.exchange_a_open_price) * parseFloat(operation.exchange_a_open_qty), 8)} USDT
+                                            </td>
+                                            <td class="py-2 px-3 text-sm text-neutral-200">
+                                                {formatNumber(parseFloat(operation.exchange_b_open_price) * parseFloat(operation.exchange_b_open_qty), 8)} USDT
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-3 text-sm text-neutral-400 text-right">Taxa de Entrada</td>
+                                            <td class="py-2 px-3 text-sm text-neutral-200">
+                                                {operation.exchange_a_entrance_fee ? formatNumber(operation.exchange_a_entrance_fee, 8) + ' ' + operation.exchange_a_entrance_fee_currency : '-'}
+                                            </td>
+                                            <td class="py-2 px-3 text-sm text-neutral-200">
+                                                {operation.exchange_b_entrance_fee ? formatNumber(operation.exchange_b_entrance_fee, 8) + ' ' + operation.exchange_b_entrance_fee_currency : '-'}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </section>
 
-                        <section class="bg-neutral-800/50 rounded p-3">
-                            <h4 class="text-base font-medium text-neutral-200 mb-3">Fechamento</h4>
-                            <div class="overflow-x-auto">
-                                <table class="w-full">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-right py-2 px-3 text-sm font-medium text-neutral-400">Dados</th>
-                                            <th class="text-left py-2 px-3 text-sm font-medium text-neutral-400">{operation.exchange_a}</th>
-                                            <th class="text-left py-2 px-3 text-sm font-medium text-neutral-400">{operation.exchange_b} (Futures)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="py-2 px-3 text-sm text-neutral-400 text-right">Preço</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">65,500.00000000 USDT</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">65,500.00000000 USDT</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-2 px-3 text-sm text-neutral-400 text-right">Quantidade</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">0.15000000</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">0.15000000</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-2 px-3 text-sm text-neutral-400 text-right">Total/Stake</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">9,825.00 USDT</td>
-                                            <td class="py-2 px-3 text-sm text-neutral-200">9,825.00 USDT</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </section>
-
-                        <section class="bg-neutral-800/50 rounded p-3">
-                            <h4 class="text-base font-medium text-neutral-200 mb-3">Taxas</h4>
-                            <div class="space-y-2">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm text-neutral-400">{operation.exchange_a}:</span>
-                                    <span class="text-sm text-neutral-200">{formatNumber(operation.spot_fee, 4)}%</span>
+                        <!-- Seção de Fechamento -->
+                        {#if operation.status === 'FINISHED' || operation.exchange_a_close_order_id || operation.exchange_b_close_order_id}
+                            <section class="bg-neutral-800/50 rounded p-3">
+                                <h4 class="text-base font-medium text-neutral-200 mb-3">Fechamento</h4>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-right py-2 px-3 text-sm font-medium text-neutral-400">Dados</th>
+                                                <th class="text-left py-2 px-3 text-sm font-medium text-neutral-400">{operation.exchange_a_name}</th>
+                                                <th class="text-left py-2 px-3 text-sm font-medium text-neutral-400">{operation.exchange_b_name} Futuros</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="py-2 px-3 text-sm text-neutral-400 text-right">ID da Ordem</td>
+                                                <td class="py-2 px-3 text-sm text-neutral-200">{operation.exchange_a_close_order_id || '-'}</td>
+                                                <td class="py-2 px-3 text-sm text-neutral-200">{operation.exchange_b_close_order_id || '-'}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3 text-sm text-neutral-400 text-right">Preço</td>
+                                                <td class="py-2 px-3 text-sm text-neutral-200">{operation.exchange_a_close_price ? formatNumber(operation.exchange_a_close_price, 8) + ' USDT' : '-'}</td>
+                                                <td class="py-2 px-3 text-sm text-neutral-200">{operation.exchange_b_close_price ? formatNumber(operation.exchange_b_close_price, 8) + ' USDT' : '-'}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3 text-sm text-neutral-400 text-right">Quantidade</td>
+                                                <td class="py-2 px-3 text-sm text-neutral-200">{operation.exchange_a_close_qty ? formatNumber(operation.exchange_a_close_qty, 8) : '-'}</td>
+                                                <td class="py-2 px-3 text-sm text-neutral-200">{operation.exchange_b_close_qty ? formatNumber(operation.exchange_b_close_qty, 8) : '-'}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3 text-sm text-neutral-400 text-right">Total</td>
+                                                <td class="py-2 px-3 text-sm text-neutral-200">
+                                                    {operation.exchange_a_close_price && operation.exchange_a_close_qty ? 
+                                                        formatNumber(parseFloat(operation.exchange_a_close_price) * parseFloat(operation.exchange_a_close_qty), 8) + ' USDT' : 
+                                                        '-'}
+                                                </td>
+                                                <td class="py-2 px-3 text-sm text-neutral-200">
+                                                    {operation.exchange_b_close_price && operation.exchange_b_close_qty ? 
+                                                        formatNumber(parseFloat(operation.exchange_b_close_price) * parseFloat(operation.exchange_b_close_qty), 8) + ' USDT' : 
+                                                        '-'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3 text-sm text-neutral-400 text-right">Taxa de Fechamento</td>
+                                                <td class="py-2 px-3 text-sm text-neutral-200">
+                                                    {operation.exchange_a_close_fee ? formatNumber(operation.exchange_a_close_fee, 8) + ' ' + operation.exchange_a_close_fee_currency : '-'}
+                                                </td>
+                                                <td class="py-2 px-3 text-sm text-neutral-200">
+                                                    {operation.exchange_b_close_fee ? formatNumber(operation.exchange_b_close_fee, 8) + ' ' + operation.exchange_b_close_fee_currency : '-'}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm text-neutral-400">{operation.exchange_b} (Futures):</span>
-                                    <span class="text-sm text-neutral-200">{formatNumber(operation.futures_fee, 4)}%</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm text-neutral-400">Taxa de Financiamento:</span>
-                                    <span class="text-sm {parseFloat(operation.funding_fee) >= 0 ? 'text-emerald-400' : 'text-red-400'}">{formatNumber(operation.funding_fee, 6)}%</span>
-                                </div>
-                            </div>
-                        </section>
+                            </section>
+                        {/if}
 
                         <section class="bg-neutral-800/50 rounded p-3">
                             <h4 class="text-base font-medium text-neutral-200 mb-3">Resultados</h4>
                             <div class="space-y-2">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm text-neutral-400">Spread:</span>
-                                    <span class="text-sm text-neutral-200">1.0000%</span>
+                                    <span class="text-sm text-neutral-400">Stake:</span>
+                                    <span class="text-sm text-neutral-200">{formatCurrency(operation.stake)} USDT</span>
                                 </div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm text-neutral-400">Lucro Previsto:</span>
-                                    <span class="text-sm text-emerald-400">+{formatCurrency(operation.expected_profit, 2)} USDT ({formatNumber(operation.expected_profit_percentage, 2)}%)</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm text-neutral-400">Lucro Real:</span>
-                                    <span class="text-sm text-emerald-400">+75.00 USDT (0.77%)</span>
+                                    <span class="text-sm text-neutral-400">Lucro:</span>
+                                    <span class="text-sm {parseFloat(operation.profit_value) >= 0 ? 'text-emerald-400' : 'text-red-400'}">
+                                        {parseFloat(operation.profit_value) >= 0 ? '+' : ''}{formatCurrency(operation.profit_value)} USDT
+                                    </span>
                                 </div>
                             </div>
                         </section>
+
+                        {#if operation.log}
+                            <section class="bg-neutral-800/50 rounded p-3">
+                                <h4 class="text-base font-medium text-neutral-200 mb-3">Log da Operação</h4>
+                                <pre class="text-xs text-neutral-300 whitespace-pre-wrap">{operation.log}</pre>
+                            </section>
+                        {/if}
                     </div>
-                </article>
+                </div>
             </div>
         </div>
     </div>

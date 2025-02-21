@@ -1,9 +1,14 @@
 <script lang="ts">
     import { X } from 'lucide-svelte';
+    import { language } from '$lib/stores/i18n';
+    import type { Translation, Language } from '$lib/i18n/types';
+    import { translations } from '$lib/i18n/translations';
     import { toast } from '$lib/stores/toast';
     import { auth } from '$lib/stores/auth';
     import ValidatedField from './ValidatedField.svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
+
+    $: t = translations[$language as Language] as Translation;
 
     interface Exchange {
         id: string;
@@ -193,7 +198,7 @@
                     tabindex="-1"
                 >
                     <header class="flex items-center justify-between p-4 border-b border-neutral-800">
-                        <h3 id="modal-title" class="text-lg font-medium text-neutral-200">Adicionar Credenciais</h3>
+                        <h3 id="modal-title" class="text-lg font-medium text-neutral-200">{t.pages.credentials.modal.title}</h3>
                         <button 
                             type="button"
                             class="text-neutral-400 hover:text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 rounded-lg p-1"
@@ -218,11 +223,12 @@
                             <ValidatedField
                                 type="select"
                                 name="exchange"
-                                label="Exchange"
+                                label={t.pages.credentials.modal.exchange.label}
                                 bind:value={selectedExchange}
                                 error={errors.exchange}
-                                description="Selecione a exchange para adicionar as credenciais"
+                                description={t.pages.credentials.modal.exchange.description}
                                 options={exchanges.map(e => ({ value: e.id, label: e.name }))}
+                                placeholder={t.pages.credentials.modal.exchange.placeholder}
                             />
 
                             {#if selectedExchange}
@@ -253,31 +259,31 @@
                             <ValidatedField
                                 type="text"
                                 name="api_key"
-                                label="Chave da API"
+                                label={t.pages.credentials.modal.apiKey.label}
                                 bind:value={apiKey}
                                 error={errors.api_key}
                                 minLength={10}
-                                description="Chave pública da API fornecida pela exchange"
+                                description={t.pages.credentials.modal.apiKey.description}
                             />
 
                             <ValidatedField
                                 type="text"
                                 name="api_secret"
-                                label="Chave Secreta"
+                                label={t.pages.credentials.modal.apiSecret.label}
                                 bind:value={apiSecret}
                                 error={errors.api_secret}
                                 minLength={10}
-                                description="Chave secreta da API fornecida pela exchange"
+                                description={t.pages.credentials.modal.apiSecret.description}
                             />
 
                             {#if showPassphrase}
                                 <ValidatedField
                                     type="text"
                                     name="passphrase"
-                                    label="Passphrase"
+                                    label={t.pages.credentials.modal.passphrase.label}
                                     bind:value={passphrase}
                                     error={errors.passphrase}
-                                    description="Passphrase da API (opcional para algumas exchanges)"
+                                    description={t.pages.credentials.modal.passphrase.description}
                                 />
                             {/if}
 
@@ -287,14 +293,14 @@
                                     class="flex items-center justify-center gap-2 px-4 py-2 rounded bg-neutral-800 border border-neutral-700 text-neutral-200 hover:bg-neutral-700 transition-colors text-sm font-medium"
                                     on:click={onClose}
                                 >
-                                    Cancelar
+                                    {t.pages.credentials.modal.buttons.cancel}
                                 </button>
                                 <button
                                     type="submit"
                                     class="flex items-center justify-center gap-2 px-4 py-2 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                                     disabled={loading}
                                 >
-                                    {loading ? 'Salvando...' : 'Salvar Credenciais'}
+                                    {loading ? t.loading : t.pages.credentials.modal.buttons.save}
                                 </button>
                             </div>
                         </form>
