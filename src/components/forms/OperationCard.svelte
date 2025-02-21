@@ -50,9 +50,7 @@
             <span class="text-xs text-neutral-200">
                 {formatCurrency(
                     (parseFloat(operation.exchange_a_open_price) * parseFloat(operation.exchange_a_open_qty)) +
-                    (parseFloat(operation.exchange_b_open_price) * parseFloat(operation.exchange_b_open_qty)) +
-                    (parseFloat(operation.exchange_a_entrance_fee || '0')) +
-                    (parseFloat(operation.exchange_b_entrance_fee || '0'))
+                    (parseFloat(operation.exchange_b_open_price) * parseFloat(operation.exchange_b_open_qty))
                 )} USDT
             </span>
         </div>
@@ -224,9 +222,7 @@
                                     <span class="text-sm text-neutral-200">
                                         {formatCurrency(
                                             (parseFloat(operation.exchange_a_open_price) * parseFloat(operation.exchange_a_open_qty)) +
-                                            (parseFloat(operation.exchange_b_open_price) * parseFloat(operation.exchange_b_open_qty)) +
-                                            (parseFloat(operation.exchange_a_entrance_fee || '0')) +
-                                            (parseFloat(operation.exchange_b_entrance_fee || '0'))
+                                            (parseFloat(operation.exchange_b_open_price) * parseFloat(operation.exchange_b_open_qty))
                                         )} USDT
                                     </span>
                                 </div>
