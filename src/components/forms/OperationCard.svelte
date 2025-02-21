@@ -33,8 +33,8 @@
             <span class="text-xs text-neutral-400">{formatDate(operation.created)}</span>
         </div>
         <div class="flex items-center gap-2">
-            <span class="text-xs px-2 py-1 rounded-full {operation.status === 'open' ? 'bg-blue-500/20 text-blue-400' : 'bg-emerald-500/20 text-emerald-400'}">
-                {operation.status === 'open' ? 'Aberta' : 'Fechada'}
+            <span class="text-xs px-2 py-1 rounded-full {operation.status === 'STARTED' ? 'bg-blue-500/20 text-blue-400' : 'bg-emerald-500/20 text-emerald-400'}">
+                {operation.status === 'STARTED' ? 'Aberta' : 'Fechada'}
             </span>
         </div>
     </div>

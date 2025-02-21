@@ -110,7 +110,7 @@
                         <span class="text-xs text-neutral-400">{t.pages.operations.status.open}</span>
                     </div>
                     <div class="mt-1">
-                        <span class="text-lg font-medium text-blue-400">{operations.filter(op => op.status === 'open').length}</span>
+                        <span class="text-lg font-medium text-blue-400">{operations.filter(op => op.status === 'STARTED').length}</span>
                     </div>
                 </div>
 
@@ -119,7 +119,7 @@
                         <span class="text-xs text-neutral-400">{t.pages.operations.status.closed}</span>
                     </div>
                     <div class="mt-1">
-                        <span class="text-lg font-medium text-emerald-400">{operations.filter(op => op.status === 'closed').length}</span>
+                        <span class="text-lg font-medium text-emerald-400">{operations.filter(op => op.status === 'FINISHED').length}</span>
                     </div>
                 </div>
 
