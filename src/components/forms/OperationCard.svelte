@@ -79,15 +79,14 @@
             type="button"
             class="fixed inset-0 w-full h-full cursor-default focus:outline-none"
             on:click={() => showDetails = false}
+            on:keydown={e => e.key === 'Escape' && (showDetails = false)}
             aria-label="Fechar modal"
         ></button>
 
         <div class="fixed inset-0 overflow-y-auto pointer-events-none">
             <div class="flex min-h-full items-center justify-center p-4">
                 <div 
-                    class="w-full max-w-[600px] bg-neutral-900 rounded-lg shadow-xl pointer-events-auto"
-                    on:click|stopPropagation
-                    on:keydown|stopPropagation
+                    class="relative w-full max-w-[600px] bg-neutral-900 rounded-lg shadow-xl pointer-events-auto"
                     role="document"
                 >
                     <header class="flex items-center justify-between p-4 border-b border-neutral-800">
