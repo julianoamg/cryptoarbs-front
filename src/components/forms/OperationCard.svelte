@@ -47,7 +47,14 @@
 
         <div class="flex items-center justify-between">
             <span class="text-xs text-neutral-400">Stake</span>
-            <span class="text-xs text-neutral-200">{formatCurrency(operation.stake)} USDT</span>
+            <span class="text-xs text-neutral-200">
+                {formatCurrency(
+                    (parseFloat(operation.exchange_a_open_price) * parseFloat(operation.exchange_a_open_qty)) +
+                    (parseFloat(operation.exchange_b_open_price) * parseFloat(operation.exchange_b_open_qty)) +
+                    (parseFloat(operation.exchange_a_entrance_fee || '0')) +
+                    (parseFloat(operation.exchange_b_entrance_fee || '0'))
+                )} USDT
+            </span>
         </div>
 
         <div class="flex items-center justify-between">
@@ -214,7 +221,14 @@
                             <div class="space-y-2">
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm text-neutral-400">Stake:</span>
-                                    <span class="text-sm text-neutral-200">{formatCurrency(operation.stake)} USDT</span>
+                                    <span class="text-sm text-neutral-200">
+                                        {formatCurrency(
+                                            (parseFloat(operation.exchange_a_open_price) * parseFloat(operation.exchange_a_open_qty)) +
+                                            (parseFloat(operation.exchange_b_open_price) * parseFloat(operation.exchange_b_open_qty)) +
+                                            (parseFloat(operation.exchange_a_entrance_fee || '0')) +
+                                            (parseFloat(operation.exchange_b_entrance_fee || '0'))
+                                        )} USDT
+                                    </span>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm text-neutral-400">Lucro:</span>
