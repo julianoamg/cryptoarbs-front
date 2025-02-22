@@ -15,6 +15,7 @@
         name: string;
         has_passphrase: boolean;
         credentials_video?: string;
+        credentials_link?: string;
     }
 
     export let show = false;
@@ -233,8 +234,20 @@
 
                             {#if selectedExchange}
                                 <div class="mt-4 rounded bg-neutral-800/50 border border-neutral-700">
-                                    {#if videoUrl}
+                                    {#if selectedExchangeData?.credentials_link}
                                         <div class="p-4 border-b border-neutral-700">
+                                            <a 
+                                                href={selectedExchangeData.credentials_link} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                class="flex items-center justify-center w-full gap-2 px-4 py-2 text-sm font-medium text-emerald-500 bg-emerald-500/10 rounded border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
+                                            >
+                                                Gerar Credenciais na {selectedExchangeData.name}
+                                            </a>
+                                        </div>
+                                    {/if}
+                                    {#if videoUrl}
+                                        <div class="p-4 {selectedExchangeData?.credentials_link ? '' : 'border-b border-neutral-700'}">
                                             <h4 class="text-sm font-medium text-neutral-200">
                                                 Tutorial: Como gerar credenciais na {selectedExchangeData?.name}
                                             </h4>
