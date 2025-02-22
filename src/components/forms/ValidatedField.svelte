@@ -34,9 +34,6 @@
 {#if type === 'select'}
     <div class="form-field">
         <label for={name} class="block text-sm font-medium text-neutral-200 mb-1">{label}</label>
-        {#if description}
-            <p class="text-xs text-neutral-400 mb-2">{description}</p>
-        {/if}
         <select 
             {name}
             id={name}
@@ -54,13 +51,13 @@
         {#if error}
             <p id="{name}-error" class="mt-1 text-xs text-red-500" role="alert">{error}</p>
         {/if}
+        {#if description}
+            <p class="mt-1 text-xs text-neutral-400">{description}</p>
+        {/if}
     </div>
 {:else}
     <div class="form-field">
         <label for={name} class="block text-sm font-medium text-neutral-200 mb-1">{label}</label>
-        {#if description}
-            <p class="text-xs text-neutral-400 mb-2">{description}</p>
-        {/if}
         <input
             {type}
             {name}
@@ -74,6 +71,9 @@
         />
         {#if error}
             <p id="{name}-error" class="mt-1 text-xs text-red-500" role="alert">{error}</p>
+        {/if}
+        {#if description}
+            <p class="mt-1 text-xs text-neutral-400">{description}</p>
         {/if}
     </div>
 {/if} 
