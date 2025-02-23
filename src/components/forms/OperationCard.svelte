@@ -33,7 +33,7 @@
             <span class="text-xs text-neutral-400">{formatDate(operation.created)}</span>
         </div>
         <div class="flex items-center gap-2">
-            <span class="text-xs px-2 py-1 rounded-full {operation.status === 'STARTED' ? 'bg-blue-500/20 text-blue-400' : 'bg-emerald-500/20 text-emerald-400'}">
+            <span class="text-xs px-2 py-1 rounded-full {operation.status === 'STARTED' ? 'bg-amber-500/20 text-amber-300 animate-pulse-subtle' : 'bg-emerald-600/20 text-emerald-300'}">
                 {operation.status === 'STARTED' ? 'Aberta' : 'Fechada'}
             </span>
         </div>
@@ -64,10 +64,11 @@
 
         <!-- Toggle Details Button -->
         <button 
-            class="w-full mt-3 px-3 py-1.5 text-xs font-medium text-neutral-400 hover:text-neutral-200 bg-neutral-900/50 hover:bg-neutral-900 rounded transition-colors"
+            class="w-full mt-3 flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded border transition-colors bg-amber-500/10 text-amber-300 border-amber-500/20 hover:bg-amber-500/20 hover:text-amber-200"
             on:click={() => showDetails = true}
         >
-            Ver Detalhes
+            <span>Ver Detalhes</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="m9 18 6-6-6-6"/></svg>
         </button>
     </div>
 </div>
@@ -218,6 +219,10 @@
                             <h4 class="text-base font-medium text-neutral-200 mb-3">Resultados</h4>
                             <div class="space-y-2">
                                 <div class="flex items-center justify-between">
+                                    <span class="text-sm text-neutral-400">Par:</span>
+                                    <span class="text-sm text-neutral-200">{operation.symbol}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
                                     <span class="text-sm text-neutral-400">Stake:</span>
                                     <span class="text-sm text-neutral-200">
                                         {formatCurrency(
@@ -246,4 +251,19 @@
             </div>
         </div>
     </div>
-{/if} 
+{/if}
+
+<style>
+    @keyframes pulse-subtle {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.7;
+        }
+    }
+
+    .animate-pulse-subtle {
+        animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+</style> 
