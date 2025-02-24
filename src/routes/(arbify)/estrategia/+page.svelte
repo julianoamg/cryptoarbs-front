@@ -13,7 +13,6 @@
 
     interface Settings {
         id: string;
-        tolerance: string;
         min_profit: string;
         max_profit: string;
         stake: string;
@@ -66,7 +65,6 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    tolerance: Number(settings.tolerance),
                     min_profit: settings.min_profit,
                     max_profit: settings.max_profit,
                     stake: settings.stake
@@ -95,7 +93,7 @@
     function validateMinProfit(value: string): string | undefined {
         const num = Number(value);
         if (isNaN(num)) return 'Valor inválido';
-        if (num < 0.09) return 'Valor mínimo é 0.09%';
+        if (num < 0.1) return 'Valor mínimo é 0.1%';
         if (num > 2.0) return 'Valor máximo é 2.0%';
         return undefined;
     }
@@ -108,18 +106,10 @@
         return undefined;
     }
 
-    function validateTolerance(value: string): string | undefined {
-        const num = Number(value);
-        if (isNaN(num)) return 'Valor inválido';
-        if (num < 2) return 'Valor mínimo é 2%';
-        if (num > 10) return 'Valor máximo é 10%';
-        return undefined;
-    }
-
     function validateStake(value: string): string | undefined {
         const num = Number(value);
         if (isNaN(num)) return 'Valor inválido';
-        if (num < 5.0) return 'Valor mínimo é 5.0 USDT';
+        if (num < 10.0) return 'Valor mínimo é 10.0 USDT';
         if (num > 100.0) return 'Valor máximo é 100.0 USDT';
         return undefined;
     }
@@ -169,16 +159,6 @@
                         </div>
 
                         <div class="space-y-6">
-                            <ValidatedField
-                                type="number"
-                                name="tolerance"
-                                label={t.pages.strategy.tolerance}
-                                bind:value={settings.tolerance}
-                                error={errors.tolerance}
-                                validate={validateTolerance}
-                                description={t.pages.strategy.toleranceDescription}
-                            />
-
                             <ValidatedField
                                 type="number"
                                 name="stake"
