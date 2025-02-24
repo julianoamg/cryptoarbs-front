@@ -104,30 +104,30 @@
             <div class="p-4 bg-neutral-800/50 rounded border border-neutral-700/50">
                 <h3 class="text-sm font-medium text-neutral-200 mb-1">Filtrar por Status</h3>
                 <p class="text-xs text-neutral-400 mb-4">Selecione o status das operações que deseja visualizar. Você pode filtrar por operações abertas, fechadas ou ver todas.</p>
-                <div class="flex gap-4">
+                <div class="flex flex-wrap gap-2">
                     <button
-                        class="px-4 py-2 text-sm font-medium rounded border transition-colors {selectedStatus === 'all' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'text-neutral-400 border-neutral-800 hover:border-neutral-700'}"
+                        class="flex-1 min-w-[100px] px-4 py-2 text-sm font-medium rounded border transition-colors {selectedStatus === 'all' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'text-neutral-400 border-neutral-800 hover:border-neutral-700'}"
                         on:click={() => selectedStatus = 'all'}
                     >
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center justify-center gap-2">
                             <ListFilter class="w-4 h-4" />
                             <span>Todas</span>
                         </div>
                     </button>
                     <button
-                        class="px-4 py-2 text-sm font-medium rounded border transition-colors {selectedStatus === 'STARTED' ? 'bg-amber-500/10 text-amber-300 border-amber-500/20' : 'text-neutral-400 border-neutral-800 hover:border-neutral-700'}"
+                        class="flex-1 min-w-[100px] px-4 py-2 text-sm font-medium rounded border transition-colors {selectedStatus === 'STARTED' ? 'bg-amber-500/10 text-amber-300 border-amber-500/20' : 'text-neutral-400 border-neutral-800 hover:border-neutral-700'}"
                         on:click={() => selectedStatus = 'STARTED'}
                     >
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center justify-center gap-2">
                             <CircleDot class="w-4 h-4" />
                             <span>{t.pages.operations.status.open}</span>
                         </div>
                     </button>
                     <button
-                        class="px-4 py-2 text-sm font-medium rounded border transition-colors {selectedStatus === 'FINISHED' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'text-neutral-400 border-neutral-800 hover:border-neutral-700'}"
+                        class="flex-1 min-w-[100px] px-4 py-2 text-sm font-medium rounded border transition-colors {selectedStatus === 'FINISHED' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'text-neutral-400 border-neutral-800 hover:border-neutral-700'}"
                         on:click={() => selectedStatus = 'FINISHED'}
                     >
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center justify-center gap-2">
                             <CheckCircle2 class="w-4 h-4" />
                             <span>{t.pages.operations.status.closed}</span>
                         </div>
