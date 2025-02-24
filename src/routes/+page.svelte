@@ -262,8 +262,8 @@
                                             <div class="flex flex-col items-end gap-2">
                                                 <div class="flex flex-col items-end">
                                                     <div class="flex items-baseline gap-1">
-                                                        <span class="text-base font-bold text-emerald-500">{opp.profit}%</span>
-                                                        <span class="text-xs text-emerald-500/70">{t.pages.home.profit}</span>
+                                                        <span class="text-base font-bold {parseFloat(opp.profit) >= 0 ? 'text-emerald-500' : 'text-red-500'}">{opp.profit}%</span>
+                                                        <span class="text-xs {parseFloat(opp.profit) >= 0 ? 'text-emerald-500/70' : 'text-red-500/70'}">{t.pages.home.profit}</span>
                                                     </div>
                                                     <div class="flex items-center gap-1">
                                                         <span class="text-xs" class:text-emerald-500={parseFloat(opp.profit_fee) > 0} class:text-red-500={parseFloat(opp.profit_fee) < 0} class:text-neutral-400={parseFloat(opp.profit_fee) === 0}>
@@ -299,8 +299,8 @@
                                         <a href={opp.exchange_b_url} target="_blank" rel="noopener noreferrer" class="text-base sm:text-lg font-bold text-neutral-200 hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_b} (Futures)</a>
                                     </div>
                                     <div class="flex items-baseline space-x-1">
-                                        <span class="text-xl sm:text-2xl font-bold text-emerald-500">{opp.profit}%</span>
-                                        <span class="text-sm text-emerald-500/70">{t.pages.home.profit}</span>
+                                        <span class="text-xl sm:text-2xl font-bold {parseFloat(opp.profit) >= 0 ? 'text-emerald-500' : 'text-red-500'}">{opp.profit}%</span>
+                                        <span class="text-sm {parseFloat(opp.profit) >= 0 ? 'text-emerald-500/70' : 'text-red-500/70'}">{t.pages.home.profit}</span>
                                     </div>
                                 </div>
 
