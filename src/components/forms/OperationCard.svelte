@@ -58,7 +58,7 @@
         <div class="flex items-center justify-between">
             <span class="text-xs text-neutral-400">Lucro</span>
             <span class="text-xs {parseFloat(operation.profit_value) >= 0 ? 'text-emerald-400' : 'text-red-400'}">
-                {parseFloat(operation.profit_value) >= 0 ? '+' : ''}{formatCurrency(operation.profit_value)} USDT
+                {parseFloat(operation.profit_value) >= 0 ? '+' : ''}{formatCurrency(operation.profit_value, 5)} USDT
             </span>
         </div>
 
@@ -234,7 +234,7 @@
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm text-neutral-400">Lucro:</span>
                                     <span class="text-sm {parseFloat(operation.profit_value) >= 0 ? 'text-emerald-400' : 'text-red-400'}">
-                                        {parseFloat(operation.profit_value) >= 0 ? '+' : ''}{formatCurrency(operation.profit_value)} USDT
+                                        {parseFloat(operation.profit_value) >= 0 ? '+' : ''}{formatCurrency(operation.profit_value, 5)} USDT
                                     </span>
                                 </div>
                             </div>

@@ -173,7 +173,7 @@
                                 .filter(op => op.status === 'FINISHED')
                                 .reduce((sum, op) => sum + parseFloat(op.profit_value || '0'), 0)}
                             <span class="text-lg font-medium {totalProfit >= 0 ? 'text-emerald-400' : 'text-red-400'}">
-                                {totalProfit >= 0 ? '+' : ''}{formatCurrency(totalProfit)} USDT
+                                {totalProfit >= 0 ? '+' : ''}{formatCurrency(totalProfit, 5)} USDT
                             </span>
                         {:else}
                             <span class="text-lg font-medium text-neutral-300">-</span>
