@@ -27,6 +27,7 @@ export interface UserOpportunity {
     profit: string;
     profit_fee: string;
     profit_value: string;
+    spread: string;
     stake: string;
     status: string;
     created: string;

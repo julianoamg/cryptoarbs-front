@@ -223,6 +223,10 @@
                                     <span class="text-sm text-neutral-200">{operation.symbol}</span>
                                 </div>
                                 <div class="flex items-center justify-between">
+                                    <span class="text-sm text-neutral-400">Spread:</span>
+                                    <span class="text-sm text-neutral-200">{formatNumber(operation.spread, 2)}%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
                                     <span class="text-sm text-neutral-400">Stake:</span>
                                     <span class="text-sm text-neutral-200">
                                         {formatCurrency(
