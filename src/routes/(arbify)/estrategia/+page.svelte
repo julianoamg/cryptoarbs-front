@@ -70,7 +70,10 @@
                 body: JSON.stringify({
                     min_profit: settings.min_profit,
                     max_profit: settings.max_profit,
-                    stake: settings.stake
+                    stake: settings.stake,
+                    enable_open_robot: settings.enable_open_robot,
+                    enable_close_robot: settings.enable_close_robot,
+                    enable_financial_robot: settings.enable_financial_robot
                 })
             });
 
@@ -174,28 +177,37 @@
 
                             <!-- Robot Control Switches -->
                             <div class="space-y-4 pt-2">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-neutral-200">Robô de Abertura</span>
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" bind:checked={settings.enable_open_robot} class="sr-only peer">
-                                        <div class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                                    </label>
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm font-medium text-neutral-200">{t.pages.strategy.robots.open.title}</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" bind:checked={settings.enable_open_robot} class="sr-only peer">
+                                            <div class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                        </label>
+                                    </div>
+                                    <p class="text-xs text-neutral-400">{t.pages.strategy.robots.open.description}</p>
                                 </div>
 
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-neutral-200">Robô de Fechamento</span>
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" bind:checked={settings.enable_close_robot} class="sr-only peer">
-                                        <div class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                                    </label>
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm font-medium text-neutral-200">{t.pages.strategy.robots.close.title}</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" bind:checked={settings.enable_close_robot} class="sr-only peer">
+                                            <div class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                        </label>
+                                    </div>
+                                    <p class="text-xs text-neutral-400">{t.pages.strategy.robots.close.description}</p>
                                 </div>
 
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-neutral-200">Robô de Gestão Financeira</span>
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" bind:checked={settings.enable_financial_robot} class="sr-only peer">
-                                        <div class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                                    </label>
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm font-medium text-neutral-200">{t.pages.strategy.robots.financial.title}</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" bind:checked={settings.enable_financial_robot} class="sr-only peer">
+                                            <div class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                        </label>
+                                    </div>
+                                    <p class="text-xs text-neutral-400">{t.pages.strategy.robots.financial.description}</p>
                                 </div>
                             </div>
                         </div>

@@ -300,6 +300,20 @@ export const translations = {
                 toleranceDescription: 'Valor de tolerância para operações de arbitragem (2-10)',
                 stake: 'Stake',
                 stakeDescription: 'Valor em USDT para operações (10.0-100.0). Este valor será usado em cada exchange, totalizando o dobro.',
+                robots: {
+                    open: {
+                        title: 'Robô de Abertura',
+                        description: 'Executa ordens de compra limitadas no mercado spot e vendas no mercado futuro quando uma oportunidade de arbitragem é identificada dentro dos parâmetros configurados.'
+                    },
+                    close: {
+                        title: 'Robô de Fechamento',
+                        description: 'Monitora e executa ordens de venda limitadas no mercado spot e compra no mercado futuro para realizar o lucro quando o objetivo da operação é alcançado.'
+                    },
+                    financial: {
+                        title: 'Robô de Gerenciamento Financeiro',
+                        description: 'Gerencia o capital entre exchanges, calculando taxas e custos operacionais, enquanto monitora taxas de financiamento para maximizar o lucro em operações de contango.'
+                    }
+                },
                 saveButton: 'Salvar Configurações',
                 success: 'Configurações salvas com sucesso!',
                 error: 'Erro ao salvar configurações',
@@ -688,10 +702,22 @@ export const translations = {
                 minProfitDescription: 'Set the minimum acceptable profit to execute an operation (%)',
                 maxProfit: 'Maximum Profit',
                 maxProfitDescription: 'Set the maximum profit to filter unrealistic opportunities (%)',
-                tolerance: 'Tolerance',
-                toleranceDescription: 'Tolerance margin for price variations during execution (%)',
                 stake: 'Stake in USDT',
-                stakeDescription: 'Amount in USDT for operations (5.0-100.0). This value will be used in each exchange, totaling double.',
+                stakeDescription: 'Amount in USDT for operations (10.0-100.0). This value will be used in each exchange, totaling double.',
+                robots: {
+                    open: {
+                        title: 'Opening AI Robot',
+                        description: 'Executes limit buy orders in the spot market and sell orders in the futures market when an arbitrage opportunity is identified within the configured parameters.'
+                    },
+                    close: {
+                        title: 'Closing AI Robot',
+                        description: 'Monitors and executes limit sell orders in the spot market and buy orders in the futures market to realize profit when the operation target is reached.'
+                    },
+                    financial: {
+                        title: 'Financial Management AI Robot',
+                        description: 'Manages capital between exchanges, calculating fees and operational costs, while monitoring funding rates to maximize profit in contango operations.'
+                    }
+                },
                 saveButton: 'Save Settings',
                 success: 'Settings saved successfully!',
                 error: 'Error saving settings',
@@ -1080,10 +1106,22 @@ export const translations = {
                 minProfitDescription: 'Define el beneficio mínimo aceptable para ejecutar una operación (%)',
                 maxProfit: 'Beneficio Máximo',
                 maxProfitDescription: 'Define el beneficio máximo para filtrar oportunidades irreales (%)',
-                tolerance: 'Tolerancia',
-                toleranceDescription: 'Margen de tolerancia para variaciones de precio durante la ejecución (%)',
                 stake: 'Stake en USDT',
-                stakeDescription: 'Cantidad en USDT para operaciones (5.0-100.0). Este valor se usará en cada exchange, totalizando el doble.',
+                stakeDescription: 'Cantidad en USDT para operaciones (10.0-100.0). Este valor se usará en cada exchange, totalizando el doble.',
+                robots: {
+                    open: {
+                        title: 'IA Robot de Apertura',
+                        description: 'Ejecuta órdenes limit de compra en el mercado spot y venta en el mercado de futuros cuando se identifica una oportunidad de arbitraje dentro de los parámetros configurados.'
+                    },
+                    close: {
+                        title: 'IA Robot de Cierre',
+                        description: 'Monitorea y ejecuta órdenes limit de venta en el mercado spot y compra en el mercado de futuros para realizar el beneficio cuando se alcanza el objetivo de la operación.'
+                    },
+                    financial: {
+                        title: 'IA Robot de Gestión Financiera',
+                        description: 'Gestiona el capital entre los exchanges, calculando comisiones y costos operativos, además de monitorear la tasa de financiación para maximizar el beneficio en operaciones de contango.'
+                    }
+                },
                 saveButton: 'Guardar Configuraciones',
                 success: '¡Configuraciones guardadas con éxito!',
                 error: 'Error al guardar configuraciones',
