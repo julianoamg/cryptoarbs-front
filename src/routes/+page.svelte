@@ -63,8 +63,11 @@
     let pollingInterval: number;
     let isListView = false;
     let showOnlyPositiveFunding = false;
+    let showOnlyNegativeFunding = false;
     let selectedCategory: string | null = null;
     let showCategoryDropdown = false;
+    let showFundingDropdown = false;
+    let fundingFilter: 'all' | 'positive' | 'negative' = 'all';
 
     const CATEGORY_COLORS = [
         { bg: 'bg-amber-500/10', text: 'text-amber-300' },
@@ -84,6 +87,40 @@
         }
         const index = Math.abs(hash) % CATEGORY_COLORS.length;
         return CATEGORY_COLORS[index];
+    }
+
+    // Funções para gerenciar preferências no localStorage
+    function loadUserPreferences(): void {
+        if (browser) {
+            // Carrega preferência de visualização
+            const savedView = localStorage.getItem('cryptoarbs:viewPreference');
+            isListView = savedView === 'list';
+
+            // Carrega categoria selecionada
+            const savedCategory = localStorage.getItem('cryptoarbs:selectedCategory');
+            selectedCategory = savedCategory ? savedCategory : null;
+
+            // Carrega filtro de taxa
+            const savedFundingFilter = localStorage.getItem('cryptoarbs:fundingFilter') as 'all' | 'positive' | 'negative';
+            fundingFilter = savedFundingFilter || 'all';
+        }
+    }
+
+    function saveUserPreferences(): void {
+        if (browser) {
+            // Salva preferência de visualização
+            localStorage.setItem('cryptoarbs:viewPreference', isListView ? 'list' : 'grid');
+            
+            // Salva categoria selecionada
+            if (selectedCategory) {
+                localStorage.setItem('cryptoarbs:selectedCategory', selectedCategory);
+            } else {
+                localStorage.removeItem('cryptoarbs:selectedCategory');
+            }
+
+            // Salva filtro de taxa
+            localStorage.setItem('cryptoarbs:fundingFilter', fundingFilter);
+        }
     }
 
     // Carrega a preferência do usuário do localStorage
@@ -112,33 +149,43 @@
                 return;
             }
 
-            opportunities = data.results.map((opp) => ({
-                ...opp,
-                profit: opp.profit?.replace('$', '') ?? '0',
-                profit_fee: opp.profit_fee?.replace('$', '') ?? '0',
-                exchange_a_price: opp.exchange_a_price?.replace('$', '') ?? '0',
-                exchange_b_price: opp.exchange_b_price?.replace('$', '') ?? '0',
-                spread: opp.spread?.replace('$', '') ?? '0'
-            }));
+            // Só atualiza se houver dados válidos
+            if (data.results.length > 0) {
+                opportunities = data.results.map((opp) => ({
+                    ...opp,
+                    profit: opp.profit?.replace('$', '') ?? '0',
+                    profit_fee: opp.profit_fee?.replace('$', '') ?? '0',
+                    exchange_a_price: opp.exchange_a_price?.replace('$', '') ?? '0',
+                    exchange_b_price: opp.exchange_b_price?.replace('$', '') ?? '0',
+                    spread: opp.spread?.replace('$', '') ?? '0'
+                }));
+            }
         } catch (error) {
             console.error('Failed to fetch opportunities:', error);
-            opportunities = []; // Reset on error
+            // Não reseta as oportunidades em caso de erro
+            // opportunities = []; // Removido para manter os dados anteriores
         }
     }
 
     function handleClickOutside(event: MouseEvent) {
         if (!browser) return;
         
-        const dropdown = document.getElementById('category-dropdown');
-        if (dropdown && !dropdown.contains(event.target as Node)) {
+        const categoryDropdown = document.getElementById('category-dropdown');
+        const fundingDropdown = document.getElementById('funding-dropdown');
+        
+        if (categoryDropdown && !categoryDropdown.contains(event.target as Node)) {
             showCategoryDropdown = false;
+        }
+        
+        if (fundingDropdown && !fundingDropdown.contains(event.target as Node)) {
+            showFundingDropdown = false;
         }
     }
 
     onMount(async () => {
         if (browser) {
             document.addEventListener('click', handleClickOutside);
-            loadViewPreference();
+            loadUserPreferences();
         }
 
         if ($auth.token) {
@@ -149,7 +196,8 @@
                 if (hasActiveSubscription) {
                     await fetchOpportunities();
                     if (browser) {
-                        pollingInterval = setInterval(fetchOpportunities, 5000);
+                        // Atualiza a cada 3 segundos
+                        pollingInterval = window.setInterval(fetchOpportunities, 3000);
                     }
                 }
             } catch (error) {
@@ -159,7 +207,6 @@
             }
         } else {
             loading = false;
-            // Redireciona para login se não houver token
             if (browser) {
                 window.location.href = '/login';
             }
@@ -170,18 +217,22 @@
         if (browser) {
             document.removeEventListener('click', handleClickOutside);
             if (pollingInterval) {
-                clearInterval(pollingInterval);
+                window.clearInterval(pollingInterval);
             }
         }
     });
 
     function toggleView() {
         isListView = !isListView;
-        saveViewPreference(isListView);
+        saveUserPreferences();
     }
 
     $: filteredOpportunities = opportunities
-        .filter(opp => !showOnlyPositiveFunding || parseFloat(opp.profit_fee) >= 0)
+        .filter(opp => {
+            if (fundingFilter === 'positive') return parseFloat(opp.profit_fee) > 0;
+            if (fundingFilter === 'negative') return parseFloat(opp.profit_fee) < 0;
+            return true;
+        })
         .filter(opp => !selectedCategory || opp.category === selectedCategory);
 
     $: uniqueCategories = [...new Set(opportunities.map(opp => opp.category).filter(Boolean))];
@@ -202,6 +253,26 @@
         } else {
             return num.toFixed(0);
         }
+    }
+
+    // Observa mudanças nos filtros e salva no localStorage
+    $: {
+        if (browser) {
+            saveUserPreferences();
+        }
+    }
+
+    // Modifica os handlers de clique dos botões para salvar o estado
+    async function handleCategorySelect(category: string | null) {
+        selectedCategory = category;
+        showCategoryDropdown = false;
+        saveUserPreferences();
+    }
+
+    async function handleFundingFilterSelect(filter: 'all' | 'positive' | 'negative') {
+        fundingFilter = filter;
+        showFundingDropdown = false;
+        saveUserPreferences();
     }
 </script>
 
@@ -244,25 +315,58 @@
                                     transition:fade={{ duration: 100 }}
                                 >
                                     <button
-                                        class="w-full px-4 py-2 text-sm text-center transition-colors hover:bg-neutral-800 {selectedCategory === null ? 'text-emerald-500' : 'text-neutral-200'}"
+                                        class="w-full px-4 py-2 text-sm transition-colors hover:bg-neutral-800 {selectedCategory === null ? 'text-emerald-500' : 'text-neutral-200'}"
                                         on:click={() => {
                                             selectedCategory = null;
                                             showCategoryDropdown = false;
+                                            saveUserPreferences();
                                         }}
                                     >
-                                        Todas Categorias
+                                        <div class="text-left">
+                                            <div class="font-medium flex items-center gap-2">
+                                                <span>Todas Categorias</span>
+                                                <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300">Recomendado</span>
+                                            </div>
+                                            <p class="text-xs text-neutral-400 mt-1.5">Visualize todas as oportunidades disponíveis para maximizar seus ganhos em diferentes tipos de mercado</p>
+                                        </div>
                                     </button>
 
                                     {#each uniqueCategories as category}
                                         {@const color = getCategoryColor(category)}
                                         <button
-                                            class="w-full px-4 py-2 text-sm transition-colors hover:bg-neutral-800 flex items-center justify-center gap-2"
+                                            class="w-full px-4 py-2 text-sm transition-colors hover:bg-neutral-800"
                                             on:click={() => {
                                                 selectedCategory = category;
                                                 showCategoryDropdown = false;
+                                                saveUserPreferences();
                                             }}
                                         >
-                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center {color.bg} {color.text}">{category}</span>
+                                            <div class="text-left">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center {color.bg} {color.text}">{category}</span>
+                                                </div>
+                                                <p class="text-xs text-neutral-400 mt-1.5">
+                                                    {#if category === 'Spot-Futures'}
+                                                        Exemplo de contango: Quando o Bitcoin está em $50.000 no spot e $50.500 no futuro, indicando que o mercado espera alta no preço
+                                                    {:else if category === 'Spot-Margin'}
+                                                        Aproveite diferenças de preço entre mercados à vista e de margem
+                                                    {:else if category === 'Funding'}
+                                                        Exemplo de backwardation: Quando o Bitcoin está em $50.000 no spot e $49.500 no futuro, indicando que o mercado espera queda no preço
+                                                    {:else if category === 'Cross-Exchange'}
+                                                        Compare preços entre exchanges
+                                                    {:else if category === 'Triangular'}
+                                                        Use 3 moedas para lucrar
+                                                    {:else if category === 'Statistical'}
+                                                        Lucre com desvios temporários de preço
+                                                    {:else if category === 'Index'}
+                                                        Compare índices com preços reais
+                                                    {:else if category === 'Perpetual-Futures'}
+                                                        Compare futuros sem vencimento com futuros com data
+                                                    {:else}
+                                                        Exibe apenas oportunidades da categoria {category}
+                                                    {/if}
+                                                </p>
+                                            </div>
                                         </button>
                                     {/each}
                                 </div>
@@ -271,13 +375,88 @@
                     {/if}
 
                     <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
-                        <button
-                            class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded border transition-colors {showOnlyPositiveFunding ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'text-neutral-400 border-neutral-800 hover:border-neutral-700'}"
-                            on:click={() => showOnlyPositiveFunding = !showOnlyPositiveFunding}
-                        >
-                            <Percent class="w-4 h-4" />
-                            <span class="text-sm">Taxa Positiva</span>
-                        </button>
+                        <div class="relative flex-1 sm:flex-none sm:w-[180px]">
+                            <button
+                                id="funding-dropdown"
+                                class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded border transition-colors bg-neutral-800/50 border-neutral-800 hover:border-neutral-700"
+                                on:click|stopPropagation={() => showFundingDropdown = !showFundingDropdown}
+                            >
+                                <div class="flex-1 flex justify-center">
+                                    {#if fundingFilter === 'positive'}
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center bg-emerald-500/10 text-emerald-400">Taxa Positiva</span>
+                                        </div>
+                                    {:else if fundingFilter === 'negative'}
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center bg-red-500/10 text-red-400">Taxa Negativa</span>
+                                        </div>
+                                    {:else}
+                                        <span class="text-neutral-200">Todas Taxas</span>
+                                    {/if}
+                                </div>
+                                <ChevronDown class="w-4 h-4 text-neutral-400 transition-transform {showFundingDropdown ? 'rotate-180' : ''} ml-2" />
+                            </button>
+
+                            {#if showFundingDropdown}
+                                <div 
+                                    class="absolute z-50 w-full mt-2 py-2 bg-neutral-900 border border-neutral-800 rounded-lg shadow-xl"
+                                    transition:fade={{ duration: 100 }}
+                                >
+                                    <button
+                                        class="w-full px-4 py-2 text-sm transition-colors hover:bg-neutral-800 {fundingFilter === 'all' ? 'text-emerald-500' : 'text-neutral-200'}"
+                                        on:click={() => {
+                                            fundingFilter = 'all';
+                                            showFundingDropdown = false;
+                                            saveUserPreferences();
+                                        }}
+                                    >
+                                        <div class="text-left">
+                                            <div class="font-medium flex items-center gap-2">
+                                                <span>Todas Taxas</span>
+                                                <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300">Recomendado</span>
+                                            </div>
+                                            <p class="text-xs text-neutral-400 mt-1.5">
+                                                Visualize todas as oportunidades de arbitragem, independente do tipo de posição (long/short) e suas taxas
+                                            </p>
+                                        </div>
+                                    </button>
+                                    <button
+                                        class="w-full px-4 py-2 text-sm transition-colors hover:bg-neutral-800 {fundingFilter === 'positive' ? 'text-emerald-500' : 'text-neutral-200'}"
+                                        on:click={() => {
+                                            fundingFilter = 'positive';
+                                            showFundingDropdown = false;
+                                            saveUserPreferences();
+                                        }}
+                                    >
+                                        <div class="text-left">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center bg-emerald-500/10 text-emerald-400">Taxa Positiva</span>
+                                            </div>
+                                            <p class="text-xs text-neutral-400 mt-1.5">
+                                                Apenas oportunidades onde você mantém posição short no futuro e recebe taxa extra a cada 8h
+                                            </p>
+                                        </div>
+                                    </button>
+                                    <button
+                                        class="w-full px-4 py-2 text-sm transition-colors hover:bg-neutral-800 {fundingFilter === 'negative' ? 'text-emerald-500' : 'text-neutral-200'}"
+                                        on:click={() => {
+                                            fundingFilter = 'negative';
+                                            showFundingDropdown = false;
+                                            saveUserPreferences();
+                                        }}
+                                    >
+                                        <div class="text-left">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center bg-red-500/10 text-red-400">Taxa Negativa</span>
+                                            </div>
+                                            <p class="text-xs text-neutral-400 mt-1.5">
+                                                Apenas oportunidades onde você mantém posição short no futuro e paga uma pequena taxa a cada 8h
+                                            </p>
+                                        </div>
+                                    </button>
+                                </div>
+                            {/if}
+                        </div>
 
                         <button
                             class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded border transition-colors text-neutral-400 border-neutral-800 hover:border-neutral-700"
