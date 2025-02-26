@@ -13,6 +13,8 @@
     import PageHeader from '../components/forms/PageHeader.svelte';
     import Loading from '../components/Loading.svelte';
     import Button from '../components/forms/Button.svelte';
+    import { goto } from '$app/navigation';
+    import { browser } from '$app/environment';
 
     interface ArbitrageOpportunity {
         id: string;
@@ -121,41 +123,51 @@
     }
 
     function handleClickOutside(event: MouseEvent) {
+        if (!browser) return;
         const dropdown = document.getElementById('category-dropdown');
         if (dropdown && !dropdown.contains(event.target as Node)) {
             showCategoryDropdown = false;
         }
     }
 
-    onMount(() => {
-        document.addEventListener('click', handleClickOutside);
-        loadViewPreference();
-
-        async function init() {
-            if ($auth.token) {
-                try {
-                    const userData = await getMe($auth.token);
-                    hasActiveSubscription = userData.has_active_subscription;
-
-                    if (hasActiveSubscription) {
-                        await fetchOpportunities();
-                        pollingInterval = setInterval(fetchOpportunities, 5000);
-                    }
-                } catch (error) {
-                    console.error('Failed to fetch data:', error);
-                } finally {
-                    loading = false;
-                }
-            }
+    onMount(async () => {
+        if (browser) {
+            document.addEventListener('click', handleClickOutside);
+            loadViewPreference();
         }
 
-        init();
+        try {
+            if (!$auth.token) {
+                await goto('/login');
+                return;
+            }
+
+            const userData = await getMe($auth.token);
+            hasActiveSubscription = userData.has_active_subscription;
+
+            if (!hasActiveSubscription) {
+                await goto('/assinatura');
+                return;
+            }
+
+            await fetchOpportunities();
+            if (browser) {
+                pollingInterval = setInterval(fetchOpportunities, 5000);
+            }
+        } catch (error) {
+            console.error('Failed to fetch data:', error);
+            await goto('/login');
+        } finally {
+            loading = false;
+        }
     });
 
     onDestroy(() => {
-        document.removeEventListener('click', handleClickOutside);
-        if (pollingInterval) {
-            clearInterval(pollingInterval);
+        if (browser) {
+            document.removeEventListener('click', handleClickOutside);
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
         }
     });
 
