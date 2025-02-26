@@ -94,15 +94,21 @@
         if (browser) {
             // Carrega preferência de visualização
             const savedView = localStorage.getItem('cryptoarbs:viewPreference');
-            isListView = savedView === 'list';
+            if (savedView !== null) {
+                isListView = savedView === 'list';
+            }
 
             // Carrega categoria selecionada
             const savedCategory = localStorage.getItem('cryptoarbs:selectedCategory');
-            selectedCategory = savedCategory ? savedCategory : null;
+            if (savedCategory !== null) {
+                selectedCategory = savedCategory;
+            }
 
             // Carrega filtro de taxa
-            const savedFundingFilter = localStorage.getItem('cryptoarbs:fundingFilter') as 'all' | 'positive' | 'negative';
-            fundingFilter = savedFundingFilter || 'all';
+            const savedFundingFilter = localStorage.getItem('cryptoarbs:fundingFilter');
+            if (savedFundingFilter !== null) {
+                fundingFilter = savedFundingFilter as 'all' | 'positive' | 'negative';
+            }
         }
     }
 
@@ -112,7 +118,7 @@
             localStorage.setItem('cryptoarbs:viewPreference', isListView ? 'list' : 'grid');
             
             // Salva categoria selecionada
-            if (selectedCategory) {
+            if (selectedCategory !== null) {
                 localStorage.setItem('cryptoarbs:selectedCategory', selectedCategory);
             } else {
                 localStorage.removeItem('cryptoarbs:selectedCategory');
@@ -120,21 +126,6 @@
 
             // Salva filtro de taxa
             localStorage.setItem('cryptoarbs:fundingFilter', fundingFilter);
-        }
-    }
-
-    // Carrega a preferência do usuário do localStorage
-    function loadViewPreference(): void {
-        if (browser) {
-            const savedView = localStorage.getItem('cryptoarbs:viewPreference');
-            isListView = savedView === 'list';
-        }
-    }
-
-    // Salva a preferência do usuário no localStorage
-    function saveViewPreference(isList: boolean): void {
-        if (browser) {
-            localStorage.setItem('cryptoarbs:viewPreference', isList ? 'list' : 'grid');
         }
     }
 
@@ -185,6 +176,7 @@
     onMount(async () => {
         if (browser) {
             document.addEventListener('click', handleClickOutside);
+            // Carrega as preferências antes de qualquer outra operação
             loadUserPreferences();
         }
 
@@ -255,9 +247,9 @@
         }
     }
 
-    // Observa mudanças nos filtros e salva no localStorage
+    // Observa mudanças nos estados e salva no localStorage
     $: {
-        if (browser) {
+        if (browser && !loading) {
             saveUserPreferences();
         }
     }
@@ -362,6 +354,10 @@
                                                         Compare índices com preços reais
                                                     {:else if category === 'Perpetual-Futures'}
                                                         Compare futuros sem vencimento com futuros com data
+                                                    {:else if category === 'Backwardation'}
+                                                        Exemplo: Quando o Bitcoin está em $50.000 no spot e $49.500 no futuro, indicando que o mercado espera queda no preço
+                                                    {:else if category === 'Contango'}
+                                                        Exemplo: Quando o Bitcoin está em $50.000 no spot e $50.500 no futuro, indicando que o mercado espera alta no preço
                                                     {:else}
                                                         Exibe apenas oportunidades da categoria {category}
                                                     {/if}
