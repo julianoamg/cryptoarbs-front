@@ -16,6 +16,9 @@
         min_profit: string;
         max_profit: string;
         stake: string;
+        enable_open_robot: boolean;
+        enable_close_robot: boolean;
+        enable_financial_robot: boolean;
     }
 
     $: t = translations[$language as Language] as Translation;
@@ -168,6 +171,33 @@
                                 validate={validateStake}
                                 description={t.pages.strategy.stakeDescription}
                             />
+
+                            <!-- Robot Control Switches -->
+                            <div class="space-y-4 pt-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-neutral-200">Robô de Abertura</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" bind:checked={settings.enable_open_robot} class="sr-only peer">
+                                        <div class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                    </label>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-neutral-200">Robô de Fechamento</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" bind:checked={settings.enable_close_robot} class="sr-only peer">
+                                        <div class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                    </label>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-neutral-200">Robô de Gestão Financeira</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" bind:checked={settings.enable_financial_robot} class="sr-only peer">
+                                        <div class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
