@@ -10,11 +10,10 @@
     import { onMount, onDestroy } from 'svelte';
     import { getOpportunities } from '$lib/services/exchange';
     import { getMe } from '$lib/services/user';
+    import { browser } from '$app/environment';
     import PageHeader from '../components/forms/PageHeader.svelte';
     import Loading from '../components/Loading.svelte';
     import Button from '../components/forms/Button.svelte';
-    import { goto } from '$app/navigation';
-    import { browser } from '$app/environment';
 
     interface ArbitrageOpportunity {
         id: string;
@@ -22,6 +21,8 @@
         exchange_b: string;
         exchange_a_price: string;
         exchange_b_price: string;
+        exchange_a_volume: string;
+        exchange_b_volume: string;
         spread: string;
         profit_fee: string;
         profit: string;
@@ -40,12 +41,15 @@
             exchange_b: string;
             exchange_a_price: string;
             exchange_b_price: string;
+            exchange_a_volume: string;
+            exchange_b_volume: string;
             spread: string;
             profit_fee: string;
             profit: string;
             created: string;
             modified: string;
             symbol?: string;
+            category?: string;
             exchange_a_url?: string;
             exchange_b_url?: string;
         }>;
@@ -84,7 +88,7 @@
 
     // Carrega a preferência do usuário do localStorage
     function loadViewPreference(): void {
-        if (typeof window !== 'undefined') {
+        if (browser) {
             const savedView = localStorage.getItem('cryptoarbs:viewPreference');
             isListView = savedView === 'list';
         }
@@ -92,7 +96,7 @@
 
     // Salva a preferência do usuário no localStorage
     function saveViewPreference(isList: boolean): void {
-        if (typeof window !== 'undefined') {
+        if (browser) {
             localStorage.setItem('cryptoarbs:viewPreference', isList ? 'list' : 'grid');
         }
     }
@@ -124,6 +128,7 @@
 
     function handleClickOutside(event: MouseEvent) {
         if (!browser) return;
+        
         const dropdown = document.getElementById('category-dropdown');
         if (dropdown && !dropdown.contains(event.target as Node)) {
             showCategoryDropdown = false;
@@ -136,29 +141,28 @@
             loadViewPreference();
         }
 
-        try {
-            if (!$auth.token) {
-                await goto('/login');
-                return;
-            }
+        if ($auth.token) {
+            try {
+                const userData = await getMe($auth.token);
+                hasActiveSubscription = userData.has_active_subscription;
 
-            const userData = await getMe($auth.token);
-            hasActiveSubscription = userData.has_active_subscription;
-
-            if (!hasActiveSubscription) {
-                await goto('/assinatura');
-                return;
+                if (hasActiveSubscription) {
+                    await fetchOpportunities();
+                    if (browser) {
+                        pollingInterval = setInterval(fetchOpportunities, 5000);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+            } finally {
+                loading = false;
             }
-
-            await fetchOpportunities();
-            if (browser) {
-                pollingInterval = setInterval(fetchOpportunities, 5000);
-            }
-        } catch (error) {
-            console.error('Failed to fetch data:', error);
-            await goto('/login');
-        } finally {
+        } else {
             loading = false;
+            // Redireciona para login se não houver token
+            if (browser) {
+                window.location.href = '/login';
+            }
         }
     });
 
@@ -181,6 +185,24 @@
         .filter(opp => !selectedCategory || opp.category === selectedCategory);
 
     $: uniqueCategories = [...new Set(opportunities.map(opp => opp.category).filter(Boolean))];
+
+    // Format volume for display (e.g. 1.2M, 450K, etc.)
+    function formatVolume(volume: string | number | null | undefined): string {
+        if (volume === null || volume === undefined) return '0';
+        
+        const num = typeof volume === 'string' ? parseFloat(volume) : volume;
+        if (isNaN(num)) return '0';
+        
+        if (num >= 1_000_000_000) {
+            return (num / 1_000_000_000).toFixed(1) + 'B';
+        } else if (num >= 1_000_000) {
+            return (num / 1_000_000).toFixed(1) + 'M';
+        } else if (num >= 1_000) {
+            return (num / 1_000).toFixed(1) + 'K';
+        } else {
+            return num.toFixed(0);
+        }
+    }
 </script>
 
 <div class="flex flex-col items-center">
@@ -339,15 +361,18 @@
                                                     </div>
                                                     <div class="flex flex-col">
                                                         <span class="text-base font-medium text-neutral-200">{opp.symbol || '-'}</span>
-                                                        {#if opp.category}
-                                                            {@const color = getCategoryColor(opp.category)}
-                                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center w-fit {color.bg} {color.text}">{opp.category}</span>
-                                                        {/if}
+                                                        <span class="text-xs px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-300 flex items-center gap-1 w-fit mt-1">
+                                                            <TrendingUp class="w-3 h-3 text-neutral-400" />
+                                                            <span>${formatVolume(Math.max(parseFloat(opp.exchange_a_volume || '0'), parseFloat(opp.exchange_b_volume || '0')))}</span>
+                                                        </span>
+                                                        <div class="flex items-center gap-2 mt-1">
+                                                            {#if opp.category}
+                                                                {@const color = getCategoryColor(opp.category)}
+                                                                <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center {color.bg} {color.text}">{opp.category}</span>
+                                                            {/if}
+                                                            <span class="text-xs text-neutral-400">{t.pages.home.table.spread}: <span class="font-medium text-emerald-500">{opp.spread}%</span></span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="flex items-center gap-1.5 ml-9">
-                                                    <span class="text-xs text-neutral-400">{t.pages.home.table.spread}:</span>
-                                                    <span class="text-xs font-medium text-emerald-500">{opp.spread}%</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -417,16 +442,18 @@
 
                                 <!-- Trading Pair, Spread e Profit Fees -->
                                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                    {#if opp.symbol}
-                                        <div class="col-span-2 sm:col-span-1">
-                                            <p class="text-xs sm:text-sm font-medium text-neutral-400">{t.pages.home.tradingPair}</p>
-                                            <p class="text-sm sm:text-base text-neutral-200 font-medium">{opp.symbol}</p>
-                                            {#if opp.category}
-                                                {@const color = getCategoryColor(opp.category)}
-                                                <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center w-fit mt-1 {color.bg} {color.text}">{opp.category}</span>
-                                            {/if}
-                                        </div>
-                                    {/if}
+                                    <div class="col-span-2 sm:col-span-1">
+                                        <p class="text-xs sm:text-sm font-medium text-neutral-400">{t.pages.home.tradingPair}</p>
+                                        <p class="text-sm sm:text-base text-neutral-200 font-medium">{opp.symbol}</p>
+                                        <span class="text-xs px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-300 flex items-center gap-1 w-fit mt-1 mb-1">
+                                            <TrendingUp class="w-3 h-3 text-neutral-400" />
+                                            <span>${formatVolume(Math.max(parseFloat(opp.exchange_a_volume || '0'), parseFloat(opp.exchange_b_volume || '0')))}</span>
+                                        </span>
+                                        {#if opp.category}
+                                            {@const color = getCategoryColor(opp.category)}
+                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center w-fit mt-1 {color.bg} {color.text}">{opp.category}</span>
+                                        {/if}
+                                    </div>
                                     <div>
                                         <p class="text-xs sm:text-sm font-medium text-neutral-400">{t.pages.home.spread}</p>
                                         <p class="text-sm sm:text-base text-neutral-200">{opp.spread}%</p>
