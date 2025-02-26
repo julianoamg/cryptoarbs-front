@@ -1,7 +1,7 @@
 <script lang="ts">
     import { ArrowRight, TrendingUp, Percent, X, ArrowLeftRight, LayoutGrid, List, 
         Coins, ArrowLeftRight as Exchange, TrendingUp as SpreadIcon, 
-        CircleDollarSign, DollarSign, Scale } from 'lucide-svelte';
+        CircleDollarSign, DollarSign, Scale, ChevronDown } from 'lucide-svelte';
     import { fade } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';
     import { language } from '$lib/stores/i18n';
@@ -26,6 +26,7 @@
         created: string;
         modified: string;
         symbol?: string;
+        category?: string;
         exchange_a_url?: string;
         exchange_b_url?: string;
     }
@@ -56,6 +57,28 @@
     let pollingInterval: number;
     let isListView = false;
     let showOnlyPositiveFunding = false;
+    let selectedCategory: string | null = null;
+    let showCategoryDropdown = false;
+
+    const CATEGORY_COLORS = [
+        { bg: 'bg-amber-500/10', text: 'text-amber-300' },
+        { bg: 'bg-emerald-500/10', text: 'text-emerald-300' },
+        { bg: 'bg-blue-500/10', text: 'text-blue-300' },
+        { bg: 'bg-purple-500/10', text: 'text-purple-300' },
+        { bg: 'bg-rose-500/10', text: 'text-rose-300' },
+        { bg: 'bg-indigo-500/10', text: 'text-indigo-300' },
+        { bg: 'bg-cyan-500/10', text: 'text-cyan-300' },
+        { bg: 'bg-pink-500/10', text: 'text-pink-300' }
+    ];
+
+    function getCategoryColor(category: string) {
+        let hash = 0;
+        for (let i = 0; i < category.length; i++) {
+            hash = category.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const index = Math.abs(hash) % CATEGORY_COLORS.length;
+        return CATEGORY_COLORS[index];
+    }
 
     // Carrega a preferência do usuário do localStorage
     function loadViewPreference(): void {
@@ -97,28 +120,40 @@
         }
     }
 
-    onMount(async () => {
-        // Carrega a preferência de visualização
+    function handleClickOutside(event: MouseEvent) {
+        const dropdown = document.getElementById('category-dropdown');
+        if (dropdown && !dropdown.contains(event.target as Node)) {
+            showCategoryDropdown = false;
+        }
+    }
+
+    onMount(() => {
+        document.addEventListener('click', handleClickOutside);
         loadViewPreference();
 
-        if ($auth.token) {
-            try {
-                const userData = await getMe($auth.token);
-                hasActiveSubscription = userData.has_active_subscription;
+        async function init() {
+            if ($auth.token) {
+                try {
+                    const userData = await getMe($auth.token);
+                    hasActiveSubscription = userData.has_active_subscription;
 
-                if (hasActiveSubscription) {
-                    await fetchOpportunities();
-                    pollingInterval = setInterval(fetchOpportunities, 5000);
+                    if (hasActiveSubscription) {
+                        await fetchOpportunities();
+                        pollingInterval = setInterval(fetchOpportunities, 5000);
+                    }
+                } catch (error) {
+                    console.error('Failed to fetch data:', error);
+                } finally {
+                    loading = false;
                 }
-            } catch (error) {
-                console.error('Failed to fetch data:', error);
-            } finally {
-                loading = false;
             }
         }
+
+        init();
     });
 
     onDestroy(() => {
+        document.removeEventListener('click', handleClickOutside);
         if (pollingInterval) {
             clearInterval(pollingInterval);
         }
@@ -129,15 +164,17 @@
         saveViewPreference(isListView);
     }
 
-    $: filteredOpportunities = opportunities.filter(opp => 
-        !showOnlyPositiveFunding || parseFloat(opp.profit_fee) >= 0
-    );
+    $: filteredOpportunities = opportunities
+        .filter(opp => !showOnlyPositiveFunding || parseFloat(opp.profit_fee) >= 0)
+        .filter(opp => !selectedCategory || opp.category === selectedCategory);
+
+    $: uniqueCategories = [...new Set(opportunities.map(opp => opp.category).filter(Boolean))];
 </script>
 
 <div class="flex flex-col items-center">
-    <div class="w-full max-w-5xl space-y-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
-            <div class="w-full sm:w-auto">
+    <div class="w-full max-w-5xl space-y-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-6 pt-2 sm:pt-4">
+            <div class="w-full sm:w-[75%]">
                 <PageHeader 
                     title={t?.pages?.home?.title || 'Arbitragem de Criptomoedas'}
                     description={t?.pages?.home?.subtitle || 'Esta página é atualizada automaticamente.'}
@@ -145,26 +182,82 @@
                 />
             </div>
             {#if !loading && hasActiveSubscription && opportunities.length > 0}
-                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                    <button
-                        class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg {showOnlyPositiveFunding ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-neutral-900/50 border-neutral-800'} border hover:border-neutral-700 transition-colors"
-                        on:click={() => showOnlyPositiveFunding = !showOnlyPositiveFunding}
-                    >
-                        <Percent class="w-4 h-4 {showOnlyPositiveFunding ? 'text-emerald-500' : 'text-neutral-400'}" />
-                        <span class="text-sm {showOnlyPositiveFunding ? 'text-emerald-500' : 'text-neutral-400'}">Taxa Positiva</span>
-                    </button>
-                    <button
-                        class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-neutral-900/50 border border-neutral-800 hover:border-neutral-700 transition-colors"
-                        on:click={toggleView}
-                    >
-                        {#if isListView}
-                            <LayoutGrid class="w-4 h-4 text-neutral-400" />
-                            <span class="text-sm text-neutral-400">Grid</span>
-                        {:else}
-                            <List class="w-4 h-4 text-neutral-400" />
-                            <span class="text-sm text-neutral-400">Lista</span>
-                        {/if}
-                    </button>
+                <div class="flex flex-col w-full sm:flex-row sm:items-center sm:justify-end gap-4">
+                    <!-- Category Filter -->
+                    {#if uniqueCategories.length > 0}
+                        <div class="relative sm:w-[200px]">
+                            <button
+                                id="category-dropdown"
+                                class="w-full sm:w-[200px] flex items-center justify-between px-4 py-2 text-sm font-medium rounded border transition-colors bg-neutral-800/50 border-neutral-800 hover:border-neutral-700"
+                                on:click|stopPropagation={() => showCategoryDropdown = !showCategoryDropdown}
+                            >
+                                <div class="flex-1 flex justify-center">
+                                    {#if selectedCategory}
+                                        {@const color = getCategoryColor(selectedCategory)}
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center {color.bg} {color.text}">{selectedCategory}</span>
+                                        </div>
+                                    {:else}
+                                        <span class="text-neutral-200">Todas Categorias</span>
+                                    {/if}
+                                </div>
+                                <ChevronDown class="w-4 h-4 text-neutral-400 transition-transform {showCategoryDropdown ? 'rotate-180' : ''} ml-2" />
+                            </button>
+
+                            {#if showCategoryDropdown}
+                                <div 
+                                    class="absolute z-50 w-full sm:w-[200px] mt-2 py-2 bg-neutral-900 border border-neutral-800 rounded-lg shadow-xl"
+                                    transition:fade={{ duration: 100 }}
+                                >
+                                    <button
+                                        class="w-full px-4 py-2 text-sm text-center transition-colors hover:bg-neutral-800 {selectedCategory === null ? 'text-emerald-500' : 'text-neutral-200'}"
+                                        on:click={() => {
+                                            selectedCategory = null;
+                                            showCategoryDropdown = false;
+                                        }}
+                                    >
+                                        Todas Categorias
+                                    </button>
+
+                                    {#each uniqueCategories as category}
+                                        {@const color = getCategoryColor(category)}
+                                        <button
+                                            class="w-full px-4 py-2 text-sm transition-colors hover:bg-neutral-800 flex items-center justify-center gap-2"
+                                            on:click={() => {
+                                                selectedCategory = category;
+                                                showCategoryDropdown = false;
+                                            }}
+                                        >
+                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center {color.bg} {color.text}">{category}</span>
+                                        </button>
+                                    {/each}
+                                </div>
+                            {/if}
+                        </div>
+                    {/if}
+
+                    <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+                        <button
+                            class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded border transition-colors {showOnlyPositiveFunding ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'text-neutral-400 border-neutral-800 hover:border-neutral-700'}"
+                            on:click={() => showOnlyPositiveFunding = !showOnlyPositiveFunding}
+                        >
+                            <Percent class="w-4 h-4" />
+                            <span class="text-sm">Taxa Positiva</span>
+                        </button>
+
+                        <button
+                            class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded border transition-colors text-neutral-400 border-neutral-800 hover:border-neutral-700"
+                            on:click={toggleView}
+                        >
+                            {#if isListView}
+                                <LayoutGrid class="w-4 h-4" />
+                                <span class="text-sm">Grid</span>
+                            {:else}
+                                <List class="w-4 h-4" />
+                                <span class="text-sm">Lista</span>
+                            {/if}
+                        </button>
+                    </div>
                 </div>
             {/if}
         </div>
@@ -232,7 +325,13 @@
                                                     <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 flex items-center justify-center">
                                                         <ArrowLeftRight class="w-3.5 h-3.5 text-emerald-500/80" />
                                                     </div>
-                                                    <span class="text-base font-medium text-neutral-200">{opp.symbol || '-'}</span>
+                                                    <div class="flex flex-col">
+                                                        <span class="text-base font-medium text-neutral-200">{opp.symbol || '-'}</span>
+                                                        {#if opp.category}
+                                                            {@const color = getCategoryColor(opp.category)}
+                                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center w-fit {color.bg} {color.text}">{opp.category}</span>
+                                                        {/if}
+                                                    </div>
                                                 </div>
                                                 <div class="flex items-center gap-1.5 ml-9">
                                                     <span class="text-xs text-neutral-400">{t.pages.home.table.spread}:</span>
@@ -310,6 +409,10 @@
                                         <div class="col-span-2 sm:col-span-1">
                                             <p class="text-xs sm:text-sm font-medium text-neutral-400">{t.pages.home.tradingPair}</p>
                                             <p class="text-sm sm:text-base text-neutral-200 font-medium">{opp.symbol}</p>
+                                            {#if opp.category}
+                                                {@const color = getCategoryColor(opp.category)}
+                                                <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center w-fit mt-1 {color.bg} {color.text}">{opp.category}</span>
+                                            {/if}
                                         </div>
                                     {/if}
                                     <div>
