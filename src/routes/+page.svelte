@@ -642,6 +642,10 @@
                                                     <span class="text-xs text-neutral-400">em</span>
                                                     <a href={opp.exchange_a_url} target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-emerald-500 hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_a}</a>
                                                 </div>
+                                                <div class="flex items-center gap-1 mt-1">
+                                                    <span class="text-xs text-neutral-400">Vol:</span>
+                                                    <span class="text-xs text-neutral-300">${formatVolume(opp.exchange_a_volume)}</span>
+                                                </div>
                                             </div>
                                         </td>
                                         <td class="py-4 px-4">
@@ -650,6 +654,10 @@
                                                 <div class="flex items-center gap-1 mt-1">
                                                     <span class="text-xs text-neutral-400">em</span>
                                                     <a href={opp.exchange_b_url} target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-emerald-500 hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_b} (Futures)</a>
+                                                </div>
+                                                <div class="flex items-center gap-1 mt-1">
+                                                    <span class="text-xs text-neutral-400">Vol:</span>
+                                                    <span class="text-xs text-neutral-300">${formatVolume(opp.exchange_b_volume)}</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -746,6 +754,10 @@
                                                 <span class="text-xs sm:text-sm text-neutral-400">{t.pages.home.price}</span>
                                                 <span class="text-xs sm:text-sm text-neutral-200">{opp.exchange_a_price}</span>
                                             </div>
+                                            <div class="flex justify-between mt-1">
+                                                <span class="text-xs text-neutral-400">Volume</span>
+                                                <span class="text-xs text-neutral-300">${formatVolume(opp.exchange_a_volume)}</span>
+                                            </div>
                                         </div>
                                         <div>
                                             <p class="text-xs sm:text-sm font-medium text-neutral-400 mb-2">
@@ -754,6 +766,10 @@
                                             <div class="flex justify-between">
                                                 <span class="text-xs sm:text-sm text-neutral-400">{t.pages.home.price}</span>
                                                 <span class="text-xs sm:text-sm text-neutral-200">{opp.exchange_b_price}</span>
+                                            </div>
+                                            <div class="flex justify-between mt-1">
+                                                <span class="text-xs text-neutral-400">Volume</span>
+                                                <span class="text-xs text-neutral-300">${formatVolume(opp.exchange_b_volume)}</span>
                                             </div>
                                         </div>
                                     </div>
