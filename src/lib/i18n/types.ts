@@ -25,12 +25,12 @@ export interface MentoringBenefit {
 export interface MentoringPage {
     title: string;
     subtitle: string;
-    hero: {
+    hero?: {
         title: string;
         description: string;
         cta: string;
     };
-    benefits: {
+    benefits?: {
         advancedStrategies: MentoringBenefit;
         groupMentoring: MentoringBenefit;
         flexibleSchedule: MentoringBenefit;
@@ -38,7 +38,7 @@ export interface MentoringPage {
         updatedContent: MentoringBenefit;
         certificate: MentoringBenefit;
     };
-    cta: {
+    cta?: {
         title: string;
         description: string;
         primary: string;
@@ -58,6 +58,24 @@ export interface Pages {
         price: string;
         entryValue: string;
         estimatedProfit: string;
+        fundingRate: string;
+        recommendedPosition: string;
+        table?: {
+            pair: string;
+            buyPrice: string;
+            sellPrice: string;
+            profit: string;
+            spread: string;
+            gross: string;
+            net: string;
+            mobileHint: string;
+        };
+        tradingPair?: string;
+        subscription?: {
+            title: string;
+            description: string;
+            button: string;
+        };
     };
     settings: {
         title: string;
@@ -93,6 +111,7 @@ export interface Pages {
 export interface Menu {
     arbitragens: string;
     criptomoedas: string;
+    robo: string;
     configuracoes: string;
     suporte: string;
     primeirosPassos: string;

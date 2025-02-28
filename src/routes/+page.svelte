@@ -272,6 +272,52 @@
         }
     }
 
+    // Calcula a diferença percentual entre os volumes dos dois mercados
+    function calculateVolumeDifference(volumeA: string | number | null | undefined, volumeB: string | number | null | undefined): { percent: number, higherVolume: 'A' | 'B' | 'equal' } {
+        const numA = typeof volumeA === 'string' ? parseFloat(volumeA || '0') : (volumeA || 0);
+        const numB = typeof volumeB === 'string' ? parseFloat(volumeB || '0') : (volumeB || 0);
+        
+        if (numA === numB) return { percent: 0, higherVolume: 'equal' };
+        
+        if (numA > numB) {
+            const diff = numA - numB;
+            const percent = (diff / numB) * 100;
+            return { percent, higherVolume: 'A' };
+        } else {
+            const diff = numB - numA;
+            const percent = (diff / numA) * 100;
+            return { percent, higherVolume: 'B' };
+        }
+    }
+
+    // Calcula a posição recomendada para futuros (long ou short) com base no peso do volume e condição de contango/backwardation
+    function calculateFuturesPosition(spotPrice: string | number, futuresPrice: string | number, spotVolume: string | number, futuresVolume: string | number): { position: 'LONG' | 'SHORT', weight: number } {
+        // Converter para números
+        const spotPriceNum = typeof spotPrice === 'string' ? parseFloat(spotPrice || '0') : (spotPrice || 0);
+        const futuresPriceNum = typeof futuresPrice === 'string' ? parseFloat(futuresPrice || '0') : (futuresPrice || 0);
+        const spotVolumeNum = typeof spotVolume === 'string' ? parseFloat(spotVolume || '0') : (spotVolume || 0);
+        const futuresVolumeNum = typeof futuresVolume === 'string' ? parseFloat(futuresVolume || '0') : (futuresVolume || 0);
+        
+        // Calcular o peso do futuro
+        const totalVolume = spotVolumeNum + futuresVolumeNum;
+        const futuresWeight = totalVolume > 0 ? futuresVolumeNum / totalVolume : 0.5;
+        
+        // Determinar se é contango ou backwardation
+        const priceDiff = futuresPriceNum - spotPriceNum;
+        
+        // Determinar a posição com base na condição
+        let position: 'LONG' | 'SHORT';
+        if (priceDiff > 0) {
+            // Contango: Preço do futuro > Preço do spot → Tendência de alta → Long
+            position = 'LONG';
+        } else {
+            // Backwardation: Preço do futuro < Preço do spot → Tendência de baixa → Short
+            position = 'SHORT';
+        }
+        
+        return { position, weight: futuresWeight * 100 };
+    }
+
     // Observa mudanças nos estados e salva no localStorage
     $: {
         if (browser && !loading) {
@@ -443,7 +489,7 @@
                                 id="funding-dropdown"
                                 class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded border transition-colors bg-neutral-800/50 border-neutral-800 hover:border-neutral-700"
                                 on:click|stopPropagation={() => showFundingDropdown = !showFundingDropdown}
-                                aria-label="Filtrar por taxa de financiamento"
+                                aria-label={`Filtrar por ${t.pages.home.fundingRate.toLowerCase()}`}
                                 aria-expanded={showFundingDropdown}
                                 aria-controls="funding-dropdown-menu"
                             >
@@ -500,7 +546,7 @@
                                                 <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center bg-emerald-500/10 text-emerald-400">Taxa Positiva</span>
                                             </div>
                                             <p class="text-xs text-neutral-400 mt-1.5">
-                                                Apenas oportunidades onde você mantém posição short no futuro e recebe taxa extra a cada 8h
+                                                {t.pages.home.fundingRate === 'Taxa de Financiamento' ? 'Apenas oportunidades onde você mantém posição short no futuro e recebe taxa extra a cada 8h' : 'Only opportunities where you maintain a short position in the future and receive an extra fee every 8h'}
                                             </p>
                                         </div>
                                     </button>
@@ -517,7 +563,7 @@
                                                 <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center bg-red-500/10 text-red-400">Taxa Negativa</span>
                                             </div>
                                             <p class="text-xs text-neutral-400 mt-1.5">
-                                                Apenas oportunidades onde você mantém posição short no futuro e paga uma pequena taxa a cada 8h
+                                                {t.pages.home.fundingRate === 'Taxa de Financiamento' ? 'Apenas oportunidades onde você mantém posição short no futuro e paga uma pequena taxa a cada 8h' : 'Only opportunities where you maintain a short position in the future and pay a small fee every 8h'}
                                             </p>
                                         </div>
                                     </button>
@@ -645,6 +691,9 @@
                                                 <div class="flex items-center gap-1 mt-1">
                                                     <span class="text-xs text-neutral-400">Vol:</span>
                                                     <span class="text-xs text-neutral-300">${formatVolume(opp.exchange_a_volume)}</span>
+                                                    {#if calculateVolumeDifference(opp.exchange_a_volume, opp.exchange_b_volume).higherVolume === 'A'}
+                                                        <span class="text-xs text-blue-400 ml-1">(+{calculateVolumeDifference(opp.exchange_a_volume, opp.exchange_b_volume).percent.toFixed(1)}%)</span>
+                                                    {/if}
                                                 </div>
                                             </div>
                                         </td>
@@ -658,22 +707,44 @@
                                                 <div class="flex items-center gap-1 mt-1">
                                                     <span class="text-xs text-neutral-400">Vol:</span>
                                                     <span class="text-xs text-neutral-300">${formatVolume(opp.exchange_b_volume)}</span>
+                                                    {#if calculateVolumeDifference(opp.exchange_a_volume, opp.exchange_b_volume).higherVolume === 'B'}
+                                                        <span class="text-xs text-purple-400 ml-1">(+{calculateVolumeDifference(opp.exchange_a_volume, opp.exchange_b_volume).percent.toFixed(1)}%)</span>
+                                                    {/if}
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="py-4 px-4">
                                             <div class="flex flex-col items-end gap-2">
-                                                <div class="flex flex-col items-end">
-                                                    <div class="flex items-baseline gap-1">
-                                                        <span class="text-base font-bold {parseFloat(opp.profit) >= 0 ? 'text-emerald-500' : 'text-red-500'}">{opp.profit}%</span>
-                                                        <span class="text-xs {parseFloat(opp.profit) >= 0 ? 'text-emerald-500/70' : 'text-red-500/70'}">{t.pages.home.profit}</span>
+                                                <div class="flex items-center gap-2">
+                                                    <!-- Botão de favorito -->
+                                                    <button 
+                                                        class="text-neutral-400 hover:text-amber-400 transition-colors focus:outline-none"
+                                                        on:click|stopPropagation={() => toggleFavorite(opp)}
+                                                        aria-label={opp.favorited ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill={opp.favorited ? "currentColor" : "none"} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={opp.favorited ? "text-amber-400" : "text-neutral-400"}>
+                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                        </svg>
+                                                    </button>
+                                                    <div class="flex flex-col items-end">
+                                                        <div class="flex items-baseline space-x-1">
+                                                            <span class="text-xl sm:text-2xl font-bold {parseFloat(opp.profit) >= 0 ? 'text-emerald-500' : 'text-red-500'}">{opp.profit}%</span>
+                                                            <span class="text-sm {parseFloat(opp.profit) >= 0 ? 'text-emerald-500/70' : 'text-red-500/70'}">{t.pages.home.profit}</span>
+                                                        </div>
+                                                        <!-- Posição recomendada para futuros -->
+                                                        {#if true}
+                                                            {@const futuresPosition = calculateFuturesPosition(opp.exchange_a_price, opp.exchange_b_price, opp.exchange_a_volume, opp.exchange_b_volume)}
+                                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center mt-1 {futuresPosition.position === 'LONG' ? 'bg-blue-500/10 text-blue-400' : 'bg-purple-500/10 text-purple-400'} font-medium">
+                                                                {futuresPosition.position} ({futuresPosition.weight.toFixed(1)}%)
+                                                            </span>
+                                                        {/if}
                                                     </div>
-                                                    <div class="flex items-center gap-1">
-                                                        <span class="text-xs" class:text-emerald-500={parseFloat(opp.profit_fee) > 0} class:text-red-500={parseFloat(opp.profit_fee) < 0} class:text-neutral-400={parseFloat(opp.profit_fee) === 0}>
-                                                            {parseFloat(opp.profit_fee).toFixed(6)}%
-                                                        </span>
-                                                        <span class="text-xs text-neutral-400">Taxa de Financiamento</span>
-                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-1 mt-1">
+                                                    <span class="text-xs" class:text-emerald-500={parseFloat(opp.profit_fee) > 0} class:text-red-500={parseFloat(opp.profit_fee) < 0} class:text-neutral-400={parseFloat(opp.profit_fee) === 0}>
+                                                        {parseFloat(opp.profit_fee).toFixed(6)}%
+                                                    </span>
+                                                    <span class="text-xs text-neutral-400">{t.pages.home.fundingRate}</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -701,21 +772,30 @@
                                         <ArrowRight class="w-4 h-4 sm:w-5 sm:h-5 text-neutral-500" />
                                         <a href={opp.exchange_b_url} target="_blank" rel="noopener noreferrer" class="text-base sm:text-lg font-bold text-neutral-200 hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_b} (Futures)</a>
                                     </div>
-                                    <div class="flex items-center gap-2">
-                                        <!-- Botão de favorito -->
-                                        <button 
-                                            class="text-neutral-400 hover:text-amber-400 transition-colors focus:outline-none"
-                                            on:click|stopPropagation={() => toggleFavorite(opp)}
-                                            aria-label={opp.favorited ? "Remover dos favoritos" : "Adicionar aos favoritos"}
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={opp.favorited ? "currentColor" : "none"} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={opp.favorited ? "text-amber-400" : "text-neutral-400"}>
-                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                            </svg>
-                                        </button>
-                                        <div class="flex items-baseline space-x-1">
-                                            <span class="text-xl sm:text-2xl font-bold {parseFloat(opp.profit) >= 0 ? 'text-emerald-500' : 'text-red-500'}">{opp.profit}%</span>
-                                            <span class="text-sm {parseFloat(opp.profit) >= 0 ? 'text-emerald-500/70' : 'text-red-500/70'}">{t.pages.home.profit}</span>
+                                    <div class="flex flex-col items-end">
+                                        <div class="flex items-center gap-2">
+                                            <!-- Botão de favorito -->
+                                            <button 
+                                                class="text-neutral-400 hover:text-amber-400 transition-colors focus:outline-none"
+                                                on:click|stopPropagation={() => toggleFavorite(opp)}
+                                                aria-label={opp.favorited ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={opp.favorited ? "currentColor" : "none"} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={opp.favorited ? "text-amber-400" : "text-neutral-400"}>
+                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                </svg>
+                                            </button>
+                                            <div class="flex items-baseline space-x-1">
+                                                <span class="text-xl sm:text-2xl font-bold {parseFloat(opp.profit) >= 0 ? 'text-emerald-500' : 'text-red-500'}">{opp.profit}%</span>
+                                                <span class="text-sm {parseFloat(opp.profit) >= 0 ? 'text-emerald-500/70' : 'text-red-500/70'}">{t.pages.home.profit}</span>
+                                            </div>
                                         </div>
+                                        <!-- Posição recomendada para futuros -->
+                                        {#if true}
+                                            {@const futuresPosition = calculateFuturesPosition(opp.exchange_a_price, opp.exchange_b_price, opp.exchange_a_volume, opp.exchange_b_volume)}
+                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center mt-1 {futuresPosition.position === 'LONG' ? 'bg-blue-500/10 text-blue-400' : 'bg-purple-500/10 text-purple-400'} font-medium">
+                                                {futuresPosition.position} ({futuresPosition.weight.toFixed(1)}%)
+                                            </span>
+                                        {/if}
                                     </div>
                                 </div>
 
@@ -738,7 +818,7 @@
                                         <p class="text-sm sm:text-base text-neutral-200">{opp.spread}%</p>
                                     </div>
                                     <div>
-                                        <p class="text-xs sm:text-sm font-medium text-neutral-400">Taxa de Financiamento</p>
+                                        <p class="text-xs sm:text-sm font-medium text-neutral-400">{t.pages.home.fundingRate}</p>
                                         <p class="text-sm sm:text-base" class:text-emerald-500={parseFloat(opp.profit_fee) > 0} class:text-red-500={parseFloat(opp.profit_fee) < 0} class:text-neutral-200={parseFloat(opp.profit_fee) === 0}>{parseFloat(opp.profit_fee).toFixed(6)}%</p>
                                     </div>
                                 </div>
@@ -754,9 +834,12 @@
                                                 <span class="text-xs sm:text-sm text-neutral-400">{t.pages.home.price}</span>
                                                 <span class="text-xs sm:text-sm text-neutral-200">{opp.exchange_a_price}</span>
                                             </div>
-                                            <div class="flex justify-between mt-1">
-                                                <span class="text-xs text-neutral-400">Volume</span>
+                                            <div class="flex items-center gap-1 mt-1">
+                                                <span class="text-xs text-neutral-400">Vol:</span>
                                                 <span class="text-xs text-neutral-300">${formatVolume(opp.exchange_a_volume)}</span>
+                                                {#if calculateVolumeDifference(opp.exchange_a_volume, opp.exchange_b_volume).higherVolume === 'A'}
+                                                    <span class="text-xs text-blue-400 ml-1">(+{calculateVolumeDifference(opp.exchange_a_volume, opp.exchange_b_volume).percent.toFixed(1)}%)</span>
+                                                {/if}
                                             </div>
                                         </div>
                                         <div>
@@ -767,9 +850,12 @@
                                                 <span class="text-xs sm:text-sm text-neutral-400">{t.pages.home.price}</span>
                                                 <span class="text-xs sm:text-sm text-neutral-200">{opp.exchange_b_price}</span>
                                             </div>
-                                            <div class="flex justify-between mt-1">
-                                                <span class="text-xs text-neutral-400">Volume</span>
+                                            <div class="flex items-center gap-1 mt-1">
+                                                <span class="text-xs text-neutral-400">Vol:</span>
                                                 <span class="text-xs text-neutral-300">${formatVolume(opp.exchange_b_volume)}</span>
+                                                {#if calculateVolumeDifference(opp.exchange_a_volume, opp.exchange_b_volume).higherVolume === 'B'}
+                                                    <span class="text-xs text-purple-400 ml-1">(+{calculateVolumeDifference(opp.exchange_a_volume, opp.exchange_b_volume).percent.toFixed(1)}%)</span>
+                                                {/if}
                                             </div>
                                         </div>
                                     </div>

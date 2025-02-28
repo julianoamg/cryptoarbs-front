@@ -206,6 +206,7 @@ export const translations = {
                 waitingMessage: 'Aguarde enquanto buscamos as melhores oportunidades para você',
                 tradingPair: 'Par',
                 profitAfterFees: 'Lucro após taxas',
+                fundingRate: 'Taxa de Financiamento',
                 table: {
                     pair: 'Par',
                     buyPrice: 'Preço Compra',
@@ -612,6 +613,7 @@ export const translations = {
                 waitingMessage: 'Please wait while we find the best opportunities for you',
                 tradingPair: 'Pair',
                 profitAfterFees: 'Profit after fees',
+                fundingRate: 'Funding Rate',
                 table: {
                     pair: 'Pair',
                     buyPrice: 'Buy Price',
@@ -1016,6 +1018,7 @@ export const translations = {
                 waitingMessage: 'Espere mientras buscamos las mejores oportunidades para usted',
                 tradingPair: 'Par',
                 profitAfterFees: 'Beneficio después de comisiones',
+                fundingRate: 'Tasa de Financiación',
                 table: {
                     pair: 'Par',
                     buyPrice: 'Precio Compra',

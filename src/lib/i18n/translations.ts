@@ -101,7 +101,9 @@ export const translations: Translations = {
                 spread: 'Spread',
                 price: 'Preço',
                 entryValue: 'Valor de entrada ($)',
-                estimatedProfit: 'Lucro estimado'
+                estimatedProfit: 'Lucro estimado',
+                fundingRate: 'Taxa de Funding',
+                recommendedPosition: 'Posição Recomendada'
             },
             settings: {
                 title: 'Configurações',
@@ -307,7 +309,9 @@ export const translations: Translations = {
                 spread: 'Spread',
                 price: 'Price',
                 entryValue: 'Entry value ($)',
-                estimatedProfit: 'Estimated profit'
+                estimatedProfit: 'Estimated profit',
+                fundingRate: 'Funding Rate',
+                recommendedPosition: 'Recommended Position'
             },
             settings: {
                 title: 'Settings',
@@ -513,7 +517,9 @@ export const translations: Translations = {
                 spread: 'Spread',
                 price: 'Precio',
                 entryValue: 'Valor de entrada ($)',
-                estimatedProfit: 'Beneficio estimado'
+                estimatedProfit: 'Beneficio estimado',
+                fundingRate: 'Tasa de Funding',
+                recommendedPosition: 'Posición Recomendada'
             },
             settings: {
                 title: 'Configuración',
