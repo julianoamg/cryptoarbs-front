@@ -1,9 +1,6 @@
 <script lang="ts">
-    import { ArrowRight, TrendingUp, Percent, X, ArrowLeftRight, LayoutGrid, List, 
-        Coins, ArrowLeftRight as Exchange, TrendingUp as SpreadIcon, 
-        CircleDollarSign, DollarSign, Scale, ChevronDown } from 'lucide-svelte';
+    import { ArrowRight, TrendingUp, Percent, X, ArrowLeftRight, LayoutGrid, List, Coins, CircleDollarSign, DollarSign, ChevronDown } from 'lucide-svelte';
     import { fade } from 'svelte/transition';
-    import { quintOut } from 'svelte/easing';
     import { language } from '$lib/stores/i18n';
     import { translations } from '$lib/i18n/translations';
     import { auth } from '$lib/stores/auth';
@@ -32,6 +29,7 @@
         category?: string;
         exchange_a_url?: string;
         exchange_b_url?: string;
+        favorited?: boolean;
     }
 
     interface ApiResponse {
@@ -60,7 +58,7 @@
     let opportunities: ArbitrageOpportunity[] = [];
     let loading = true;
     let hasActiveSubscription = false;
-    let pollingInterval: number;
+    let pollingTimeout: ReturnType<typeof setTimeout>;
     let isListView = false;
     let showOnlyPositiveFunding = false;
     let showOnlyNegativeFunding = false;
@@ -68,6 +66,7 @@
     let showCategoryDropdown = false;
     let showFundingDropdown = false;
     let fundingFilter: 'all' | 'positive' | 'negative' = 'all';
+    let favorites: Record<string, boolean> = {};
 
     const CATEGORY_COLORS = [
         { bg: 'bg-amber-500/10', text: 'text-amber-300' },
@@ -109,6 +108,12 @@
             if (savedFundingFilter !== null) {
                 fundingFilter = savedFundingFilter as 'all' | 'positive' | 'negative';
             }
+            
+            // Carrega favoritos
+            const savedFavorites = localStorage.getItem('cryptoarbs:favorites');
+            if (savedFavorites !== null) {
+                favorites = JSON.parse(savedFavorites);
+            }
         }
     }
 
@@ -126,6 +131,9 @@
 
             // Salva filtro de taxa
             localStorage.setItem('cryptoarbs:fundingFilter', fundingFilter);
+            
+            // Salva favoritos
+            localStorage.setItem('cryptoarbs:favorites', JSON.stringify(favorites));
         }
     }
 
@@ -148,7 +156,8 @@
                     profit_fee: opp.profit_fee?.replace('$', '') ?? '0',
                     exchange_a_price: opp.exchange_a_price?.replace('$', '') ?? '0',
                     exchange_b_price: opp.exchange_b_price?.replace('$', '') ?? '0',
-                    spread: opp.spread?.replace('$', '') ?? '0'
+                    spread: opp.spread?.replace('$', '') ?? '0',
+                    favorited: favorites[getFavoriteKey(opp)] || false
                 }));
             }
         } catch (error) {
@@ -173,10 +182,23 @@
         }
     }
 
+    async function startPolling() {
+        if (!$auth.token || !hasActiveSubscription) return;
+
+        try {
+            await fetchOpportunities();
+            // Agenda a próxima chamada apenas após a atual terminar
+            pollingTimeout = setTimeout(startPolling, 3000);
+        } catch (error) {
+            console.error('Failed to fetch opportunities:', error);
+            // Em caso de erro, tenta novamente após 3 segundos
+            pollingTimeout = setTimeout(startPolling, 3000);
+        }
+    }
+
     onMount(async () => {
         if (browser) {
             document.addEventListener('click', handleClickOutside);
-            // Carrega as preferências antes de qualquer outra operação
             loadUserPreferences();
         }
 
@@ -186,11 +208,8 @@
                 hasActiveSubscription = userData.has_active_subscription;
 
                 if (hasActiveSubscription) {
-                    await fetchOpportunities();
-                    if (browser) {
-                        // Atualiza a cada 3 segundos
-                        pollingInterval = window.setInterval(fetchOpportunities, 3000);
-                    }
+                    // Inicia o polling
+                    startPolling();
                 }
             } catch (error) {
                 console.error('Failed to fetch data:', error);
@@ -208,8 +227,8 @@
     onDestroy(() => {
         if (browser) {
             document.removeEventListener('click', handleClickOutside);
-            if (pollingInterval) {
-                window.clearInterval(pollingInterval);
+            if (pollingTimeout) {
+                clearTimeout(pollingTimeout);
             }
         }
     });
@@ -225,7 +244,13 @@
             if (fundingFilter === 'negative') return parseFloat(opp.profit_fee) < 0;
             return true;
         })
-        .filter(opp => !selectedCategory || opp.category === selectedCategory);
+        .filter(opp => !selectedCategory || opp.category === selectedCategory)
+        .sort((a, b) => {
+            // Ordena favoritos primeiro
+            if (a.favorited && !b.favorited) return -1;
+            if (!a.favorited && b.favorited) return 1;
+            return 0;
+        });
 
     $: uniqueCategories = [...new Set(opportunities.map(opp => opp.category).filter(Boolean))];
 
@@ -266,6 +291,44 @@
         showFundingDropdown = false;
         saveUserPreferences();
     }
+
+    // Função para gerar uma chave única para cada oportunidade baseada no par e exchanges
+    function getFavoriteKey(opp: ArbitrageOpportunity): string {
+        return `${opp.symbol}-${opp.exchange_a}-${opp.exchange_b}`;
+    }
+    
+    // Função para alternar o status de favorito
+    function toggleFavorite(opp: ArbitrageOpportunity): void {
+        const key = getFavoriteKey(opp);
+        
+        // Atualiza o estado local
+        if (favorites[key]) {
+            delete favorites[key];
+        } else {
+            favorites[key] = true;
+        }
+        
+        // Força a atualização do objeto para que o Svelte detecte a mudança
+        favorites = { ...favorites };
+        
+        // Atualiza o status de favorito na oportunidade
+        opp.favorited = favorites[key] || false;
+        
+        // Reordena as oportunidades para mostrar favoritos primeiro
+        opportunities = [...opportunities].sort((a, b) => {
+            // Verifica se é favorito usando a chave atualizada
+            const aFavorited = favorites[getFavoriteKey(a)] || false;
+            const bFavorited = favorites[getFavoriteKey(b)] || false;
+            
+            // Ordena favoritos primeiro
+            if (aFavorited && !bFavorited) return -1;
+            if (!aFavorited && bFavorited) return 1;
+            return 0;
+        });
+        
+        // Salva as preferências
+        saveUserPreferences();
+    }
 </script>
 
 <div class="flex flex-col items-center">
@@ -287,6 +350,9 @@
                                 id="category-dropdown"
                                 class="w-full sm:w-[200px] flex items-center justify-between px-4 py-2 text-sm font-medium rounded border transition-colors bg-neutral-800/50 border-neutral-800 hover:border-neutral-700"
                                 on:click|stopPropagation={() => showCategoryDropdown = !showCategoryDropdown}
+                                aria-label="Filtrar por categoria"
+                                aria-expanded={showCategoryDropdown}
+                                aria-controls="category-dropdown-menu"
                             >
                                 <div class="flex-1 flex justify-center">
                                     {#if selectedCategory}
@@ -303,6 +369,7 @@
 
                             {#if showCategoryDropdown}
                                 <div 
+                                    id="category-dropdown-menu"
                                     class="absolute z-50 w-full sm:w-[200px] mt-2 py-2 bg-neutral-900 border border-neutral-800 rounded-lg shadow-xl"
                                     transition:fade={{ duration: 100 }}
                                 >
@@ -376,6 +443,9 @@
                                 id="funding-dropdown"
                                 class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded border transition-colors bg-neutral-800/50 border-neutral-800 hover:border-neutral-700"
                                 on:click|stopPropagation={() => showFundingDropdown = !showFundingDropdown}
+                                aria-label="Filtrar por taxa de financiamento"
+                                aria-expanded={showFundingDropdown}
+                                aria-controls="funding-dropdown-menu"
                             >
                                 <div class="flex-1 flex justify-center">
                                     {#if fundingFilter === 'positive'}
@@ -395,6 +465,7 @@
 
                             {#if showFundingDropdown}
                                 <div 
+                                    id="funding-dropdown-menu"
                                     class="absolute z-50 w-full mt-2 py-2 bg-neutral-900 border border-neutral-800 rounded-lg shadow-xl"
                                     transition:fade={{ duration: 100 }}
                                 >
@@ -457,6 +528,7 @@
                         <button
                             class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded border transition-colors text-neutral-400 border-neutral-800 hover:border-neutral-700"
                             on:click={toggleView}
+                            aria-label={isListView ? "Alternar para visualização em grid" : "Alternar para visualização em lista"}
                         >
                             {#if isListView}
                                 <LayoutGrid class="w-4 h-4" />
@@ -535,7 +607,19 @@
                                                         <ArrowLeftRight class="w-3.5 h-3.5 text-emerald-500/80" />
                                                     </div>
                                                     <div class="flex flex-col">
-                                                        <span class="text-base font-medium text-neutral-200">{opp.symbol || '-'}</span>
+                                                        <div class="flex items-center gap-2">
+                                                            <span class="text-base font-medium text-neutral-200">{opp.symbol || '-'}</span>
+                                                            <!-- Botão de favorito -->
+                                                            <button 
+                                                                class="text-neutral-400 hover:text-amber-400 transition-colors focus:outline-none"
+                                                                on:click|stopPropagation={() => toggleFavorite(opp)}
+                                                                aria-label={opp.favorited ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                                                            >
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill={opp.favorited ? "currentColor" : "none"} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={opp.favorited ? "text-amber-400" : "text-neutral-400"}>
+                                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
                                                         <span class="text-xs px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-300 flex items-center gap-1 w-fit mt-1">
                                                             <TrendingUp class="w-3 h-3 text-neutral-400" />
                                                             <span>${formatVolume(Math.max(parseFloat(opp.exchange_a_volume || '0'), parseFloat(opp.exchange_b_volume || '0')))}</span>
@@ -609,9 +693,21 @@
                                         <ArrowRight class="w-4 h-4 sm:w-5 sm:h-5 text-neutral-500" />
                                         <a href={opp.exchange_b_url} target="_blank" rel="noopener noreferrer" class="text-base sm:text-lg font-bold text-neutral-200 hover:text-emerald-400 transition-colors underline decoration-emerald-500/30 hover:decoration-emerald-400">{opp.exchange_b} (Futures)</a>
                                     </div>
-                                    <div class="flex items-baseline space-x-1">
-                                        <span class="text-xl sm:text-2xl font-bold {parseFloat(opp.profit) >= 0 ? 'text-emerald-500' : 'text-red-500'}">{opp.profit}%</span>
-                                        <span class="text-sm {parseFloat(opp.profit) >= 0 ? 'text-emerald-500/70' : 'text-red-500/70'}">{t.pages.home.profit}</span>
+                                    <div class="flex items-center gap-2">
+                                        <!-- Botão de favorito -->
+                                        <button 
+                                            class="text-neutral-400 hover:text-amber-400 transition-colors focus:outline-none"
+                                            on:click|stopPropagation={() => toggleFavorite(opp)}
+                                            aria-label={opp.favorited ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={opp.favorited ? "currentColor" : "none"} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={opp.favorited ? "text-amber-400" : "text-neutral-400"}>
+                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                            </svg>
+                                        </button>
+                                        <div class="flex items-baseline space-x-1">
+                                            <span class="text-xl sm:text-2xl font-bold {parseFloat(opp.profit) >= 0 ? 'text-emerald-500' : 'text-red-500'}">{opp.profit}%</span>
+                                            <span class="text-sm {parseFloat(opp.profit) >= 0 ? 'text-emerald-500/70' : 'text-red-500/70'}">{t.pages.home.profit}</span>
+                                        </div>
                                     </div>
                                 </div>
 

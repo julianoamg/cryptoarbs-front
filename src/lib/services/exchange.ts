@@ -55,6 +55,25 @@ export interface UserOpportunity {
     log: string;
 }
 
+export interface ArbitrageOpportunity {
+    id: string;
+    exchange_a: string;
+    exchange_b: string;
+    exchange_a_price: string;
+    exchange_b_price: string;
+    exchange_a_volume: string;
+    exchange_b_volume: string;
+    spread: string;
+    profit_fee: string;
+    profit: string;
+    created: string;
+    modified: string;
+    symbol?: string;
+    category?: string;
+    exchange_a_url?: string;
+    exchange_b_url?: string;
+}
+
 export async function getExchanges(token: string): Promise<Exchange[]> {
     const response = await fetch(`${PUBLIC_API_URL}/exchanges/`, {
         headers: {
@@ -111,6 +130,20 @@ export async function getUserOperations(token: string, page: number = 1): Promis
 
     if (!response.ok) {
         throw new Error('Failed to fetch user operations');
+    }
+
+    return await response.json();
+}
+
+export async function getOpportunities(token: string): Promise<PaginatedResponse<ArbitrageOpportunity>> {
+    const response = await fetch(`${PUBLIC_API_URL}/exchanges/opportunities/`, {
+        headers: {
+            'Authorization': `Token ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch opportunities');
     }
 
     return await response.json();

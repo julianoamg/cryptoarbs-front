@@ -9,6 +9,7 @@
     import Card from '../../../components/forms/Card.svelte';
     import { Activity, ListFilter, CircleDot, CheckCircle2 } from 'lucide-svelte';
     import OperationCard from '../../../components/forms/OperationCard.svelte';
+    import Pagination from '../../../components/forms/Pagination.svelte';
     import { getUserOperations } from '$lib/services/exchange';
     import type { UserOpportunity } from '$lib/services/exchange';
 
@@ -197,24 +198,12 @@
 
                 <!-- Paginação -->
                 {#if totalOperations > 0}
-                    <div class="flex justify-center mt-4 gap-4">
-                        <button
-                            class="px-4 py-2 text-sm font-medium rounded border transition-colors {previousPage ? 'border-neutral-700 text-neutral-200 hover:border-neutral-600' : 'border-neutral-800 text-neutral-500 cursor-not-allowed'}"
-                            disabled={!previousPage}
-                            on:click={() => handlePageChange(currentPage - 1)}
-                        >
-                            Anterior
-                        </button>
-                        <span class="px-4 py-2 text-sm font-medium text-neutral-400">
-                            Página {currentPage}
-                        </span>
-                        <button
-                            class="px-4 py-2 text-sm font-medium rounded border transition-colors {nextPage ? 'border-neutral-700 text-neutral-200 hover:border-neutral-600' : 'border-neutral-800 text-neutral-500 cursor-not-allowed'}"
-                            disabled={!nextPage}
-                            on:click={() => handlePageChange(currentPage + 1)}
-                        >
-                            Próxima
-                        </button>
+                    <div class="mt-4">
+                        <Pagination 
+                            currentPage={currentPage} 
+                            totalPages={Math.ceil(totalOperations / 10)} 
+                            onPageChange={handlePageChange} 
+                        />
                     </div>
                 {/if}
             {/if}
