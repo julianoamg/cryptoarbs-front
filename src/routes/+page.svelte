@@ -291,7 +291,7 @@
     }
 
     // Calcula a posição recomendada para futuros (long ou short) com base no peso do volume e condição de contango/backwardation
-    function calculateFuturesPosition(spotPrice: string | number, futuresPrice: string | number, spotVolume: string | number, futuresVolume: string | number): { position: 'LONG' | 'SHORT' | 'Comprar no Spot', weight: number, isContango: boolean } {
+    function calculateFuturesPosition(spotPrice: string | number, futuresPrice: string | number, spotVolume: string | number, futuresVolume: string | number): { position: string, weight: number, isContango: boolean } {
         // Converter para números
         const spotPriceNum = typeof spotPrice === 'string' ? parseFloat(spotPrice || '0') : (spotPrice || 0);
         const futuresPriceNum = typeof futuresPrice === 'string' ? parseFloat(futuresPrice || '0') : (futuresPrice || 0);
@@ -306,14 +306,22 @@
         const priceDiff = futuresPriceNum - spotPriceNum;
         const isContango = priceDiff > 0;
         
-        // Determinar a posição com base na condição
-        let position: 'LONG' | 'SHORT' | 'Comprar no Spot';
+        // Determinar a posição com base na condição e traduzir conforme o idioma
+        let position: string;
+        
         if (isContango) {
-            // Contango: Preço do futuro > Preço do spot → Tendência de alta → Comprar no Spot
-            position = 'Comprar no Spot';
+            // Contango: Preço do futuro > Preço do spot → Tendência de alta → COMPRAR SPOT
+            // Traduzir "COMPRAR SPOT" conforme o idioma selecionado
+            if ($language === 'en') {
+                position = 'BUY SPOT';
+            } else if ($language === 'es') {
+                position = 'COMPRAR SPOT';
+            } else {
+                position = 'COMPRAR SPOT'; // Português (padrão)
+            }
         } else {
-            // Backwardation: Preço do futuro < Preço do spot → Tendência de baixa → Short
-            position = 'SHORT';
+            // Backwardation: Preço do futuro < Preço do spot → Tendência de baixa → LONG
+            position = 'LONG'; // LONG é universal para todos os idiomas
         }
         
         return { position, weight: futuresWeight * 100, isContango };
@@ -735,8 +743,8 @@
                                                         <!-- Posição recomendada para futuros -->
                                                         {#if true}
                                                             {@const futuresPosition = calculateFuturesPosition(opp.exchange_a_price, opp.exchange_b_price, opp.exchange_a_volume, opp.exchange_b_volume)}
-                                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center mt-1 {futuresPosition.position === 'SHORT' ? 'bg-purple-500/10 text-purple-400' : 'bg-blue-500/10 text-blue-400'} font-medium">
-                                                                {futuresPosition.position} {futuresPosition.position !== 'Comprar no Spot' ? `(${futuresPosition.weight.toFixed(1)}%)` : ''}
+                                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center mt-1 {futuresPosition.position === 'LONG' ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-500/10 text-blue-400'} font-medium">
+                                                                {futuresPosition.position} {`(${futuresPosition.weight.toFixed(1)}%)`}
                                                             </span>
                                                         {/if}
                                                     </div>
@@ -793,8 +801,8 @@
                                         <!-- Posição recomendada para futuros -->
                                         {#if true}
                                             {@const futuresPosition = calculateFuturesPosition(opp.exchange_a_price, opp.exchange_b_price, opp.exchange_a_volume, opp.exchange_b_volume)}
-                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center mt-1 {futuresPosition.position === 'SHORT' ? 'bg-purple-500/10 text-purple-400' : 'bg-blue-500/10 text-blue-400'} font-medium">
-                                                {futuresPosition.position} {futuresPosition.position !== 'Comprar no Spot' ? `(${futuresPosition.weight.toFixed(1)}%)` : ''}
+                                            <span class="text-xs px-2 py-0.5 rounded-full inline-flex items-center mt-1 {futuresPosition.position === 'LONG' ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-500/10 text-blue-400'} font-medium">
+                                                {futuresPosition.position} {`(${futuresPosition.weight.toFixed(1)}%)`}
                                             </span>
                                         {/if}
                                     </div>
