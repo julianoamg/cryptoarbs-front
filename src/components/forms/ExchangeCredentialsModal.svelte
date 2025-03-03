@@ -62,10 +62,7 @@
             }
 
             const data = await response.json();
-            const allowedExchanges = ['bybit', 'bitget', 'kucoin'];
-            exchanges = data.results.filter((exchange: Exchange) => 
-                allowedExchanges.includes(exchange.name.toLowerCase())
-            );
+            exchanges = data.results;
             console.log('Exchanges loaded:', exchanges);
         } catch (error) {
             console.error('Error fetching exchanges:', error);

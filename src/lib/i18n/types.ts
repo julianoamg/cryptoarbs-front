@@ -46,6 +46,50 @@ export interface MentoringPage {
     };
 }
 
+export interface CredentialsPage {
+    title: string;
+    subtitle: string;
+    cardTitle: string;
+    addButton: string;
+    noCredentials: string;
+    addHint: string;
+    configuredStatus: string;
+    modal: {
+        title: string;
+        exchange: {
+            label: string;
+            description: string;
+            placeholder: string;
+        };
+        apiKey: {
+            label: string;
+            description: string;
+        };
+        apiSecret: {
+            label: string;
+            description: string;
+        };
+        passphrase: {
+            label: string;
+            description: string;
+        };
+        buttons: {
+            cancel: string;
+            save: string;
+        };
+    };
+    fields: {
+        apiKey: string;
+        apiSecret: string;
+        passphrase: string;
+    };
+    deleteConfirm: string;
+    success: {
+        added: string;
+        removed: string;
+    };
+}
+
 export interface Pages {
     gettingStarted: GettingStartedPage;
     home: {
@@ -106,6 +150,7 @@ export interface Pages {
         };
     };
     mentoring: MentoringPage;
+    credentials: CredentialsPage;
 }
 
 export interface Menu {
